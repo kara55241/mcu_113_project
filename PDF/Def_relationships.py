@@ -1,8 +1,6 @@
-
+from neo4j import GraphDatabase
 from langchain_google_genai import GoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
-from neo4j import GraphDatabase
-
 class Def_relationships:
     def __init__(self, uri, user, password,database):
         self.driver = GraphDatabase.driver(uri, auth=(user, password),database=database)
