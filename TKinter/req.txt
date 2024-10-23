@@ -1,0 +1,9 @@
+networkx
+Pillow
+neo4j
+matplotlib
+langchain-google-genai
+langchain-openai
+langchain-community
+langchain-core
+python-dotenv
