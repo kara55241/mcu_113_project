@@ -1,0 +1,1048 @@
+/* 全局重置與基本設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+:root {
+    /* 深色模式柔和色調 */
+    --background-dark: #2d2d3a; /* 柔和的深藍灰色，不是純黑 */
+    --background-darker: #252532; /* 稍微深一點的背景色 */
+    --background-lighter: #3a3a4a; /* 稍微淺一點的背景色 */
+    --text-color: #e8e8e8; /* 淺色文字，不是純白 */
+    --text-secondary: #b0b0b0; /* 次要文字 */
+    --border-color: #454554; /* 邊框顏色 */
+    --primary-color: #7c9eff; /* 明亮的藍色 */
+    --primary-dark: #5d7fd9; /* 較暗的藍色 */
+    --primary-light: #4c5c8a; /* 更暗的藍色背景 */
+    --accent-color: #a991ff; /* 紫色調 */
+    --success-color: #5cccb0; /* 柔和的綠色 */
+    --warning-color: #ffb86b; /* 柔和的橙色 */
+    --radius-small: 10px;
+    --radius-large: 16px;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --modal-background: rgba(0, 0, 0, 0.7);
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--background-dark);
+    color: var(--text-color);
+    font-size: 18px;
+    line-height: 1.6;
+    position: relative;
+}
+
+/* 主應用容器 */
+.app-container {
+    display: flex;
+    height: calc(100vh - 39px); /* 扣除輔助功能區的高度 */
+    width: 100%;
+    overflow: hidden;
+}
+
+/* 側邊欄樣式 */
+.sidebar {
+    width: 320px;
+    background-color: var(--background-darker);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.sidebar-header {
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--primary-light);
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-lighter);
+    border-radius: 12px;
+    padding: 8px;
+}
+
+.logo img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.sidebar-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.sidebar-section {
+    padding: 25px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.new-chat button {
+    width: 100%;
+    padding: 18px;
+    background-color: var(--primary-color);
+    color: var(--background-dark);
+    border: none;
+    border-radius: var(--radius-small);
+    font-weight: 700;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    box-shadow: var(--shadow);
+}
+
+.new-chat button:hover {
+    background-color: var(--accent-color);
+}
+
+.new-chat button i {
+    margin-right: 12px;
+    font-size: 22px;
+}
+
+.chat-history {
+    padding: 25px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-color);
+    border-left: 4px solid var(--primary-color);
+    padding-left: 12px;
+}
+
+.chat-history ul {
+    list-style: none;
+}
+
+/* 聊天項目容器 */
+.chat-item-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.chat-item-content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0; /* 允許 flex 項目縮小到比其內容小 */
+    cursor: pointer;
+}
+
+/* 簡化的刪除按鈕 - 只使用圖標 */
+.delete-chat {
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    font-size: 16px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0.8;
+    flex-shrink: 0; /* 防止按鈕縮小 */
+    margin-left: 8px; /* 確保與文字有間距 */
+}
+
+.delete-chat:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.delete-chat:active {
+    transform: scale(0.95);
+}
+
+.chat-history li {
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    border-radius: var(--radius-small);
+    font-size: 16px;
+    transition: all 0.3s;
+    background-color: var(--background-lighter);
+    border-left: 4px solid transparent;
+    width: 100%;
+    position: relative;
+}
+
+.chat-history li:hover {
+    border-left-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.chat-history li.active {
+    border-left-color: var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.chat-history li i {
+    margin-right: 10px;
+    color: var(--primary-color);
+    font-size: 18px;
+}
+
+.chat-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: calc(100% - 20px); /* 留出圖標空間 */
+}
+
+/* 主內容區域 */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-dark);
+    max-width: calc(100% - 320px);
+    height: 100%;
+    overflow: hidden;
+}
+
+.chat-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    background-color: var(--background-darker);
+}
+
+.chat-header h2 {
+    font-size: 22px;
+    color: var(--text-color);
+    margin-left: 12px;
+}
+
+.chat-header .status {
+    width: 14px;
+    height: 14px;
+    background-color: var(--success-color);
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-dark);
+    gap: 24px;
+}
+
+.welcome-message {
+    padding: 35px;
+    text-align: center;
+    margin: 20px auto;
+    max-width: 750px;
+    background-color: var(--background-lighter);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow);
+}
+
+.welcome-message h2 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    font-size: 28px;
+}
+
+.welcome-message p {
+    color: var(--text-color);
+    font-size: 20px;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.welcome-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.suggestion-btn {
+    padding: 16px 20px;
+    background-color: var(--background-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-small);
+    font-size: 18px;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+}
+
+.suggestion-btn:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+}
+
+.message {
+    margin-bottom: 10px;
+    max-width: 85%;
+    position: relative;
+    line-height: 1.6;
+    font-size: 20px;
+    padding: 18px 22px;
+    border-radius: var(--radius-large);
+}
+
+.message.user {
+    align-self: flex-end;
+    background-color: var(--primary-light);
+    color: var(--text-color);
+    border-radius: 20px 20px 0 20px;
+    box-shadow: var(--shadow);
+}
+
+.message.bot {
+    align-self: flex-start;
+    background-color: var(--background-lighter);
+    color: var(--text-color);
+    border-radius: 20px 20px 20px 0;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+.message-time {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    display: block;
+    text-align: right;
+}
+
+/* 輸入區域 */
+.input-area {
+    padding: 25px;
+    background-color: var(--background-darker);
+    border-top: 1px solid var(--border-color);
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    background-color: var(--background-lighter);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-large);
+    padding: 8px 16px;
+    box-shadow: var(--shadow);
+}
+
+.input-container:focus-within {
+    border-color: var(--primary-color);
+}
+
+.input-container input[type="text"] {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 20px;
+    color: var(--text-color);
+}
+
+.input-container input[type="text"]::placeholder {
+    color: var(--text-secondary);
+}
+
+.input-container input[type="file"] {
+    display: none;
+}
+
+.input-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: var(--background-dark);
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0 6px;
+    font-size: 22px;
+}
+
+.input-button:hover {
+    background-color: var(--primary-light);
+    color: var(--text-color);
+}
+
+#sendButton {
+    background-color: var(--primary-color);
+    color: var(--background-darker);
+    border: none;
+    width: 55px;
+    height: 55px;
+}
+
+#sendButton:hover {
+    background-color: var(--accent-color);
+}
+
+/* 麥克風按鈕 */
+#micButton {
+    color: var(--text-color);
+    background-color: var(--background-dark);
+}
+
+#micButton.active {
+    background-color: var(--warning-color);
+    color: var(--background-darker);
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: var(--border-color);
+    height: 8px;
+    margin-top: 15px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar span {
+    display: block;
+    height: 100%;
+    width: 30%;
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
+
+/* 輔助功能區 */
+.accessibility-bar {
+    padding: 12px 25px;
+    background-color: var(--background-darker);
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    border-bottom: 1px solid var(--border-color);
+    height: 39px;
+}
+
+.accessibility-button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-small);
+    transition: all 0.3s;
+}
+
+.accessibility-button:hover {
+    background-color: var(--background-lighter);
+}
+
+.accessibility-button i {
+    font-size: 20px;
+    color: var(--primary-color);
+}
+
+/* Google Maps 模態框樣式 */
+.map-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--modal-background);
+}
+
+.map-modal-content {
+    background-color: var(--background-darker);
+    margin: 5% auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-large);
+    width: 90%;
+    max-width: 900px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+
+.map-modal-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.map-modal-header h3 {
+    color: var(--text-color);
+    font-size: 24px;
+    margin: 0;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 22px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-button:hover {
+    color: var(--text-color);
+}
+
+.map-modal-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.map-container {
+    width: 100%;
+    height: 500px;
+    border-radius: var(--radius-small);
+    overflow: hidden;
+}
+
+.place-picker-container {
+    margin: 10px;
+    z-index: 10;
+    width: 300px;
+}
+
+gmpx-place-picker {
+    --gmpx-color-primary: var(--primary-color);
+    --gmpx-color-on-primary: var(--background-darker);
+    --gmpx-color-surface: var(--background-lighter);
+    --gmpx-color-on-surface: var(--text-color);
+}
+
+.map-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+.primary-button {
+    padding: 14px 25px;
+    background-color: var(--primary-color);
+    color: var(--background-darker);
+    border: none;
+    border-radius: var(--radius-small);
+    font-weight: 600;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.primary-button:hover {
+    background-color: var(--accent-color);
+}
+
+/* 地圖標記的信息窗口樣式 */
+.gm-style .gm-style-iw-c {
+    background-color: var(--background-darker);
+    color: var(--text-color);
+    padding: 15px;
+    border-radius: var(--radius-small);
+}
+
+.gm-style .gm-style-iw-d {
+    overflow: hidden !important;
+}
+
+.gm-style .gm-style-iw-t::after {
+    background: var(--background-darker);
+}
+
+.info-window-content {
+    color: var(--text-color);
+}
+
+.info-window-content strong {
+    font-size: 18px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.info-window-content span {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* 地圖視圖裡面的位置搜尋框 */
+.location-search-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    width: 300px;
+}
+
+/* 位置訊息樣式 */
+.location-message {
+    background-color: var(--background-lighter);
+    border-radius: var(--radius-small);
+    padding: 12px;
+    margin-top: 5px;
+}
+
+.location-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.location-address, .location-coordinates {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* 響應式設計 */
+@media (max-width: 1100px) {
+    .sidebar {
+        width: 280px;
+    }
+    
+    .main-content {
+        max-width: calc(100% - 280px);
+    }
+    
+    .map-modal-content {
+        width: 95%;
+    }
+    
+    .map-container {
+        height: 400px;
+    }
+}
+
+@media (max-width: 900px) {
+    .app-container {
+        flex-direction: column;
+        height: calc(100vh - 39px);
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-height: 200px;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+    
+    .main-content {
+        max-width: 100%;
+        height: calc(100vh - 200px - 39px);
+    }
+    
+    .message {
+        max-width: 90%;
+        font-size: 18px;
+        padding: 15px 18px;
+    }
+
+    .input-button {
+        width: 45px;
+        height: 45px;
+    }
+
+    #sendButton {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .map-container {
+        height: 350px;
+    }
+    
+    .place-picker-container {
+        width: 250px;
+    }
+}
+
+@media (max-width: 600px) {
+    .app-container {
+        height: calc(100vh - 39px);
+    }
+    
+    .sidebar {
+        max-height: 180px;
+    }
+    
+    .main-content {
+        height: calc(100vh - 180px - 39px);
+    }
+    
+    .sidebar-header h1,
+    .section-title {
+        font-size: 20px;
+    }
+    
+    .welcome-message h2 {
+        font-size: 24px;
+    }
+    
+    .welcome-message p,
+    .new-chat button,
+    .input-container input[type="text"] {
+        font-size: 18px;
+    }
+    
+    .message {
+        font-size: 18px;
+        padding: 14px;
+    }
+
+    .input-area {
+        padding: 15px;
+    }
+
+    .input-button {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    #sendButton {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .map-container {
+        height: 300px;
+    }
+    
+    .place-picker-container {
+        width: 200px;
+    }
+    
+    .map-modal-header h3 {
+        font-size: 20px;
+    }
+    
+    .primary-button {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+}
+
+/* 位置請求提示樣式 */
+.location-request-prompt {
+    background-color: var(--background-lighter);
+    border-radius: var(--radius-small);
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.location-request-prompt p {
+    margin-bottom: 10px;
+}
+
+.location-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.location-buttons button {
+    padding: 10px 15px;
+    border-radius: var(--radius-small);
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+/* 主要按鈕樣式 */
+.location-buttons .primary-button {
+    background-color: var(--primary-color);
+    color: var(--background-darker);
+    border: none;
+}
+
+.location-buttons .primary-button:hover {
+    background-color: var(--accent-color);
+}
+
+/* 次要按鈕樣式 */
+.location-buttons .secondary-button {
+    background-color: var(--background-dark);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.location-buttons .secondary-button:hover {
+    background-color: var(--primary-light);
+}
+
+/* 位置信息顯示樣式 */
+.location-selected-message {
+    background-color: var(--background-lighter);
+    border-radius: var(--radius-small);
+    padding: 12px;
+    margin-top: 5px;
+}
+
+.location-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.location-header i {
+    color: var(--primary-color);
+}
+
+.location-address, 
+.location-coordinates {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* 位置提示樣式 */
+.location-hint {
+    background-color: var(--background-lighter);
+    border-radius: var(--radius-small);
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.location-hint p {
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.location-hint ul {
+    margin-left: 20px;
+}
+
+.location-hint li {
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.map-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.map-modal-content {
+    background-color: var(--background-darker);
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.map-modal-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 10px 15px;
+    cursor: pointer;
+}
+
+.map-modal-close:hover,
+.map-modal-close:focus {
+    color: black;
+}
+
+.map-marker {
+    padding: 6px 10px;
+    background: #2c7be5;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 更新醫院結果樣式，確保格式化顯示正確 */
+.hospital-results {
+    background-color: var(--background-lighter);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 10px;
+}
+
+.hospital-results p {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.hospital-results p:last-child {
+    margin-bottom: 0;
+}
+
+.hospital-item {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hospital-item:last-child {
+    border-bottom: none;
+    margin-bottom: 20px;
+}
+
+.hospital-item p {
+    margin: 0 0 5px 0;
+}
+
+.hospital-item strong {
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+.hospital-details {
+    list-style-type: none;
+    padding-left: 20px;
+    margin: 5px 0 0 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.hospital-details li {
+    margin-bottom: 5px;
+    position: relative;
+    padding-left: 18px;
+}
+
+.hospital-details li:before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-size: 18px;
+    line-height: 1;
+}
+
+.hospital-footer {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+/* 地圖標記樣式 */
+.map-marker {
+    background-color: #e53935;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 50%;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 醫院信息窗口樣式優化 */
+.hospital-info-window {
+    min-width: 250px;
+    padding: 10px;
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+.hospital-info-window h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #3b82f6;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.hospital-info-window p {
+    margin: 5px 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* 確保聊天消息文本正確顯示 */
+.message {
+    word-wrap: break-word;
+    word-break: normal;
+    white-space: pre-wrap;
+    font-family: 'Noto Sans TC', sans-serif, Arial, "Microsoft JhengHei", "Microsoft YaHei";
+    text-align: left;
+    line-height: 1.6;
+  }
+  
+  /* 確保聊天容器能夠適應長訊息 */
+  .chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-dark);
+    gap: 24px;
+    height: auto;
+    min-height: 400px;
+  }
+  
+  /* 解決可能的溢出問題 */
+  .message-container {
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="description" content="AI 聊天助手 - 提供健康諮詢與醫療設施查詢">
+    <title>AI 聊天助手</title>
+    
+    <!-- 預載關鍵資源 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://maps.googleapis.com">
+    <link rel="preconnect" href="https://maps.gstatic.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- 功能偵測與錯誤處理 -->
+    <script>
+        // 錯誤處理與日誌記錄
+        window.addEventListener('error', function(e) {
+            console.error('全局錯誤:', e.message, 'at', e.filename, ':', e.lineno);
+        });
+        
+        // 檢測功能支援
+        window.supportsSpeechRecognition = 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+        window.supportsGeolocation = 'geolocation' in navigator;
+    </script>
+    
+    <!-- CSS 資源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <!-- 輔助功能區 -->
+    <div class="accessibility-bar">
+        <button class="accessibility-button" id="increaseFontBtn" title="放大字體" aria-label="放大字體">
+            <i class="fas fa-text-height"></i>
+        </button>
+        <button class="accessibility-button" id="voiceReadBtn" title="朗讀文字" aria-label="朗讀文字">
+            <i class="fas fa-volume-up"></i>
+        </button>
+    </div>
+
+    <!-- 主應用區域 -->
+    <div class="app-container">
+        <!-- 側邊欄 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="{% static 'images/bot.png' %}" alt="AI Logo" width="40" height="40">
+                </div>
+                <h1>AI 聊天助手</h1>
+            </div>
+            <div class="new-chat sidebar-section">
+                <button id="newChatButton" title="新對話" aria-label="新對話">
+                    <i class="fas fa-plus-circle"></i> 新對話
+                </button>
+            </div>
+            <div class="chat-history">
+                <h2 class="section-title">最近對話</h2>
+                <ul id="chatHistoryList"></ul>
+            </div>
+        </aside>
+
+        <!-- 主內容區 -->
+        <main class="main-content">
+            <div class="chat-header">
+                <span class="status"></span>
+                <h2 id="currentChatTitle">AI助手已就緒</h2>
+            </div>
+            <div class="chat-container" id="chatContainer">
+                <div class="welcome-message" id="welcomeMessage">
+                    <h2>歡迎使用 AI 聊天助手</h2>
+                    <p>我能幫您查詢資訊、解答問題或提供建議。您可以直接輸入問題，或點擊下方建議開始對話。</p>
+                    <div class="welcome-suggestions">
+                        <button class="suggestion-btn" data-suggestion="如何保持健康的睡眠習慣？">如何保持健康的睡眠習慣？</button>
+                        <button class="suggestion-btn" data-suggestion="幫我查詢附近的醫療設施">幫我查詢附近的醫療設施</button>
+                        <button class="suggestion-btn" data-suggestion="建議每日健康飲食菜單">建議每日健康飲食菜單</button>
+                        <button class="suggestion-btn" data-suggestion="家中緊急情況的處理方法">家中緊急情況的處理方法</button>
+                    </div>
+                </div>
+            </div>
+            <div class="input-area">
+                <div class="input-container">
+                    <input type="text" id="userInput" placeholder="請輸入您的問題..." aria-label="聊天輸入框">
+                    <button class="input-button" id="micButton" title="語音輸入" aria-label="語音輸入">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <input type="file" id="fileInput" name="file" accept=".txt,.pdf,.doc,.docx,.csv,.xls,.xlsx">
+                    <label class="input-button" for="fileInput" title="附加檔案" aria-label="附加檔案">
+                        <i class="fas fa-paperclip"></i>
+                    </label>
+                    <button class="input-button" id="locationButton" title="查詢地點" aria-label="查詢地點">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </button>
+                    <button class="input-button" id="sendButton" title="送出訊息" aria-label="送出訊息">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="progress-bar" id="progressBar" aria-hidden="true"><span></span></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 地圖模態框 -->
+    <div id="mapModal" class="map-modal" aria-labelledby="mapModalTitle" aria-modal="true" role="dialog">
+        <div class="map-modal-content">
+            <div class="map-modal-header">
+                <h2 id="mapModalTitle">選擇位置</h2>
+                <button id="closeMapModal" class="close-button" title="關閉" aria-label="關閉">×</button>
+            </div>
+            <div class="map-modal-body">
+                <!-- 地點搜索輸入框 -->
+                <div class="location-search-container">
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="locationSearch" 
+                            class="location-search-input" 
+                            placeholder="輸入地址或地點名稱"
+                            aria-label="搜尋位置">
+                        <button id="locationSearchBtn" class="location-search-btn" aria-label="搜尋">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 地圖容器 -->
+                <div id="map" class="map-container" aria-label="Google地圖"></div>
+            </div>
+            <div class="map-modal-footer">
+                <button id="selectLocation" class="primary-button" title="確認位置" aria-label="確認位置">
+                    <i class="fas fa-check-circle"></i> 確認此位置
+                </button>
+                <button id="searchHospitalsBtn" class="secondary-button" title="搜尋附近醫院" aria-label="搜尋附近醫院">
+                    <i class="fas fa-hospital"></i> 搜尋附近醫院
+                </button>
+                <button id="getCurrentLocationBtn" class="secondary-button" title="使用我的位置" aria-label="使用我的位置">
+                    <i class="fas fa-location-arrow"></i> 使用我的位置
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 初始化與配置 -->
+    <script>
+        // 應用程式初始化狀態
+        window.appConfig = {
+            apiRoot: '{% url "home" %}',
+            mapApiKey: 'AIzaSyAEW_iMaTrOPg0vQJJN3pMiy84-u8C_ZiE',
+            staticPath: '{% static "js/" %}'
+        };
+        
+        // 頁面載入事件
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM已載入，初始化應用程式...');
+        });
+        
+        // 定義全局 initMap 函數作為 Google Maps API 的回調
+        window.initMap = function() {
+            console.log("Google Maps API 已載入，等待地圖模組初始化...");
+            
+            // 創建一個安全的初始化嘗試函數
+            var initMapSafely = function() {
+                // 檢查 MedApp 和 maps.core 是否存在
+                if (window.MedApp && window.MedApp.maps && window.MedApp.maps.core) {
+                    // 檢查 initMap 函數是否存在
+                    if (typeof window.MedApp.maps.core.initMap === 'function') {
+                        console.log("呼叫 MedApp.maps.core.initMap");
+                        window.MedApp.maps.core.initMap();
+                        return true;
+                    } else {
+                        console.log("MedApp.maps.core 存在但 initMap 不是函數");
+                        // 等待模組載入完成
+                        document.addEventListener('modulesLoaded', function() {
+                            if (typeof window.MedApp.maps.core.initMap === 'function') {
+                                console.log("模組已載入，初始化地圖");
+                                window.MedApp.maps.core.initMap();
+                            }
+                        });
+                        return false;
+                    }
+                } else {
+                    console.log("MedApp 或 maps.core 尚未準備好");
+                    return false;
+                }
+            };
+            
+            // 嘗試初始化
+            if (!initMapSafely()) {
+                // 如果不成功，設置監聽器
+                console.log("地圖模組尚未準備好，設置監聽");
+                
+                // 監聽模組載入完成事件
+                document.addEventListener('modulesLoaded', function() {
+                    setTimeout(function() {
+                        initMapSafely();
+                    }, 500);
+                });
+            }
+        };
+    </script>
+    
+    <!-- 核心模組 - 優先載入 -->
+    <script src="{% static 'js/app-core.js' %}"></script>
+    <script src="{% static 'js/loader.js' %}"></script>
+    
+    <!-- Google Maps API - 按需載入 -->
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEW_iMaTrOPg0vQJJN3pMiy84-u8C_ZiE&callback=initMap&libraries=places"
+    async defer>
+    </script>
+    
+    <!-- 谷歌地圖元件庫 - 按需載入 -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js"></script>
+</body>
+</html>

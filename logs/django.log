@@ -1,0 +1,351 @@
+INFO 2025-04-24 20:44:21,595 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 21:00:11,670 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 21:04:48,367 autoreload C:\myproject\manage.py changed, reloading.
+INFO 2025-04-24 21:04:49,248 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-24 21:05:39,429 log Not Found: /favicon.ico
+INFO 2025-04-24 21:21:46,831 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-24 21:21:49,818 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 21:22:58,206 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 21:26:11,075 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 21:27:52,695 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-24 21:28:26,545 log Not Found: /chat/history/1745501010568/
+WARNING 2025-04-24 21:28:28,816 log Not Found: /chat/history/1745501001381/
+WARNING 2025-04-24 21:28:30,620 log Not Found: /chat/history/1745500995472/
+WARNING 2025-04-24 21:28:32,804 log Not Found: /chat/history/1745500931746/
+WARNING 2025-04-24 21:28:34,529 log Not Found: /chat/history/1745499939066/
+WARNING 2025-04-24 21:28:37,069 log Not Found: /chat/history/1745499952685/
+WARNING 2025-04-24 21:29:09,486 log Not Found: /chat/history/1745501317899/
+INFO 2025-04-24 21:31:17,074 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-24 21:31:20,145 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 21:32:27,898 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-24 21:33:40,303 log Not Found: /chat/history/1745501576662/
+INFO 2025-04-24 21:40:56,532 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-24 21:41:17,744 log Not Found: /chat/history/1745501763051/
+WARNING 2025-04-24 21:41:46,617 log Not Found: /chat/history/1745501757905/
+WARNING 2025-04-24 21:41:48,480 log Not Found: /chat/history/1745501704064/
+INFO 2025-04-24 21:49:32,286 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-24 21:49:50,402 log Not Found: /chat/history/1745502124088/
+WARNING 2025-04-24 21:49:52,479 log Not Found: /chat/history/1745502110571/
+INFO 2025-04-24 21:57:14,330 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 21:58:08,221 autoreload C:\myproject\myproject\settings.py changed, reloading.
+INFO 2025-04-24 21:58:11,177 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-24 22:06:39,201 log Not Found: /chat/history/1745502593309/
+INFO 2025-04-24 22:28:32,294 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 22:28:57,918 autoreload Watching for file changes with StatReloader
+INFO 2025-04-24 22:29:54,734 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-24 22:30:29,814 log Not Found: /chat/history/1745503998603/
+INFO 2025-04-29 17:08:56,672 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 17:10:40,865 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 17:11:07,492 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 17:11:35,017 log Not Found: /favicon.ico
+INFO 2025-04-29 17:23:45,440 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 17:24:07,355 log Not Found: /chat/history/1745917894707/
+INFO 2025-04-29 17:25:03,739 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-04-29 17:25:06,689 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 17:25:47,528 log Not Found: /chat/history/1745918656615/
+INFO 2025-04-29 17:50:36,314 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 17:50:59,734 log Not Found: /chat/history/1745918747837/
+INFO 2025-04-29 18:02:02,023 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 18:02:21,804 log Not Found: /chat/history/1745920260568/
+INFO 2025-04-29 18:07:11,541 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 18:07:14,518 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 18:08:53,689 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 18:09:22,510 log Not Found: /chat/history/1745920942820/
+INFO 2025-04-29 18:14:51,241 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 18:17:32,619 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 18:20:37,710 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 18:31:27,588 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 18:31:48,182 log Not Found: /chat/history/1745921363644/
+INFO 2025-04-29 18:34:00,138 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 18:35:38,469 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 18:43:08,580 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-04-29 18:43:11,680 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 18:48:48,837 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 19:26:59,336 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 19:27:18,035 log Not Found: /chat/history/1745923743384/
+WARNING 2025-04-29 19:27:38,481 log Not Found: /chat/history/1745923743384/
+INFO 2025-04-29 19:33:41,331 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 19:33:57,555 log Not Found: /chat/history/1745923743384/
+INFO 2025-04-29 19:34:29,652 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 19:37:47,446 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 19:43:40,572 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 19:49:23,267 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-04-29 19:49:26,255 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 19:49:51,854 log Not Found: /chat/history/1745927037228/
+INFO 2025-04-29 20:00:37,782 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 20:01:05,648 log Not Found: /chat/history/1745927391841/
+INFO 2025-04-29 20:06:03,362 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 20:06:22,012 log Not Found: /chat/history/1745928074544/
+INFO 2025-04-29 20:09:55,683 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 20:11:32,169 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 20:19:43,984 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 20:40:26,761 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 20:40:40,428 log Not Found: /api/reverse_geocode
+INFO 2025-04-29 20:45:21,250 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 20:56:43,524 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 20:57:16,139 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:05:18,478 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-04-29 21:05:21,450 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:08:50,266 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 21:09:09,410 log Not Found: /chat/history/1745930440341/
+WARNING 2025-04-29 21:09:11,111 log Not Found: /chat/history/1745928382993/
+INFO 2025-04-29 21:14:52,873 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-04-29 21:14:55,931 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:15:22,159 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-04-29 21:15:23,049 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:15:54,213 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-04-29 21:15:57,118 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:16:19,302 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 21:16:39,500 log Not Found: /chat/history/1745932149397/
+INFO 2025-04-29 21:24:17,753 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:26:15,261 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:32:25,630 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 21:32:28,670 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:32:54,775 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-29 21:32:57,684 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:33:24,212 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-29 21:33:24,595 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:34:10,225 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:35:28,451 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-29 21:35:28,828 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 21:35:46,935 log Not Found: /chat/history/1745933207155/
+INFO 2025-04-29 21:41:55,550 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 21:42:13,058 log Not Found: /chat/history/1745933748310/
+INFO 2025-04-29 21:50:09,229 autoreload C:\myproject\myproject\settings.py changed, reloading.
+INFO 2025-04-29 21:50:12,221 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:50:30,448 autoreload C:\myproject\myproject\settings.py changed, reloading.
+INFO 2025-04-29 21:50:33,376 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 21:51:53,886 autoreload C:\myproject\myproject\settings.py changed, reloading.
+INFO 2025-04-29 21:52:02,664 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 22:05:49,724 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 22:06:15,411 log Not Found: /chat/history/1745934133676/
+WARNING 2025-04-29 22:06:19,290 log Not Found: /chat/history/1745932737030/
+INFO 2025-04-29 22:17:22,838 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 22:17:25,806 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 22:22:54,377 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 22:23:13,747 log Not Found: /chat/history/1745935579284/
+ERROR 2025-04-29 22:23:49,990 log Internal Server Error: /chat/
+ERROR 2025-04-29 22:24:00,759 log Internal Server Error: /chat/
+INFO 2025-04-29 22:24:47,662 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 22:24:50,639 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 22:25:09,389 log Not Found: /chat/history/1745936594825/
+INFO 2025-04-29 22:34:37,977 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 22:34:40,994 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 22:36:42,108 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 22:37:05,317 log Not Found: /chat/history/1745936709773/
+INFO 2025-04-29 22:40:33,433 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 22:40:36,422 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 22:40:54,760 log Not Found: /chat/history/1745937427578/
+ERROR 2025-04-29 22:40:59,841 log Internal Server Error: /chat/
+INFO 2025-04-29 22:42:04,432 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 22:42:07,412 autoreload Watching for file changes with StatReloader
+ERROR 2025-04-29 22:42:26,596 log Internal Server Error: /chat/
+INFO 2025-04-29 22:43:46,564 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 22:43:49,505 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 22:51:04,753 autoreload C:\myproject\myproject\wsgi.py changed, reloading.
+INFO 2025-04-29 22:51:07,771 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 22:52:43,494 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 22:53:00,070 log Not Found: /chat/history/1745937655956/
+INFO 2025-04-29 23:02:27,185 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:02:46,187 log Not Found: /chat/history/1745938381237/
+INFO 2025-04-29 23:04:20,105 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 23:04:23,129 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:05:12,500 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 23:05:12,967 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:05:33,378 log Not Found: /chat/history/1745938967789/
+INFO 2025-04-29 23:06:45,137 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:07:00,494 log Not Found: /chat/history/1745939134170/
+INFO 2025-04-29 23:09:31,727 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-29 23:09:34,688 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:09:52,873 log Not Found: /chat/history/1745939222111/
+INFO 2025-04-29 23:10:33,462 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-29 23:10:36,459 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:12:59,744 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:13:23,218 log Not Found: /chat/history/1745939395399/
+INFO 2025-04-29 23:18:00,920 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 23:18:03,889 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:18:20,746 log Not Found: /chat/history/1745939604829/
+INFO 2025-04-29 23:19:21,938 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 23:19:24,907 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:19:40,985 log Not Found: /chat/history/1745939900729/
+INFO 2025-04-29 23:21:37,059 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:21:54,050 log Not Found: /chat/history/1745939980974/
+INFO 2025-04-29 23:24:53,230 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:27:45,800 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-29 23:28:04,987 log Not Found: /chat/history/1745940363770/
+INFO 2025-04-29 23:29:31,444 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:30:05,360 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:31:31,766 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:33:54,116 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 23:33:57,129 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:34:41,103 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-29 23:34:44,124 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:39:02,511 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-29 23:39:05,484 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:47:18,392 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-04-29 23:47:21,438 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:50:46,419 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:54:14,421 autoreload Watching for file changes with StatReloader
+INFO 2025-04-29 23:57:01,053 autoreload Watching for file changes with StatReloader
+INFO 2025-04-30 00:02:43,428 autoreload Watching for file changes with StatReloader
+INFO 2025-04-30 00:03:42,675 autoreload Watching for file changes with StatReloader
+WARNING 2025-04-30 00:04:09,146 log Not Found: /favicon.ico
+ERROR 2025-04-30 00:04:34,847 log Internal Server Error: /chat/
+ERROR 2025-04-30 00:05:00,168 log Internal Server Error: /chat/
+INFO 2025-04-30 00:05:53,648 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-30 00:05:56,681 autoreload Watching for file changes with StatReloader
+ERROR 2025-04-30 00:06:16,675 log Internal Server Error: /chat/
+Traceback (most recent call last):
+  File "C:\myproject\myenv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\myproject\myenv\Lib\site-packages\django\core\handlers\base.py", line 204, in _get_response
+    self.check_response(response, callback)
+  File "C:\myproject\myenv\Lib\site-packages\django\core\handlers\base.py", line 332, in check_response
+    raise ValueError(
+ValueError: The view myproject.views.view didn't return an HttpResponse object. It returned None instead.
+INFO 2025-04-30 00:06:28,949 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-30 00:06:31,882 autoreload Watching for file changes with StatReloader
+INFO 2025-04-30 00:07:20,913 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-04-30 00:07:23,928 autoreload Watching for file changes with StatReloader
+INFO 2025-05-01 21:52:07,394 autoreload Watching for file changes with StatReloader
+INFO 2025-05-01 21:58:10,572 autoreload Watching for file changes with StatReloader
+INFO 2025-05-01 21:58:42,083 autoreload Watching for file changes with StatReloader
+INFO 2025-05-01 21:59:46,099 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-01 22:00:16,015 log Not Found: /favicon.ico
+WARNING 2025-05-01 22:00:18,870 log Not Found: /chat/history/1745943299803/
+WARNING 2025-05-01 22:13:07,801 log Not Found: /chat/history/1746108020066/
+INFO 2025-05-05 20:45:31,584 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 20:46:13,739 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 20:46:16,811 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 20:46:39,709 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-05-05 20:46:40,736 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 20:47:04,153 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-05-05 20:47:05,102 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 20:47:32,907 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 20:47:33,951 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-05 20:47:50,227 log Not Found: /favicon.ico
+INFO 2025-05-05 21:06:55,014 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-05-05 21:06:58,127 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:09:20,322 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 21:09:23,376 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:10:28,648 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 21:10:29,665 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:20:06,391 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 21:20:09,428 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:20:32,138 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 21:20:32,616 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:24:08,986 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 21:24:12,050 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:24:55,728 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 21:24:58,745 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:27:54,220 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 21:27:57,205 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:29:32,564 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-05 21:29:35,622 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:55:16,847 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 21:58:15,050 autoreload C:\myproject\myapp\__init__.py changed, reloading.
+INFO 2025-05-05 21:58:16,026 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 22:00:58,160 autoreload C:\myproject\graph_rag_agent\llm.py changed, reloading.
+INFO 2025-05-05 22:01:01,112 autoreload Watching for file changes with StatReloader
+INFO 2025-05-05 22:13:09,276 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-05 22:18:43,491 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-05 22:18:46,741 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2025-05-12 19:59:20,281 autoreload Watching for file changes with StatReloader
+INFO 2025-05-12 20:00:37,273 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:01:07,567 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:01:17,423 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:02:47,857 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:02:48,300 log Not Found: /favicon.ico
+INFO 2025-05-12 20:03:32,230 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:03:52,802 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:06:49,636 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:06:49,964 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:06:54,971 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:06:55,261 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:06:56,478 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:06:56,772 log Not Found: /favicon.ico
+INFO 2025-05-12 20:08:47,837 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:09:08,722 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:14,663 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:14,994 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:09:15,429 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:15,699 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:09:15,987 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:16,243 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:09:16,487 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:16,753 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:16,969 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:17,171 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:17,337 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:17,542 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:17,690 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:17,957 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:09:18,230 log Not Found: /favicon.ico
+INFO 2025-05-12 20:12:02,939 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:12:22,451 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2025-05-12 20:13:33,586 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:13:52,590 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2025-05-12 20:23:13,639 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:23:34,745 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:23:51,994 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:27:48,876 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:27:49,279 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:28:07,214 log Not Found: /chat/history/1746450647372/
+WARNING 2025-05-12 20:28:07,609 log Not Found: /chat/history/1746449704902/
+WARNING 2025-05-12 20:28:07,810 log Not Found: /chat/history/1746449274978/
+WARNING 2025-05-12 20:28:08,204 log Not Found: /chat/history/1746108789758/
+WARNING 2025-05-12 20:28:08,633 log Not Found: /chat/history/1746711977806/
+WARNING 2025-05-12 20:28:09,444 log Not Found: /chat/history/1746711967245/
+WARNING 2025-05-12 20:28:59,331 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:28:59,691 log Not Found: /favicon.ico
+INFO 2025-05-12 20:30:07,078 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:30:24,526 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:30:26,850 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:30:27,258 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:30:45,258 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2025-05-12 20:35:38,775 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:35:57,654 log Not Found: /chat/history/1747052886889/
+INFO 2025-05-12 20:39:32,333 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:39:59,162 log Not Found: /chat/history/1747053360609/
+WARNING 2025-05-12 20:40:16,553 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:40:59,995 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:41:00,427 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:42:16,928 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:42:46,068 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:42:46,511 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:42:54,189 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:42:54,656 log Not Found: /favicon.ico
+INFO 2025-05-12 20:47:59,920 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:48:17,132 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:48:23,558 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:48:26,985 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:48:27,478 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:49:05,030 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2025-05-12 20:51:17,483 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:51:34,119 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:51:34,541 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:51:35,738 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:51:36,197 log Not Found: /favicon.ico
+WARNING 2025-05-12 20:51:47,675 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:52:15,729 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:52:17,722 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:52:18,370 log Not Found: /favicon.ico
+INFO 2025-05-12 20:56:22,115 autoreload Watching for file changes with StatReloader
+INFO 2025-05-12 20:57:28,823 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 20:57:47,677 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:59:13,374 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 20:59:13,792 log Not Found: /favicon.ico
+INFO 2025-05-12 21:02:58,499 autoreload Watching for file changes with StatReloader
+INFO 2025-05-12 21:07:50,371 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 21:08:19,456 log Not Found: /chat/history/1747054131966/
+WARNING 2025-05-12 21:08:20,310 log Not Found: /chat/history/1747053600936/
+WARNING 2025-05-12 21:08:38,985 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 21:08:44,920 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 21:08:48,155 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 21:08:48,562 log Not Found: /favicon.ico
+INFO 2025-05-12 21:11:54,802 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-12 21:12:12,799 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-12 21:13:06,356 log Not Found: /favicon.ico
+WARNING 2025-05-12 21:13:09,535 log Not Found: /chat/history/1747055531163/
+WARNING 2025-05-12 21:13:10,782 log Not Found: /favicon.ico
