@@ -4,6 +4,7 @@ from vertexai.generative_models import GenerationConfig
 from neo4j_graphrag.llm.vertexai_llm import VertexAILLM
 from neo4j_graphrag.indexes import create_vector_index
 from neo4j_graphrag.retrievers import VectorRetriever
+from neo4j_graphrag.retrievers import VectorCypherRetriever
 from neo4j_graphrag.generation import RagTemplate
 from neo4j_graphrag.generation.graphrag import GraphRAG
 from neo4j_graphrag.llm import OpenAILLM
@@ -27,11 +28,25 @@ create_vector_index(driver, name="text_embeddings", label="Chunk",
                    embedding_property="embedding", dimensions=1536, similarity_fn="cosine")
 
 
-vector_retriever = VectorRetriever(
+vc_retriever = VectorCypherRetriever(
    driver,
    index_name="text_embeddings",
    embedder=embedder,
-   return_properties=["text"],
+   
+   retrieval_query="""
+//1) Go out 2-3 hops in the entity graph and get relationships
+WITH node AS chunk
+MATCH (chunk)<-[:FROM_CHUNK]-()-[relList:!FROM_CHUNK]-{1,2}()
+UNWIND relList AS rel
+
+//2) collect relationships and text chunks
+WITH collect(DISTINCT chunk) AS chunks,
+ collect(DISTINCT rel) AS rels
+
+//3) format and return context
+RETURN '=== text ===n' + apoc.text.join([c in chunks | c.text], 'n---n') + 'nn=== kg_rels ===n' +
+ apoc.text.join([r in rels | startNode(r).name + ' - ' + type(r) + '(' + coalesce(r.details, '') + ')' +  ' -> ' + endNode(r).name ], 'n---n') AS info
+"""
 )
 
 rag_template = RagTemplate(template=
@@ -57,11 +72,22 @@ If you are not sure about the answer, just say "I do not know the answer, please
 # Answer:
 ''', system_instructions="You are an expert in medcial field, your goal is provide imformation for elders using Neo4j.",expected_inputs=['query_text', 'context'])
 
-rag  = GraphRAG(llm=llm, retriever=vector_retriever, prompt_template=rag_template)
+rag  = GraphRAG(llm=llm, retriever=vc_retriever, prompt_template=rag_template)
 
 def graph_rag(input:str):
+   
+   vc_res = vc_retriever.get_search_results(query_text=input, top_k=3)
+   kg_rel_pos = vc_res.records[0]['info'].find('nn=== kg_rels ===n')
+    
+    
+   kg_result_chunk = vc_res.records[0]['info'][:kg_rel_pos]
+   kg_result_relationships = vc_res.records[0]['info'][kg_rel_pos+len('nn=== kg_rels ===n'):]  
+    
+    # RAG answer
    result = rag.search(input, retriever_config={'top_k':5})
-   return result.answer
-
+    
+    # 整理輸出
+   answer_with_source = f"{result.answer}\n資料來源:\n{kg_result_chunk}{kg_result_relationships}"
+   return answer_with_source
 
 
