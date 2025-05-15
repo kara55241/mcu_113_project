@@ -6,7 +6,7 @@ class SearchTools:
     """MCP風格的地圖與搜尋工具，使用 Google Maps API 與 Google Search API 本地查詢地點與網頁資訊"""
 
     @staticmethod
-    def Google_Map_MCP(input: str) -> str:
+    def Google_Map(input: str) -> str:
         """
         使用 Google Maps API 查詢地點附近的醫療設施。
         輸入應為地名，例如「台北醫院」、「新竹診所」。

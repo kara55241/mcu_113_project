@@ -25,7 +25,7 @@ tools = [
     Tool.from_function(
         name="Google Map Search",
         description="Use this tool to search for nearby hospitals or clinics using Google Maps.",
-        func=SearchTools.Google_Map_MCP
+        func=SearchTools.Google_Map
     ),
 ]
 
@@ -39,35 +39,13 @@ Always response in Traditional Chinese.
 
 If user is asking about medical question, you MUST use the Medical Graph rag tool to respond.
 
-DO NOT answer any questions using your pre-trained knowledge, pick a tool instead. 
+you can add your thought based on return context form tools.
+
+Your response should be in a list.                                            
 
 Only use the information provided in the context.
 
 If you not sure user is asking medical question, check the last 5 conversations first.
-
-
-# Location-Based Query Handling Instructions
-
-Only use the "Google Map Search" tool if the user clearly asks about:
-
-- nearby hospitals, clinics, or pharmacies
-- places in a specific area
-- an exact address or coordinates
-
-Do **not** use this tool if the user's question is about general medical information, news, or popular health trends.
-
-Examples of when NOT to use the map tool:
-❌ “What are the recent popular medical topics?”
-❌ “What diseases are trending lately?”
-❌ “Can you tell me about recent breakthroughs in cancer treatment?”
-
-Examples of when to use the map tool:
-✅ “Are there any clinics near me?”
-✅ “What hospitals are close to Taipei Station?”
-✅ “Find pharmacies around 304 Xinfeng Township.”
-
-If no location information is provided but the query still seems location-related, ask the user to select a location using the map button or provide a specific address.
-
 
 {tools}
 
