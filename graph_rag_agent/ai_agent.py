@@ -41,6 +41,8 @@ If user is asking about medical question, you MUST use the Medical Graph rag too
 
 you can add your thought based on return context form tools.
 
+Your response should be in a list.                                            
+
 Only use the information provided in the context.
 
 If you not sure user is asking medical question, check the last 5 conversations first.
