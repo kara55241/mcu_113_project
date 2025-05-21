@@ -103,6 +103,8 @@ chat_agent = RunnableWithMessageHistory(
     history_messages_key="chat_history",
 )
 
+# 修改 ai_agent.py 中的 generate_response 函數結尾部分
+
 def generate_response(user_input, session_id="default", location_info=None):
     # 準備輸入資料
     input_text = user_input.strip()
@@ -131,14 +133,35 @@ def generate_response(user_input, session_id="default", location_info=None):
 
     # 統一解析輸出格式
     if isinstance(response, dict):
+        # 獲取輸出文本
+        output_text = response.get("output", "（未取得 AI 回應）")
+        
+        # 確保輸出包含Markdown語法標記
+        # 嘗試添加明確的Markdown標記，比如列表的 * 前面確保有換行
+        if not output_text.startswith('# ') and '\n# ' not in output_text:
+            # 檢查是否有列表項但格式可能不正確
+            if any(line.strip().startswith('*') or line.strip().startswith('-') or 
+                   (line.strip() and line.strip()[0].isdigit() and line.strip()[1:].startswith('.')) 
+                   for line in output_text.split('\n')):
+                # 確保列表項前有換行
+                output_text = output_text.replace('\n* ', '\n\n* ')
+                output_text = output_text.replace('\n- ', '\n\n- ')
+                # 處理數字列表
+                import re
+                output_text = re.sub(r'\n(\d+\.)', r'\n\n\1', output_text)
+        
         return {
-            "output": response.get("output", "（未取得 AI 回應）"),
+            "output": output_text,
+            "is_markdown": True,  # 明確標記為Markdown
             "location": location_info,
             "data": response.get("data", {})
         }
     else:
+        # 字符串響應處理
+        output_text = str(response)
         return {
-            "output": str(response),
+            "output": output_text,
+            "is_markdown": True,  # 明確標記為Markdown
             "location": location_info,
             "data": {}
         }

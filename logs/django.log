@@ -349,3 +349,53 @@ WARNING 2025-05-12 21:12:12,799 log Not Found: /.well-known/appspecific/com.chro
 WARNING 2025-05-12 21:13:06,356 log Not Found: /favicon.ico
 WARNING 2025-05-12 21:13:09,535 log Not Found: /chat/history/1747055531163/
 WARNING 2025-05-12 21:13:10,782 log Not Found: /favicon.ico
+INFO 2025-05-21 20:40:20,830 autoreload Watching for file changes with StatReloader
+INFO 2025-05-21 20:42:57,991 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-21 20:47:35,124 log Not Found: /favicon.ico
+WARNING 2025-05-21 20:47:38,266 log Not Found: /chat/history/1747055590647/
+INFO 2025-05-21 21:24:08,795 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-21 21:24:11,922 autoreload Watching for file changes with StatReloader
+INFO 2025-05-21 21:33:39,320 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-21 21:33:42,298 autoreload Watching for file changes with StatReloader
+INFO 2025-05-21 21:34:51,050 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-21 21:34:54,062 autoreload Watching for file changes with StatReloader
+INFO 2025-05-21 21:48:05,002 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-21 21:48:08,084 autoreload Watching for file changes with StatReloader
+INFO 2025-05-21 21:52:59,971 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-21 21:53:02,935 autoreload Watching for file changes with StatReloader
+INFO 2025-05-21 22:37:46,239 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-21 22:38:10,918 log Not Found: /chat/history/1747835599354/
+INFO 2025-05-21 22:39:49,872 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-21 22:39:52,844 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-21 22:40:44,226 log Not Found: /chat/history/1747838291479/
+WARNING 2025-05-21 22:44:45,104 log Not Found: /favicon.ico
+INFO 2025-05-21 22:44:59,890 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-21 22:45:19,064 log Not Found: /chat/history/1747838445332/
+INFO 2025-05-21 22:53:00,240 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-21 22:56:59,155 log Not Found: /chat/history/1747838721491/
+INFO 2025-05-21 23:12:13,089 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-05-21 23:12:16,112 autoreload Watching for file changes with StatReloader
+INFO 2025-05-21 23:13:22,635 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-21 23:13:41,253 log Not Found: /chat/history/1747839421453/
+WARNING 2025-05-21 23:14:02,667 log Not Found: /favicon.ico
+WARNING 2025-05-21 23:16:58,761 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-21 23:16:59,835 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2025-05-21 23:23:09,342 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-21 23:23:12,325 autoreload Watching for file changes with StatReloader
+INFO 2025-05-21 23:40:04,087 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-21 23:40:22,784 log Not Found: /chat/history/1747840422634/
+WARNING 2025-05-21 23:56:00,671 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-21 23:58:42,458 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-21 23:58:43,053 log Not Found: /favicon.ico
+WARNING 2025-05-21 23:59:50,232 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-21 23:59:50,784 log Not Found: /favicon.ico
+WARNING 2025-05-22 00:00:45,688 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-22 00:00:46,209 log Not Found: /favicon.ico
+INFO 2025-05-22 00:07:22,103 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-22 00:08:30,984 log Not Found: /chat/history/1747842025824/
+ERROR 2025-05-22 00:08:52,486 log Internal Server Error: /
+WARNING 2025-05-22 00:09:11,694 log Not Found: /favicon.ico
+ERROR 2025-05-22 00:10:55,849 log Internal Server Error: /
+INFO 2025-05-22 00:12:17,204 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-05-22 00:12:20,169 autoreload Watching for file changes with StatReloader
+WARNING 2025-05-22 00:12:46,003 log Not Found: /chat/history/1747843833277/
