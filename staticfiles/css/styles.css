@@ -1046,3 +1046,355 @@ gmpx-place-picker {
     max-width: 100%;
     overflow-wrap: break-word;
   }
+/* 添加到styles.css文件底部 - Markdown 樣式增強 */
+
+/* 統一字體和行高 */
+.message-content {
+  font-family: 'Noto Sans TC', sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+/* 標題樣式 */
+.message-content h1,
+.message-content h2,
+.message-content h3,
+.message-content h4,
+.message-content h5,
+.message-content h6 {
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--primary-color);
+}
+
+.message-content h1 { font-size: 1.6em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border-color); }
+.message-content h2 { font-size: 1.4em; padding-bottom: 0.2em; border-bottom: 1px solid var(--border-color); }
+.message-content h3 { font-size: 1.25em; }
+.message-content h4 { font-size: 1.15em; }
+.message-content h5 { font-size: 1.05em; }
+.message-content h6 { font-size: 1em; }
+
+/* 段落樣式 */
+.message-content p {
+  margin-bottom: 1em;
+  overflow-wrap: break-word;
+}
+
+/* 列表樣式 */
+.message-content .markdown-unordered-list,
+.message-content .markdown-ordered-list {
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+  padding-left: 2em;
+}
+
+.message-content .markdown-unordered-list li,
+.message-content .markdown-ordered-list li {
+  margin-bottom: 0.5em;
+  position: relative;
+}
+
+.message-content .markdown-unordered-list li::marker {
+  color: var(--primary-color);
+}
+
+.message-content .markdown-ordered-list li::marker {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* 嵌套列表 */
+.message-content .markdown-unordered-list .markdown-unordered-list,
+.message-content .markdown-ordered-list .markdown-ordered-list,
+.message-content .markdown-unordered-list .markdown-ordered-list,
+.message-content .markdown-ordered-list .markdown-unordered-list {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+/* 引用區塊 */
+.message-content blockquote {
+  margin: 1em 0;
+  padding: 0.6em 1em;
+  border-left: 4px solid var(--primary-color);
+  background-color: var(--background-darker);
+  color: var(--text-secondary);
+  border-radius: 0 6px 6px 0;
+}
+
+.message-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* 代碼區塊 */
+.message-content .markdown-code-block {
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: 6px;
+  background-color: var(--background-darker);
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+}
+
+.message-content code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  background-color: var(--background-darker);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.message-content pre code {
+  padding: 0;
+  background-color: transparent;
+  white-space: pre;
+  display: block;
+}
+
+/* 內聯代碼 */
+.message-content :not(pre) > code {
+  color: #f8f8f2;
+  background-color: #2d2d3a;
+  border: 1px solid var(--border-color);
+}
+
+/* 水平線 */
+.message-content hr {
+  height: 1px;
+  margin: 2em 0;
+  background-color: var(--border-color);
+  border: none;
+}
+
+/* 鏈接樣式 */
+.message-content a {
+  color: var(--primary-color);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--primary-color);
+  transition: color 0.2s, border-bottom 0.2s;
+}
+
+.message-content a:hover {
+  color: var(--accent-color);
+  border-bottom: 1px solid var(--accent-color);
+}
+
+/* 表格樣式 */
+.message-content .table-container {
+  overflow-x: auto;
+  margin: 1em 0;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.message-content .markdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.message-content .markdown-table th,
+.message-content .markdown-table td {
+  padding: 0.75em 1em;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.message-content .markdown-table th {
+  font-weight: 600;
+  background-color: var(--background-darker);
+  color: var(--primary-color);
+}
+
+.message-content .markdown-table tr:nth-child(even) {
+  background-color: var(--background-darker);
+}
+
+.message-content .markdown-table tr:hover {
+  background-color: var(--primary-light);
+}
+
+/* 強調與粗體 */
+.message-content strong {
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+.message-content em {
+  font-style: italic;
+  color: var(--warning-color);
+}
+
+.message-content strong em,
+.message-content em strong {
+  font-weight: 600;
+  font-style: italic;
+  color: var(--primary-color);
+}
+
+/* 知識圖譜查詢樣式 */
+.message-content .knowledge-graph-process {
+  background-color: var(--background-darker);
+  border-left: 4px solid var(--accent-color);
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.95em;
+  color: var(--text-secondary);
+}
+
+/* 圖片樣式 */
+.message-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1em 0;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+/* 定義列表 */
+.message-content dl {
+  margin: 1em 0;
+}
+
+.message-content dt {
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-top: 0.8em;
+}
+
+.message-content dd {
+  margin-left: 2em;
+  margin-bottom: 0.5em;
+}
+
+/* 縮寫和標記 */
+.message-content abbr,
+.message-content mark {
+  cursor: help;
+  border-bottom: 1px dotted var(--text-secondary);
+}
+
+.message-content mark {
+  background-color: var(--warning-color);
+  color: var(--background-darker);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  border: none;
+}
+
+/* 上標和下標 */
+.message-content sup,
+.message-content sub {
+  font-size: 0.75em;
+}
+
+/* 特殊格式: 提示、警告等 */
+.message-content .info-box {
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: 6px;
+  background-color: var(--background-darker);
+  border-left: 4px solid var(--primary-color);
+}
+
+.message-content .warning-box {
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: 6px;
+  background-color: var(--background-darker);
+  border-left: 4px solid var(--warning-color);
+}
+
+.message-content .error-box {
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: 6px;
+  background-color: var(--background-darker);
+  border-left: 4px solid #ff5252;
+}
+
+.message-content .success-box {
+  margin: 1em 0;
+  padding: 1em;
+  border-radius: 6px;
+  background-color: var(--background-darker);
+  border-left: 4px solid var(--success-color);
+}
+
+/* 確保Markdown中的列表樣式正確 */
+.message-content ul {
+  list-style-type: disc;
+}
+
+.message-content ol {
+  list-style-type: decimal;
+}
+
+.message-content ul ul {
+  list-style-type: circle;
+}
+
+.message-content ol ol {
+  list-style-type: lower-alpha;
+}
+
+.message-content ul ul ul {
+  list-style-type: square;
+}
+
+.message-content ol ol ol {
+  list-style-type: lower-roman;
+}
+
+/* 修復加粗後跟冒號的樣式 */
+.message-content strong[data-followed-by-colon="true"] {
+  display: inline;
+}
+
+/* 確保預格式化文本不會溢出 */
+.message-content pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* 修復行內元素的間距 */
+.message-content strong,
+.message-content em,
+.message-content a,
+.message-content code,
+.message-content mark {
+  margin: 0 0.05em;
+}
+
+/* 確保清單項目空間正確 */
+.message-content li:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+/* 移除最後一個段落的底部間距 */
+.message-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* 確保表格單元格對齊 */
+.message-content th,
+.message-content td {
+  vertical-align: top;
+}
+
+/* 修正在深色主題下的顏色問題 */
+.message-content ::selection {
+  background-color: var(--primary-color);
+  color: var(--background-darker);
+}
+
+/* 使清單項目更易讀的間距 */
+.message-content li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}

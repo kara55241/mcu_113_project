@@ -165,10 +165,15 @@ class ChatView(View):
 
             response_data = generate_response(context_prefix + user_message, session_id, location_info)
 
-            ChatHistory.add_message(session_id, response_data.get('output', ''), 'bot')
+            # 獲取輸出內容
+            output_text = response_data.get('output', '')
+
+            # 確保 Markdown 格式不會被轉義
+            ChatHistory.add_message(session_id, output_text, 'bot')
 
             return JsonResponse({
-                "output": response_data.get('output', ''),
+                "output": output_text,
+                "is_markdown": True,  # 標記這是 Markdown 格式
                 "location": response_data.get('location', location_info),
                 "data": response_data.get('data', {})
             })
