@@ -1,3 +1,4 @@
+
 from neo4j import GraphDatabase
 from neo4j_graphrag.embeddings import OpenAIEmbeddings
 from vertexai.generative_models import GenerationConfig
@@ -9,7 +10,11 @@ from neo4j_graphrag.generation import RagTemplate
 from neo4j_graphrag.generation.graphrag import GraphRAG
 from neo4j_graphrag.llm import OpenAILLM
 import os
+from dotenv import load_dotenv
 
+
+
+load_dotenv()
 NEO4J_URI = os.getenv("NEO4J_URI")
 NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
