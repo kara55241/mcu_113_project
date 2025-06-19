@@ -1,11 +1,18 @@
 from langgraph.prebuilt import create_react_agent
 from langgraph_supervisor import create_supervisor
 from langchain_core.tools import tool
+import langchain
 from research import graph_rag
 from fact_check import search_fact_checks
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import MessagesState
+from langchain_core.messages import SystemMessage, HumanMessage
 from llm import llm_GPT, llm_gemini
-import langchain
+from typing import Literal
 langchain.cache = None
+memory=MemorySaver()
+class AgentState(MessagesState):
+    FactChecked: bool=False
 
 @tool
 def graphrag_tool(query: str) -> str:
@@ -20,11 +27,12 @@ def graphrag_tool(query: str) -> str:
         A comprehensive answer based on the medical knowledge graph.
         if answer is not found, it will return a message indicating that no answer was found.
     """
-    #print(f"Graph RAG result: {result}")
+
     result = graph_rag(input=query)
     return result
 
-def google_fact_check_tool(query: str) -> str:
+@tool
+def google_fact_check_tool(query: str,state: AgentState) -> str:
     """
     You must use this tool when supervisor asks you to fact-check a claim.
 
@@ -47,12 +55,22 @@ def google_fact_check_tool(query: str) -> str:
                         result += f"  審查結果: {review.get('textualRating')}\n"
                         result += f"  來源連結: {review.get('url')}\n"
                 result += "-" * 20 + "\n"
+            state["FactChecked"]=True
         else:
-            result += "查維相關審查結果\n"
+            result += "查無相關審查結果\n"
     
     return result
 
-
+@tool
+def should_continue(state: AgentState) -> Literal["GraphRAG","__end__"]:
+    """
+    Defined the condition to continue the workflow.
+    """
+    if state['FactChecked'] == True:
+        return "__end__"
+    else:
+        return "GraphRAG"
+    
 graphrag_agent = create_react_agent(
     model=llm_gemini,  
     tools=[graphrag_tool], 
@@ -65,7 +83,7 @@ graphrag_agent = create_react_agent(
         Your main task is to use the provided tool to search for answers whenever you receive a user inquiry, and return the search results.
     Specific Requirements:
         **Prohibitions**:
-            1.Languages ​​other than Traditional Chinese are not allowed
+            1.Languages other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
     """
     
@@ -85,6 +103,7 @@ fact_check_agent = create_react_agent(
         **Prohibitions**:   
             1. Languages ​​other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
+            3. Only use the provided tool to fact-check claims, do not use any other methods.
     """
     )
     
@@ -92,28 +111,24 @@ fact_check_agent = create_react_agent(
 
 supervisor = create_supervisor(
     agents=[graphrag_agent, fact_check_agent],
+    tools=[should_continue],
     model=llm_gemini,
     prompt=(
         """
         You are a supervisor who manages multiple agents.
         First,you need to use the `graphrag_agent` to answer medical questions.
-        then, you need to use the `fact_check_agent` to check the user query for factual accuracy.
-        Lastlt,you need to tell anout `fact_check_agent` and `graphrag_agent` both answer to  user.
+        Second, you need to use the `fact_check_agent` to check the user query for factual accuracy.
+        Last,you need to `fact_check_agent` and `graphrag_agent` respond to user.
         """
     )
 )
 
 
 # Compile and run
-app = supervisor.compile()
-result = app.invoke({
-    "messages": [
-        {
-            "role": "user",
-            "content": "糖尿病可以吃甜食嗎?"
-        }
-    ]
-})
-
-for m in result["messages"]:
-    m.pretty_print()
+app = supervisor.compile(checkpointer=memory)
+config = {"configurable": {"thread_id": "1"}}
+while True:
+    message=HumanMessage(content=input("輸入你的問題: "))
+    result = app.invoke(input={'messages':message},config=config)
+    for m in result["messages"]:
+        m.pretty_print()

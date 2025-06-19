@@ -7,7 +7,7 @@ API_KEY = "AIzaSyB2PxK_0hv39nQlazmqaGltXOSQKenZS0A"
 # Base URL for the Fact Check Tools API
 BASE_URL = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 
-def search_fact_checks(query, language_code='zh-TW', review_publisher_site_filter=None,
+def search_fact_checks(query: str, language_code='zh-TW', review_publisher_site_filter=None,
                        max_age_days=None, page_size=None, page_token=None, offset=None):
     
     params = {

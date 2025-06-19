@@ -13,10 +13,10 @@ if not os.getenv("OPENAI_API_KEY"):
     raise ValueError("OPENAI_API_KEY 環境變數未設定！")
 
 if not os.getenv("OPENAI_MODEL"):
-    os.environ["OPENAI_MODEL"] = "gpt-4o"
+    os.environ["OPENAI_MODEL"] = "gpt-4.1-mini"
 
 if not os.getenv("OPENAI_EMBEDDING_MODEL"):
-    os.environ["OPENAI_EMBEDDING_MODEL"] = "text-embedding-3-small"
+    os.environ["OPENAI_EMBEDDING_MODEL"] = "text-embedding-ada-002"
 
 # 建立 LLM 模型實例
 llm_GPT = ChatOpenAI(

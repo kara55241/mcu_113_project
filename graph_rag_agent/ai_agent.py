@@ -1,3 +1,4 @@
+"""準備棄用, 之後會用langgrpah替代"""
 from .llm import llm_GPT, llm_gemini
 from .graph import graph
 from langchain_core.prompts import ChatPromptTemplate
