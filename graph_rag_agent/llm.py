@@ -1,9 +1,9 @@
+
 from dotenv import load_dotenv
 import os
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
-
 
 # 確保環境變數已載入
 load_dotenv()
@@ -31,7 +31,8 @@ llm_gemini = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash-preview-04-17",
     temperature=0,
     max_retries=2,
-    cache=True
+    cache=False,
+    google_api_key=os.getenv("GOOGLE_API_KEY")  
 )
 
 # 建立 Embedding 模型
