@@ -26,7 +26,7 @@ GOOGLE_API_KEY=os.getenv("GOOGLE_API_KEY")
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD),database=NEO4J_DATABASE)
 embedder = OpenAIEmbeddings(model="text-embedding-ada-002", api_key=OPENAI_API_KEY)
 gen_config=GenerationConfig(temperature=0,response_mime_type="application/json")
-llm = OpenAILLM(model_name='gpt-4.1-nano',model_params={'temperature':0,"response_format": {"type": "json_object"}})
+llm = OpenAILLM(model_name='gpt-4.1-mini',model_params={'temperature':0,"response_format": {"type": "json_object"}})
 
 
 create_vector_index(driver, name="text_embeddings", label="Chunk",
