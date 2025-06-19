@@ -7,7 +7,7 @@ API_KEY = "AIzaSyB2PxK_0hv39nQlazmqaGltXOSQKenZS0A"
 # Base URL for the Fact Check Tools API
 BASE_URL = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 
-def search_fact_checks(query, language_code=None, review_publisher_site_filter=None,
+def search_fact_checks(query, language_code='zh-TW', review_publisher_site_filter=None,
                        max_age_days=None, page_size=None, page_token=None, offset=None):
     
     params = {
@@ -44,7 +44,8 @@ def search_fact_checks(query, language_code=None, review_publisher_site_filter=N
 
 if __name__ == "__main__":
     print("--- Simple Search ---")
-    results = search_fact_checks("台灣加入聯合國")
+    results = search_fact_checks("老人宜多吃豬腳，常吃可長壽")
+    
     if results:
         if 'claims' in results:
             print(f"Found {len(results['claims'])} claims:")
@@ -60,4 +61,5 @@ if __name__ == "__main__":
             print("No claims found for the query.")
 
     print("\n" + "="*50 + "\n")
+    
 
