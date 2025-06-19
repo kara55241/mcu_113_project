@@ -92,7 +92,15 @@ def graph_rag(input:str):
    result = rag.search(input, retriever_config={'top_k':5})
     
     # 整理輸出
-   answer_with_source = f"{result.answer}\n資料來源:\n{kg_result_chunk}{kg_result_relationships}"
+   #answer_with_source = f"{result.answer}\n資料來源:\n{kg_result_chunk}{kg_result_relationships}"
+   answer_with_source = result.answer
    return answer_with_source
+if __name__ == "__main__":
+      # 測試輸入
+      test_input = "糖尿病可以吃甜食嗎?"
+      answer = graph_rag(test_input)
+      print("RAG Answer:", answer)
+      
+    
 
 
