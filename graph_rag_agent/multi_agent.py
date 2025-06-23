@@ -1,15 +1,14 @@
 from langgraph.prebuilt import create_react_agent
 from langgraph_supervisor import create_supervisor
 from langchain_core.tools import tool
-import langchain
 from research import graph_rag
 from fact_check import search_fact_checks
+from cofacts_check import search_cofacts
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import MessagesState
 from langchain_core.messages import SystemMessage, HumanMessage
 from llm import llm_GPT, llm_gemini
 from typing import Literal
-langchain.cache = None
 memory=MemorySaver()
 class AgentState(MessagesState):
     FactChecked: bool=False
@@ -60,6 +59,7 @@ def google_fact_check_tool(query: str,state: AgentState) -> str:
             result += "查無相關審查結果\n"
     
     return result
+
 
 @tool
 def should_continue(state: AgentState) -> Literal["GraphRAG","__end__"]:
