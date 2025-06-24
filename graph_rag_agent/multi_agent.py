@@ -3,7 +3,7 @@ from langgraph_supervisor import create_supervisor
 from langchain_core.tools import tool
 from research import graph_rag
 from fact_check import search_fact_checks
-from cofacts_check import search_cofacts
+from word_similarity import find_most_similar_cofacts_article
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import MessagesState
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -60,7 +60,27 @@ def google_fact_check_tool(query: str,state: AgentState) -> str:
     
     return result
 
+@tool
+def cofacts_tool(query: str) -> str:
+    """
+    You must use this tool when supervisor asks you to fact-check a claim
+    Args:
+        query (str): The claim or statement to be fact-checked.
 
+    Returns:
+         A  result of the fact-check results.
+    """
+    node, score = find_most_similar_cofacts_article(query)
+    if node:
+        result = f"最相關的文章內容：{node['text']}\n"
+        result += f"AI 回覆：{node.get('aiReplies', [])}\n"
+        result += f"人工回覆：{node.get('articleReplies', [])}\n"
+        result += f"相似度：{score}\n"
+       
+    else:
+        result = "查無相關文章"
+    return result 
+    
 @tool
 def should_continue(state: AgentState) -> Literal["GraphRAG","__end__"]:
     """
@@ -106,11 +126,28 @@ fact_check_agent = create_react_agent(
             3. Only use the provided tool to fact-check claims, do not use any other methods.
     """
     )
-    
+
+cofact_agent = create_react_agent(
+    model=llm_gemini,
+    tools=[cofacts_tool],
+    name="cofacts_agent",   
+    prompt=
+    """
+    Role:
+        You are a fact-checking expert.
+    Task:
+        Your main task is to fact-check claims using the provided tool and return the results.
+    Specific Requirements:
+        **Prohibitions**:   
+            1. Languages ​​other than Traditional Chinese are not allowed
+            2. Do not use pre-trained knowledge, only use the information provided in the context.
+            3. Only use the provided tool to fact-check claims, do not use any other methods.     
+    """
+)    
 
 
 supervisor = create_supervisor(
-    agents=[graphrag_agent, fact_check_agent],
+    agents=[graphrag_agent, fact_check_agent,cofact_agent],
     tools=[should_continue],
     model=llm_gemini,
     prompt=(
@@ -118,7 +155,8 @@ supervisor = create_supervisor(
         You are a supervisor who manages multiple agents.
         First,you need to use the `graphrag_agent` to answer medical questions.
         Second, you need to use the `fact_check_agent` to check the user query for factual accuracy.
-        Last,you need to `fact_check_agent` and `graphrag_agent` respond to user.
+        Third, you need to use the `cofacts_agent` to check the user query for factual accuracy.
+        Last,you need to `fact_check_agent` and `graphrag_agent` and 'cofact_agent'respond to user.
         """
     )
 )
