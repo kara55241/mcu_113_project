@@ -4,7 +4,7 @@ import os
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
-
+from sentence_transformers import SentenceTransformer
 # 確保環境變數已載入
 load_dotenv()
 
@@ -40,3 +40,5 @@ embeddings = OpenAIEmbeddings(
     api_key=os.getenv("OPENAI_API_KEY"),
     model=os.getenv("OPENAI_EMBEDDING_MODEL")
 )
+
+word_transformer = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
