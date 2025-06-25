@@ -130,8 +130,20 @@ MedApp.chat.core = {
       // 取得回應文本
       const reply = typeof data === 'string' ? data : (data.output || '（伺服器沒有回傳內容）');
       
-      // 顯示回應
-      MedApp.chat.display.appendMessage(reply, 'bot');
+      // 記錄原始回應內容
+      console.log("收到服務器回應:", data);
+      
+      // 嘗試檢測是否為 Markdown
+      const isMarkdown = data.is_markdown === true || 
+                         reply.includes('#') || 
+                         reply.includes('*') || 
+                         reply.includes('-') || 
+                         reply.includes('```');
+      
+      console.log("是否為 Markdown:", isMarkdown);
+      
+      // 顯示回應時標記為 Markdown 格式
+      MedApp.chat.display.appendMessage(reply, 'bot', isMarkdown);
       
       // 儲存到聊天歷史
       MedApp.chat.history.saveMessageToStorage(MedApp.state.currentChatId, reply, 'bot');

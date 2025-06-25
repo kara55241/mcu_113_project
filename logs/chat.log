@@ -1,0 +1,23 @@
+[2025-06-25 18:34:37,072] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 18:34:56,710] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 18:34:57,130] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 18:34:57,133] [INFO] django.server: "GET /chat/history/1750847317551/ HTTP/1.1" 200 44
+[2025-06-25 18:35:00,961] [WARNING] django.request: Not Found: /chat/history/1750847317551/
+[2025-06-25 18:35:00,963] [WARNING] django.server: "DELETE /chat/history/1750847317551/ HTTP/1.1" 404 79
+[2025-06-25 18:35:00,974] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-06-25 18:35:01,530] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-06-25 18:35:10,101] [INFO] django.server: "POST / HTTP/1.1" 200 155
+[2025-06-25 18:35:11,196] [INFO] django.server: "POST / HTTP/1.1" 200 793
+[2025-06-25 18:35:17,359] [INFO] graph_rag_agent.multi_agent: [GraphRAG Tool] 啟用圖譜問答工具，問題: 肚子很痛
+[2025-06-25 18:35:30,991] [INFO] graph_rag_agent.multi_agent: [Google Map Tool] 查詢附近位置: 330台灣桃園市桃園區大華八街17號3樓 附近 醫院
+[2025-06-25 18:35:37,230] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 18:35:37,230] [ERROR] django.server: "POST / HTTP/1.1" 500 764
+[2025-06-25 18:35:38,456] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 18:35:38,457] [ERROR] django.server: "POST / HTTP/1.1" 500 764
+[2025-06-25 18:35:40,475] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 18:35:41,473] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 18:35:57,914] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 18:35:57,914] [ERROR] django.server: "POST / HTTP/1.1" 500 763
+[2025-06-25 18:36:01,476] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 18:36:44,591] [INFO] graph_rag_agent.multi_agent: [Google Map Tool] 查詢附近位置: 330台灣桃園市桃園區大華八街17號3樓 附近的醫院
+[2025-06-25 18:36:49,180] [INFO] django.server: "POST / HTTP/1.1" 200 1588

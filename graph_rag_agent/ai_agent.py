@@ -11,6 +11,9 @@ from langchain import hub
 from langchain_core.prompts import PromptTemplate
 from .research import graph_rag
 from .SearchTool import SearchTools
+from multi_agent import app  # 引入 Supervisor app
+from langchain_core.messages import HumanMessage
+import re
 
 tools = [
     Tool.from_function(
@@ -105,64 +108,36 @@ chat_agent = RunnableWithMessageHistory(
 )
 
 # 修改 ai_agent.py 中的 generate_response 函數結尾部分
-
 def generate_response(user_input, session_id="default", location_info=None):
-    # 準備輸入資料
-    input_text = user_input.strip()
-    if location_info and "位置信息" not in input_text:
-        input_text += (
-            f"\n\n📍位置信息："
-            f"\n- 名稱：{location_info.get('name', '未知')}"
-            f"\n- 地址：{location_info.get('address', '未知')}"
-            f"\n- 座標：{location_info.get('coordinates', '未知')}"
-        )
-
-    input_data = {"input": input_text}
-
-    # 呼叫 Agent
     try:
-        response = chat_agent.invoke(
-            input_data,
-            {"configurable": {"session_id": session_id}},
+        input_text = user_input.strip()
+        if location_info and "位置信息" not in input_text:
+            input_text += (
+                f"\n\n📍位置信息："
+                f"\n- 名稱：{location_info.get('name', '未知')}"
+                f"\n- 地址：{location_info.get('address', '未知')}"
+                f"\n- 座標：{location_info.get('coordinates', '未知')}"
+            )
+
+        result = app.invoke(
+            input={"messages": [HumanMessage(content=input_text)]},
+            config={"configurable": {"thread_id": session_id}},
         )
+
+        # ✅ 使用過濾後訊息
+        clean_messages = app.filter_messages(result.get("messages", []))
+        output_text = "\n\n".join(clean_messages)
+
+        return {
+            "output": output_text,
+            "is_markdown": True,
+            "location": location_info,
+            "data": {},
+        }
+
     except Exception as e:
         return {
-            "output": f"AI 回應失敗：{str(e)}",
+            "output": f"⚠️ 系統錯誤：{str(e)}",
             "location": location_info,
-            "data": {}
-        }
-
-    # 統一解析輸出格式
-    if isinstance(response, dict):
-        # 獲取輸出文本
-        output_text = response.get("output", "（未取得 AI 回應）")
-        
-        # 確保輸出包含Markdown語法標記
-        # 嘗試添加明確的Markdown標記，比如列表的 * 前面確保有換行
-        if not output_text.startswith('# ') and '\n# ' not in output_text:
-            # 檢查是否有列表項但格式可能不正確
-            if any(line.strip().startswith('*') or line.strip().startswith('-') or 
-                   (line.strip() and line.strip()[0].isdigit() and line.strip()[1:].startswith('.')) 
-                   for line in output_text.split('\n')):
-                # 確保列表項前有換行
-                output_text = output_text.replace('\n* ', '\n\n* ')
-                output_text = output_text.replace('\n- ', '\n\n- ')
-                # 處理數字列表
-                import re
-                output_text = re.sub(r'\n(\d+\.)', r'\n\n\1', output_text)
-        
-        return {
-            "output": output_text,
-            "is_markdown": True,  # 明確標記為Markdown
-            "location": location_info,
-            "data": response.get("data", {})
-        }
-    else:
-        # 字符串響應處理
-        output_text = str(response)
-        return {
-            "output": output_text,
-            "is_markdown": True,  # 明確標記為Markdown
-            "location": location_info,
-            "data": {}
+            "data": {},
         }

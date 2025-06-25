@@ -1,5 +1,5 @@
 from sentence_transformers import SentenceTransformer, util
-from cofacts_check import search_cofacts
+from .cofacts_check import search_cofacts
 
 model = SentenceTransformer("multi-qa-mpnet-base-dot-v1")
 

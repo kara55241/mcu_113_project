@@ -399,3 +399,147 @@ ERROR 2025-05-22 00:10:55,849 log Internal Server Error: /
 INFO 2025-05-22 00:12:17,204 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
 INFO 2025-05-22 00:12:20,169 autoreload Watching for file changes with StatReloader
 WARNING 2025-05-22 00:12:46,003 log Not Found: /chat/history/1747843833277/
+INFO 2025-06-23 15:49:38,286 autoreload Watching for file changes with StatReloader
+INFO 2025-06-23 15:50:05,476 autoreload Watching for file changes with StatReloader
+WARNING 2025-06-23 15:50:41,065 log Not Found: /favicon.ico
+INFO 2025-06-23 16:01:57,829 autoreload Watching for file changes with StatReloader
+INFO 2025-06-24 17:09:36,225 autoreload Watching for file changes with StatReloader
+INFO 2025-06-24 17:11:54,664 autoreload Watching for file changes with StatReloader
+INFO 2025-06-24 17:14:44,466 autoreload Watching for file changes with StatReloader
+INFO 2025-06-24 17:16:13,808 autoreload Watching for file changes with StatReloader
+INFO 2025-06-24 17:22:44,748 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-24 17:22:48,391 autoreload Watching for file changes with StatReloader
+INFO 2025-06-24 17:23:37,553 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-24 17:23:41,156 autoreload Watching for file changes with StatReloader
+WARNING 2025-06-24 17:24:02,612 log Not Found: /favicon.ico
+INFO 2025-06-24 17:30:35,803 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-24 17:30:39,429 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:18:58,265 autoreload Watching for file changes with StatReloader
+WARNING 2025-06-25 14:21:07,880 log Not Found: /favicon.ico
+INFO 2025-06-25 14:28:32,803 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 14:28:36,532 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:31:34,230 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 14:31:37,837 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:34:24,262 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 14:34:27,894 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:37:04,152 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 14:37:07,769 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:37:35,250 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 14:37:36,138 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:39:10,521 autoreload C:\myproject\myproject\settings.py changed, reloading.
+INFO 2025-06-25 14:39:11,377 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:39:23,027 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 14:39:23,828 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:41:00,242 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 14:41:00,643 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:44:49,917 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 14:44:50,778 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:52:16,430 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:57:20,672 autoreload C:\myproject\graph_rag_agent\research.py changed, reloading.
+INFO 2025-06-25 14:57:22,450 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:58:48,281 autoreload C:\myproject\graph_rag_agent\word_similarity.py changed, reloading.
+INFO 2025-06-25 14:58:49,927 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 14:59:55,275 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 14:59:56,957 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:00:50,757 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 15:00:52,363 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:03:20,747 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 15:03:24,314 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:06:03,686 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:08:20,818 autoreload C:\myproject\graph_rag_agent\research.py changed, reloading.
+INFO 2025-06-25 15:08:24,446 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:09:46,605 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:16:46,161 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 15:16:49,826 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:18:26,204 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:19:13,584 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 15:19:15,157 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:25:22,700 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 15:25:24,232 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:26:47,472 autoreload C:\myproject\graph_rag_agent\SearchTool.py changed, reloading.
+INFO 2025-06-25 15:26:49,015 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:29:57,039 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 15:30:00,608 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:33:27,692 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 15:33:31,311 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:34:05,891 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:34:53,438 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:37:51,723 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 15:38:26,213 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:29:35,722 autoreload C:\myproject\myproject\wsgi.py changed, reloading.
+INFO 2025-06-25 17:29:36,337 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:29:48,115 autoreload C:\myproject\myproject\wsgi.py changed, reloading.
+INFO 2025-06-25 17:29:48,604 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:29:52,769 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 17:29:53,260 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:30:01,978 autoreload C:\myproject\myproject\urls.py changed, reloading.
+INFO 2025-06-25 17:30:02,771 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:30:12,131 autoreload C:\myproject\myproject\urls.py changed, reloading.
+INFO 2025-06-25 17:30:12,543 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:30:18,727 autoreload C:\myproject\myproject\settings.py changed, reloading.
+INFO 2025-06-25 17:30:19,155 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:30:42,849 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:31:01,204 autoreload C:\myproject\myproject\urls.py changed, reloading.
+INFO 2025-06-25 17:31:01,617 autoreload Watching for file changes with StatReloader
+ERROR 2025-06-25 17:31:09,687 log Internal Server Error: /
+ERROR 2025-06-25 17:31:21,880 log Internal Server Error: /
+INFO 2025-06-25 17:31:58,472 autoreload C:\myproject\graph_rag_agent\llm.py changed, reloading.
+INFO 2025-06-25 17:31:59,264 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:32:05,106 autoreload C:\myproject\graph_rag_agent\graph.py changed, reloading.
+INFO 2025-06-25 17:32:05,881 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:42:19,174 autoreload C:\myproject\graph_rag_agent\ai_agent.py changed, reloading.
+INFO 2025-06-25 17:42:22,307 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:44:01,302 autoreload C:\myproject\myproject\settings.py changed, reloading.
+INFO 2025-06-25 17:44:02,360 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:45:10,144 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 17:45:11,147 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:45:55,058 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 17:45:55,510 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:46:27,702 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 17:46:28,700 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:47:44,994 autoreload C:\myproject\myproject\settings.py changed, reloading.
+INFO 2025-06-25 17:48:50,968 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:52:46,305 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 17:52:46,753 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:54:30,390 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 17:54:30,880 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:55:20,817 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 17:55:21,274 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:55:39,397 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 17:55:40,206 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 17:57:16,312 autoreload Watching for file changes with StatReloader
+WARNING 2025-06-25 17:57:35,481 log Not Found: /chat/history/1750834403070/
+INFO 2025-06-25 18:01:02,784 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 18:01:05,859 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:01:39,254 autoreload Watching for file changes with StatReloader
+WARNING 2025-06-25 18:01:56,252 log Not Found: /chat/history/1750845457379/
+WARNING 2025-06-25 18:01:56,657 log Not Found: /chat/history/1750757182541/
+WARNING 2025-06-25 18:01:57,428 log Not Found: /chat/history/1750757136267/
+INFO 2025-06-25 18:04:23,335 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 18:04:26,360 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:06:10,456 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:09:46,003 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 18:09:49,049 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:09:54,812 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:10:45,790 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 18:10:48,808 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:10:54,202 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:12:29,815 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 18:12:32,903 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:14:07,297 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 18:14:10,346 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:15:33,533 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 18:15:34,555 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:16:47,726 autoreload C:\myproject\graph_rag_agent\word_similarity.py changed, reloading.
+INFO 2025-06-25 18:16:49,107 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:20:43,049 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:22:28,476 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 18:22:30,015 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:25:08,456 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 18:25:12,055 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:28:11,852 autoreload C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+INFO 2025-06-25 18:28:15,487 autoreload Watching for file changes with StatReloader
+WARNING 2025-06-25 18:28:37,072 log Not Found: /chat/history/1750846830747/
+INFO 2025-06-25 18:31:02,157 autoreload C:\myproject\myproject\views.py changed, reloading.
+INFO 2025-06-25 18:31:05,782 autoreload Watching for file changes with StatReloader
+INFO 2025-06-25 18:34:33,450 autoreload C:\myproject\myproject\settings.py changed, reloading.

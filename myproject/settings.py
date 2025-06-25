@@ -136,7 +136,7 @@ STATIC_URL = '/static/'
 # 靜態文件搜索路徑 - 設置多個位置以增加找到文件的機會
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),              # 專案根目錄下的 static
-    os.path.join(BASE_DIR, "myapp", "static"),     # 應用目錄下的 static
+    os.path.join(BASE_DIR, "static"),     # 應用目錄下的 static
 ]
 
 # 靜態文件收集目標目錄
@@ -161,42 +161,38 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
+        'standard': {
+            'format': '[{asctime}] [{levelname}] {name}: {message}',
             'style': '{',
         },
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+            'formatter': 'standard',
+            'level': 'DEBUG',
         },
         'file': {
-            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
-            'formatter': 'verbose',
+            'filename': os.path.join(BASE_DIR, 'logs/chat.log'),
+            'formatter': 'standard',
+            'level': 'DEBUG',
         },
     },
     'loggers': {
+        'graph_rag_agent': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'django': {
             'handlers': ['console', 'file'],
             'level': 'INFO',
-            'propagate': True,
-        },
-        'myapp': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'django.server': {  # 更詳細的靜態文件服務日誌
-            'handlers': ['console'],
-            'level': 'DEBUG',
             'propagate': False,
         },
     },
 }
+
 
 # 確保日誌目錄存在
 os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
@@ -220,3 +216,6 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000  # 1 年
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+
+os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
