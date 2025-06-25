@@ -138,3 +138,142 @@
 [2025-06-25 19:45:03,385] [ERROR] django.server: "POST / HTTP/1.1" 500 764
 [2025-06-25 19:45:03,484] [INFO] django.server: "GET / HTTP/1.1" 200 10923
 [2025-06-25 19:45:06,403] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:48:17,290] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:50:50,174] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:50:50,598] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:50:50,602] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 19:51:07,261] [INFO] django.server: "POST / HTTP/1.1" 200 353
+[2025-06-25 19:51:32,147] [INFO] django.server: "POST / HTTP/1.1" 200 617
+[2025-06-25 19:52:14,193] [INFO] django.server: "POST / HTTP/1.1" 200 4196
+[2025-06-25 20:00:11,920] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 20:00:15,636] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:00:51,748] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 20:00:53,403] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:01:32,523] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:01:32,959] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:01:32,962] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:01:44,485] [INFO] django.server: "POST / HTTP/1.1" 200 107
+[2025-06-25 20:02:18,179] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:02:18,179] [ERROR] django.server: "POST / HTTP/1.1" 500 764
+[2025-06-25 20:02:21,479] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:02:57,779] [INFO] django.server: "POST / HTTP/1.1" 200 1142
+[2025-06-25 20:07:26,232] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 20:07:29,848] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:08:12,653] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:08:13,079] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:08:13,082] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:08:18,850] [INFO] django.server: "POST / HTTP/1.1" 200 233
+[2025-06-25 20:09:12,540] [INFO] django.server: "POST / HTTP/1.1" 200 3060
+[2025-06-25 20:11:33,836] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 20:11:37,574] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:11:55,454] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:11:55,799] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:11:55,801] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:12:13,159] [INFO] django.server: "POST / HTTP/1.1" 200 341
+[2025-06-25 20:13:25,503] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 20:13:29,128] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:13:47,188] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:13:47,565] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:13:47,569] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:13:57,628] [INFO] django.server: "POST / HTTP/1.1" 200 239
+[2025-06-25 20:14:34,289] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 20:14:37,889] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:15:09,571] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:15:09,977] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:15:09,979] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:15:16,948] [INFO] django.server: "POST / HTTP/1.1" 200 449
+[2025-06-25 20:18:54,499] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 20:18:58,188] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:21:06,201] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:21:38,682] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:21:39,119] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:21:39,123] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:22:07,720] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:22:07,721] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:22:11,486] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:23:19,682] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:24:03,270] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:24:03,672] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:24:03,675] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:24:09,854] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:24:09,854] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:24:12,961] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:25:24,734] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:25:25,163] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 148
+[2025-06-25 20:25:25,166] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 160
+[2025-06-25 20:25:31,518] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:25:31,518] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:25:35,480] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:25:45,362] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:25:45,363] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:25:48,477] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:25:56,755] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:25:56,757] [ERROR] django.server: "POST / HTTP/1.1" 500 761
+[2025-06-25 20:26:00,476] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:26:08,817] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:26:08,818] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:26:11,914] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:26:19,582] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:26:38,548] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:26:38,956] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:26:38,958] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:26:45,462] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:26:45,463] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:26:49,482] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:27:10,116] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:27:10,288] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 106
+[2025-06-25 20:27:10,290] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 140
+[2025-06-25 20:27:17,105] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:27:17,106] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:27:20,475] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:27:30,820] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:27:30,820] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:27:34,487] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:30:36,672] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:30:55,960] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:30:56,374] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:30:56,376] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:31:08,436] [INFO] django.server: "POST / HTTP/1.1" 200 445
+[2025-06-25 20:31:19,166] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:31:19,166] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:31:22,180] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:31:47,128] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:32:19,237] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:32:19,583] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:32:19,587] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:32:25,864] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:32:25,864] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:32:28,878] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:36:31,780] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:36:54,019] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:36:54,346] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:36:54,349] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 20:36:58,546] [WARNING] django.request: Not Found: /chat/history/1750851432935/
+[2025-06-25 20:36:58,547] [WARNING] django.server: "DELETE /chat/history/1750851432935/ HTTP/1.1" 404 79
+[2025-06-25 20:36:58,561] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-06-25 20:37:06,085] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:37:06,085] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:37:09,471] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:37:31,752] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:37:31,752] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:37:35,480] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:42:29,398] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:42:48,439] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:42:48,886] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:42:48,888] [INFO] django.server: "GET /chat/history/1750855018531/ HTTP/1.1" 200 44
+[2025-06-25 20:42:53,857] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:42:53,858] [ERROR] django.server: "POST / HTTP/1.1" 500 761
+[2025-06-25 20:42:57,487] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:43:12,830] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 20:43:12,830] [ERROR] django.server: "POST / HTTP/1.1" 500 762
+[2025-06-25 20:43:16,485] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:45:22,014] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\llm.py changed, reloading.
+[2025-06-25 20:45:25,621] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:45:34,698] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 20:46:02,031] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 20:46:02,462] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 20:46:02,468] [INFO] django.server: "GET /chat/history/1750855018531/ HTTP/1.1" 200 44
+[2025-06-25 20:46:07,344] [WARNING] django.request: Not Found: /chat/history/1750855018531/
+[2025-06-25 20:46:07,345] [WARNING] django.server: "DELETE /chat/history/1750855018531/ HTTP/1.1" 404 79
+[2025-06-25 20:46:07,356] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-06-25 20:46:58,193] [INFO] django.server: "POST / HTTP/1.1" 200 1388
