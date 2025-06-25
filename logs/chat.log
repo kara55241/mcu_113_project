@@ -21,3 +21,120 @@
 [2025-06-25 18:36:01,476] [INFO] django.server: "GET / HTTP/1.1" 200 10923
 [2025-06-25 18:36:44,591] [INFO] graph_rag_agent.multi_agent: [Google Map Tool] 查詢附近位置: 330台灣桃園市桃園區大華八街17號3樓 附近的醫院
 [2025-06-25 18:36:49,180] [INFO] django.server: "POST / HTTP/1.1" 200 1588
+[2025-06-25 18:42:32,223] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 18:42:50,939] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 18:42:51,340] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 18:42:51,342] [INFO] django.server: "GET /chat/history/1750847701514/ HTTP/1.1" 200 44
+[2025-06-25 18:42:54,998] [WARNING] django.request: Not Found: /chat/history/1750847701514/
+[2025-06-25 18:42:54,999] [WARNING] django.server: "DELETE /chat/history/1750847701514/ HTTP/1.1" 404 79
+[2025-06-25 18:42:55,010] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-06-25 18:42:58,900] [INFO] django.server: "POST / HTTP/1.1" 200 161
+[2025-06-25 18:43:04,590] [INFO] django.server: "POST / HTTP/1.1" 200 197
+[2025-06-25 18:43:17,521] [INFO] graph_rag_agent.multi_agent: [GraphRAG Tool] 啟用圖譜問答工具，問題: 肚子很痛
+[2025-06-25 18:43:43,465] [INFO] django.server: "POST / HTTP/1.1" 200 515
+[2025-06-25 18:43:59,017] [INFO] graph_rag_agent.multi_agent: [GraphRAG Tool] 啟用圖譜問答工具，問題: 我頭很暈
+[2025-06-25 18:44:44,106] [INFO] django.server: "POST / HTTP/1.1" 200 509
+[2025-06-25 18:49:20,812] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 18:49:24,402] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 18:49:41,453] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 18:49:41,935] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 18:49:41,947] [INFO] django.server: "GET /chat/history/1750848174994/ HTTP/1.1" 200 44
+[2025-06-25 18:49:55,780] [INFO] django.server: "POST / HTTP/1.1" 200 173
+[2025-06-25 18:50:15,023] [INFO] django.server: "POST / HTTP/1.1" 200 1297
+[2025-06-25 18:52:19,457] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 18:52:23,078] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 18:53:41,088] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 18:54:18,090] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 18:54:18,494] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 18:54:18,498] [INFO] django.server: "GET /chat/history/1750848174994/ HTTP/1.1" 200 44
+[2025-06-25 18:54:47,523] [INFO] django.server: "POST / HTTP/1.1" 200 619
+[2025-06-25 19:09:44,069] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:09:47,837] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:12:04,977] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:12:39,994] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:12:40,402] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:12:40,404] [INFO] django.server: "GET /chat/history/1750848174994/ HTTP/1.1" 200 44
+[2025-06-25 19:12:43,629] [INFO] django.server: "POST / HTTP/1.1" 200 155
+[2025-06-25 19:12:50,628] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-06-25 19:12:50,628] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3880
+[2025-06-25 19:12:59,135] [INFO] django.server: "POST / HTTP/1.1" 200 483
+[2025-06-25 19:13:09,854] [INFO] django.server: "POST / HTTP/1.1" 200 483
+[2025-06-25 19:13:23,568] [INFO] django.server: "POST / HTTP/1.1" 200 495
+[2025-06-25 19:14:18,137] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-06-25 19:14:18,138] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3880
+[2025-06-25 19:16:20,284] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:16:23,971] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:17:26,473] [INFO] django.utils.autoreload: C:\myproject\myproject\views.py changed, reloading.
+[2025-06-25 19:17:28,173] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:17:45,906] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:17:46,387] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:17:46,390] [INFO] django.server: "GET /chat/history/1750848174994/ HTTP/1.1" 200 44
+[2025-06-25 19:17:53,439] [INFO] django.server: "POST / HTTP/1.1" 200 197
+[2025-06-25 19:18:12,234] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-06-25 19:18:12,235] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3880
+[2025-06-25 19:19:14,190] [INFO] django.server: "POST / HTTP/1.1" 200 509
+[2025-06-25 19:21:48,029] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:21:51,620] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:23:08,996] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:23:48,740] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:23:49,138] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:23:49,142] [INFO] django.server: "GET /chat/history/1750848174994/ HTTP/1.1" 200 44
+[2025-06-25 19:23:56,582] [INFO] django.server: "POST / HTTP/1.1" 200 1827
+[2025-06-25 19:24:17,730] [INFO] django.server: "POST / HTTP/1.1" 200 1903
+[2025-06-25 19:24:58,713] [INFO] django.server: "POST / HTTP/1.1" 200 3653
+[2025-06-25 19:25:36,776] [INFO] django.server: "POST / HTTP/1.1" 200 4228
+[2025-06-25 19:26:26,098] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:28:07,303] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:28:08,900] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:28:28,045] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:28:28,389] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:29:02,497] [INFO] django.server: "POST / HTTP/1.1" 200 825
+[2025-06-25 19:29:04,853] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:29:08,442] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:30:52,026] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:30:53,575] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:31:11,817] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:31:12,216] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:31:12,220] [INFO] django.server: "GET /chat/history/1750850908284/ HTTP/1.1" 200 44
+[2025-06-25 19:31:14,847] [WARNING] django.request: Not Found: /chat/history/1750850908284/
+[2025-06-25 19:31:14,847] [WARNING] django.server: "DELETE /chat/history/1750850908284/ HTTP/1.1" 404 79
+[2025-06-25 19:31:14,861] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-06-25 19:31:15,671] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-06-25 19:32:16,110] [INFO] django.server: "POST / HTTP/1.1" 200 699
+[2025-06-25 19:33:02,291] [INFO] django.server: "POST / HTTP/1.1" 200 1079
+[2025-06-25 19:36:44,931] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:36:48,522] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:37:09,805] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:37:10,210] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:37:10,214] [INFO] django.server: "GET /chat/history/1750851075656/ HTTP/1.1" 200 44
+[2025-06-25 19:37:12,943] [WARNING] django.request: Not Found: /chat/history/1750851075656/
+[2025-06-25 19:37:12,945] [WARNING] django.server: "DELETE /chat/history/1750851075656/ HTTP/1.1" 404 79
+[2025-06-25 19:37:12,961] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-06-25 19:37:19,608] [INFO] django.server: "POST / HTTP/1.1" 200 263
+[2025-06-25 19:37:38,028] [INFO] django.server: "POST / HTTP/1.1" 200 263
+[2025-06-25 19:37:47,087] [INFO] django.server: "POST / HTTP/1.1" 200 509
+[2025-06-25 19:38:57,381] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:39:01,016] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:39:23,364] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:39:23,710] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:39:23,714] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 19:39:29,396] [INFO] django.server: "POST / HTTP/1.1" 200 449
+[2025-06-25 19:39:57,521] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:40:01,139] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:40:20,174] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:40:20,643] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:40:20,645] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 19:40:25,893] [INFO] django.server: "POST / HTTP/1.1" 200 449
+[2025-06-25 19:42:50,293] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-06-25 19:42:53,925] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-06-25 19:43:12,658] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:43:13,080] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-06-25 19:43:13,095] [INFO] django.server: "GET /chat/history/1750851432935/ HTTP/1.1" 200 44
+[2025-06-25 19:43:24,237] [INFO] django.server: "POST / HTTP/1.1" 200 239
+[2025-06-25 19:43:45,453] [INFO] django.server: "POST / HTTP/1.1" 200 4289
+[2025-06-25 19:44:59,745] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 19:44:59,745] [ERROR] django.server: "POST / HTTP/1.1" 500 763
+[2025-06-25 19:45:03,385] [ERROR] django.request: Internal Server Error: /
+[2025-06-25 19:45:03,385] [ERROR] django.server: "POST / HTTP/1.1" 500 764
+[2025-06-25 19:45:03,484] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-06-25 19:45:06,403] [INFO] django.server: "GET / HTTP/1.1" 200 10923

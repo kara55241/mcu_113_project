@@ -118,6 +118,9 @@ class ChatView(View):
             # 只取最新一則回應
             output_text = filtered[-1] if filtered else "（無有效回應）"
 
+            logger.info(f"[MultiAgent] ChatID={session_id} 輸出回應：{output_text}")  # 👈 建議新增
+            ChatHistory.add_message(session_id, output_text, 'bot')
+
 
 
             ChatHistory.add_message(session_id, output_text, 'bot')
