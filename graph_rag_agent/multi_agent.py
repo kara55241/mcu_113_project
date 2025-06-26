@@ -3,7 +3,7 @@ from langgraph_supervisor import create_supervisor
 from langgraph.checkpoint.sqlite import SqliteSaver
 import sqlite3
 from langchain_core.tools import tool
-from research import graph_rag
+from graph_rag import graphrag_chronic,graphrag_cardiovascular
 from fact_check import search_fact_checks
 from cofacts_check import search_cofacts
 from langgraph.graph import MessagesState
@@ -19,16 +19,16 @@ class AgentState(MessagesState):
 @tool
 def net_search(query: str):
     """
-    Use this tool when you need to search the internet for information.
+    Use this tool when you need to search the internet for information or other tool don't return answer.
     """
     tavily=TavilySearch(country='taiwan')
     result=tavily.invoke(query)
     return result
 
 @tool
-def graphrag_tool(query: str) -> str:
+def cardiovascular_search(query: str) -> str:
     """
-    You must use this tool when supervisor asks a medical question.
+    You must use this tool when supervisor asks a medical question about cardiovascular diseases.
     This tool queries a medical knowledge graph to retrieve and generate answers.
 
     Args:
@@ -39,10 +39,28 @@ def graphrag_tool(query: str) -> str:
         if answer is not found, it will return a message indicating that no answer was found.
     """
 
-    result = graph_rag(input=query)
+    result = graphrag_cardiovascular(input=query)
     return result
 
 @tool
+def chronic_search(query: str) -> str:
+    """
+    You must use this tool when supervisor asks a medical question about chronic diseases.
+    This tool queries a medical knowledge graph to retrieve and generate answers.
+
+    Args:
+        query: The medical question or statement to be answered.
+
+    Returns:
+        A comprehensive answer based on the medical knowledge graph.
+        if answer is not found, it will return a message indicating that no answer was found.
+    """
+
+    result = graphrag_chronic(input=query)
+    return result
+
+
+@tool(parse_docstring=True)
 def google_fact_check_tool(query: str,state: AgentState) -> str:
     """
     You must use this tool when supervisor asks you to fact-check a claim.
@@ -72,22 +90,40 @@ def google_fact_check_tool(query: str,state: AgentState) -> str:
     
     return result
     
-graphrag_agent = create_react_agent(
+chronic_agent = create_react_agent(
     model=llm_gemini,  
-    tools=[graphrag_tool,net_search], 
-    name="graphrag_agent",
+    tools=[chronic_search,net_search], 
+    name="chronic_agent",
     prompt=
     """
     Role:
         You are a medical expert providing information about medical knowledge.
     Task:
-        Your main task is to use the provided tool to search for answers whenever you receive a user inquiry, and return the search results.
+        Your main task is to use the provided tool to search for answers whenever you receive a user inquiry about chronic, and return the search results.
     Specific Requirements:
         **Prohibitions**:
             1.Languages other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
+            3. add source(the tool you used) at the end of your response.
     """
-    
+)
+
+cardiovascular_agent = create_react_agent(
+    model=llm_gemini,  
+    tools=[cardiovascular_search,net_search], 
+    name="cardiovascular_agent",
+    prompt=
+    """
+    Role:
+        You are a medical expert providing information about medical knowledge.
+    Task:
+        Your main task is to use the provided tool to search for answers whenever you receive a user inquiry about cardiovascular, and return the search results.
+    Specific Requirements:
+        **Prohibitions**:
+            1.Languages other than Traditional Chinese are not allowed
+            2. Do not use pre-trained knowledge, only use the information provided in the context.
+            3. add source(the tool you used) at the end of your response.
+    """
 )
 
 fact_check_agent = create_react_agent(
@@ -100,7 +136,7 @@ fact_check_agent = create_react_agent(
         You are a fact-checking expert.
     Task:
         Your main task is to fact-check claims using the provided tool and return the results.
-    Specific Requirements:
+    Rules:
         **Prohibitions**:   
             1. Languages ​​other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
@@ -111,21 +147,22 @@ fact_check_agent = create_react_agent(
 
 
 supervisor = create_supervisor(
-    agents=[graphrag_agent, fact_check_agent],
+    agents=[chronic_agent, cardiovascular_agent,fact_check_agent],
     tools=[],
     model=llm_gemini,
     prompt=(
         """
         You are a supervisor who manages multiple agents.
-        First,you need to use the `graphrag_agent` to answer medical questions.
+        First,you need to use the `cardiovascular_agent` or `chronic_agent` to answer medical questions.
         Second, you need to use the `fact_check_agent` to check the user query for factual accuracy.
-        Last,you need to provide `fact_check_agent` and `graphrag_agent`'s respond to user.
+        Last,you need to provide `fact_check_agent` and original answer to user.
         """
     )
 )
 
 
 # Compile and run
+
 app = supervisor.compile(checkpointer=memory)
 config = {"configurable": {"thread_id": "1"}}
 while True:
