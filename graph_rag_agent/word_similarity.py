@@ -1,8 +1,7 @@
 from sentence_transformers import SentenceTransformer, util
 from cofacts_check import search_cofacts
 
-model = SentenceTransformer("multi-qa-mpnet-base-dot-v1")
-
+model = SentenceTransformer("multi-qa-mpnet-base-dot-v1",device='cuda')
 def find_most_similar_cofacts_article(query_text):
     cofacts_result = search_cofacts(query_text)
     articles = []
@@ -14,7 +13,7 @@ def find_most_similar_cofacts_article(query_text):
     if not articles:
         return None, None
     sentences = [query_text] + articles
-    embeddings = model.encode(sentences)
+    embeddings = model.encode(sentences,convert_to_tensor=True)
     query_embedding = embeddings[0]
     article_embeddings = embeddings[1:]
     similarities = util.cos_sim(query_embedding, article_embeddings)[0]
