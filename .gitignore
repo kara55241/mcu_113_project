@@ -4,3 +4,6 @@ __pycache__/
 .env
 .DS_Store
 .venv/
+agent_checkpoint.sqlite-shm
+agent_checkpoint.sqlite-wal
+agent_checkpoint.sqlite
