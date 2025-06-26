@@ -1,20 +1,14 @@
-
 from neo4j import GraphDatabase
 from neo4j_graphrag.embeddings import OpenAIEmbeddings
-from vertexai.generative_models import GenerationConfig
-from neo4j_graphrag.llm.vertexai_llm import VertexAILLM
 from neo4j_graphrag.indexes import create_vector_index
-from neo4j_graphrag.retrievers import VectorRetriever
 from neo4j_graphrag.retrievers import VectorCypherRetriever
 from neo4j_graphrag.generation import RagTemplate
 from neo4j_graphrag.generation.graphrag import GraphRAG
 from neo4j_graphrag.llm import OpenAILLM
 import os
 from dotenv import load_dotenv
-
-
-
 load_dotenv()
+
 NEO4J_URI = os.getenv("NEO4J_URI")
 NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
@@ -22,12 +16,9 @@ NEO4J_DATABASE= os.getenv("NEO4J_DATABASE")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GOOGLE_API_KEY=os.getenv("GOOGLE_API_KEY")
 
-
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD),database=NEO4J_DATABASE)
 embedder = OpenAIEmbeddings(model="text-embedding-ada-002", api_key=OPENAI_API_KEY)
-gen_config=GenerationConfig(temperature=0,response_mime_type="application/json")
 llm = OpenAILLM(model_name='gpt-4.1-mini',model_params={'temperature':0,"response_format": {"type": "json_object"}})
-
 
 create_vector_index(driver, name="text_embeddings", label="Chunk",
                    embedding_property="embedding", dimensions=1536, similarity_fn="cosine")
@@ -95,6 +86,10 @@ def graph_rag(input:str):
    #answer_with_source = f"{result.answer}\n資料來源:\n{kg_result_chunk}{kg_result_relationships}"
    answer_with_source = result.answer
    return answer_with_source
+
+
+
+
 if __name__ == "__main__":
       # 測試輸入
       test_input = "糖尿病可以吃甜食嗎?"
