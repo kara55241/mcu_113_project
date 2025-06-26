@@ -1,17 +1,29 @@
 from langgraph.prebuilt import create_react_agent
 from langgraph_supervisor import create_supervisor
+from langgraph.checkpoint.sqlite import SqliteSaver
+import sqlite3
 from langchain_core.tools import tool
 from research import graph_rag
 from fact_check import search_fact_checks
 from cofacts_check import search_cofacts
-from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import MessagesState
 from langchain_core.messages import SystemMessage, HumanMessage
 from llm import llm_GPT, llm_gemini
 from typing import Literal
-memory=MemorySaver()
+from langchain_tavily import TavilySearch
+conn = sqlite3.connect("mcu_113_project/agent_checkpoint.sqlite", check_same_thread=False)
+memory=SqliteSaver(conn)
 class AgentState(MessagesState):
     FactChecked: bool=False
+
+@tool
+def net_search(query: str):
+    """
+    Use this tool when you need to search the internet for information.
+    """
+    tavily=TavilySearch(country='taiwan')
+    result=tavily.invoke(query)
+    return result
 
 @tool
 def graphrag_tool(query: str) -> str:
@@ -59,21 +71,10 @@ def google_fact_check_tool(query: str,state: AgentState) -> str:
             result += "查無相關審查結果\n"
     
     return result
-
-
-@tool
-def should_continue(state: AgentState) -> Literal["GraphRAG","__end__"]:
-    """
-    Defined the condition to continue the workflow.
-    """
-    if state['FactChecked'] == True:
-        return "__end__"
-    else:
-        return "GraphRAG"
     
 graphrag_agent = create_react_agent(
     model=llm_gemini,  
-    tools=[graphrag_tool], 
+    tools=[graphrag_tool,net_search], 
     name="graphrag_agent",
     prompt=
     """
@@ -111,14 +112,14 @@ fact_check_agent = create_react_agent(
 
 supervisor = create_supervisor(
     agents=[graphrag_agent, fact_check_agent],
-    tools=[should_continue],
+    tools=[],
     model=llm_gemini,
     prompt=(
         """
         You are a supervisor who manages multiple agents.
         First,you need to use the `graphrag_agent` to answer medical questions.
         Second, you need to use the `fact_check_agent` to check the user query for factual accuracy.
-        Last,you need to `fact_check_agent` and `graphrag_agent` respond to user.
+        Last,you need to provide `fact_check_agent` and `graphrag_agent`'s respond to user.
         """
     )
 )
