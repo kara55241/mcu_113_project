@@ -57,13 +57,27 @@ MedApp.maps.core = {
     
     // 綁定事件處理
     bindEvents: function() {
-      // 地圖按鈕點擊事件
-      if (this.elements.locationButton) {
-        this.elements.locationButton.addEventListener('click', () => {
+        MedApp.log('綁定地圖按鈕事件', 'debug');
+        
+        // 地圖按鈕點擊事件
+        if (this.elements.locationButton) {
+          this.elements.locationButton.addEventListener('click', () => {
+            MedApp.log('地圖按鈕被點擊', 'debug');
+            this.showMapModal();
+          });
+        } else {
+          MedApp.log('找不到地圖按鈕元素 locationButton', 'error');
+        }
+        
+        // 添加地圖模態框按鈕事件
+        this.initMapModal();
+        
+        // 手動添加全局事件處理器
+        window.showMap = () => {
+          MedApp.log('手動觸發顯示地圖', 'debug');
           this.showMapModal();
-        });
-      }
-    },
+        };
+      },
     
     // 初始化地圖
     initMap: function() {
@@ -140,6 +154,14 @@ MedApp.maps.core = {
       } catch (e) {
         MedApp.log("初始化地圖時出錯: " + e.message, 'error');
       }
+        // 在初始化完成後，再次檢查 placesService 是否可用
+        if (!this.services.placesService && google.maps.places && this.map) {
+        MedApp.log('嘗試再次初始化 Places 服務', 'debug');
+        this.services.placesService = new google.maps.places.PlacesService(this.map);
+        }
+        // 全局保存 MedApp.maps.core 的引用，方便調試
+        window.mapCore = this;
+        MedApp.log('地圖核心引用已保存到 window.mapCore', 'debug');
     },
     
     // 顯示地圖模態框

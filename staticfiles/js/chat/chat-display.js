@@ -71,104 +71,106 @@ MedApp.chat.display = {
       }
     },
     
-    // 修改 appendMessage 函數，添加第三個參數來標記是否為 Markdown
+    // 生成唯一的訊息 ID
+    generateMessageId: function() {
+      return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    },
 
-    // 更新這個函數定義
-    appendMessage: function(content, sender = 'user', forceMd = false) {
-      // 檢查聊天容器是否存在
+    // 添加消息到聊天界面（主要函數）
+    appendMessage: function(content, sender = 'user', isMarkdown = false, messageId = null) {
       if (!this.elements.chatContainer) return;
       
-      // 移除歡迎消息
-      if (this.elements.welcomeMessage && this.elements.welcomeMessage.parentNode && sender === 'user') {
+      // 隱藏歡迎訊息
+      if (this.elements.welcomeMessage && sender === 'user') {
         this.elements.welcomeMessage.style.display = 'none';
       }
       
-      // 創建訊息元素
+      // 生成或使用提供的訊息 ID
+      if (!messageId) {
+        messageId = this.generateMessageId();
+      }
+      
       const messageDiv = document.createElement('div');
       messageDiv.classList.add('message', sender);
+      messageDiv.setAttribute('data-message-id', messageId);
       
       // 處理內容 - 確保內容是字符串
       if (typeof content !== 'string') {
         content = String(content);
       }
       
-      // 添加原始內容到控制台，用於調試
-      console.log(`原始消息內容 (${sender}):`, content);
+      const contentDiv = document.createElement('div');
+      contentDiv.classList.add('message-content');
       
-      // 創建內容容器
-      const contentWrapper = document.createElement('div');
-      contentWrapper.className = 'message-content';
-      
-      // 當發送者是 bot 時或強制使用Markdown時，使用 Markdown 解析
-      if ((sender === 'bot' || forceMd) && typeof window.marked !== 'undefined') {
-        try {
-          // 檢查是否包含Markdown標記或明確被標記為Markdown
-          const hasMarkdownSyntax = forceMd || /(\*\*|__|\*|_|##|###|```|---|>|!\[|\[|\|-)/.test(content);
-          
-          console.log("是否包含Markdown語法:", hasMarkdownSyntax);
-          
-          if (hasMarkdownSyntax) {
-            // 預處理 Markdown 內容
+      if (sender === 'bot') {
+        // 處理機器人訊息的 Markdown
+        if (isMarkdown || this.hasMarkdownSyntax(content)) {
+          try {
+            // 預處理內容
             content = this.preprocessMarkdown(content);
             
-            // 如果內容包含轉義的HTML標籤，先解碼
-            if (content.includes('&lt;') || content.includes('&gt;')) {
-              content = this.decodeHtmlEntities(content);
-              console.log("解碼後的內容:", content);
-            }
-            
-            // 使用 marked.js 將 Markdown 轉換為 HTML
-            const parsedContent = window.marked.parse(content);
-            console.log("Markdown解析後的HTML:", parsedContent);
-            contentWrapper.innerHTML = parsedContent;
-            
-            // 處理可能的特殊元素
-            this.postProcessMarkdown(contentWrapper);
-          } else {
-            // 如果沒有明顯的Markdown但有HTML實體，嘗試解碼
-            if (content.includes('&lt;') || content.includes('&gt;') || 
-                content.includes('&amp;') || content.includes('&quot;')) {
-              try {
-                content = this.decodeHtmlEntities(content);
-              } catch (e) {
-                console.warn('HTML實體解碼失敗:', e);
-              }
-            }
-            
-            // 檢查解碼後是否有Markdown語法
-            if (/(\*\*|__|\*|_|##|###|```|---|>|!\[|\[|\|-)/.test(content)) {
-              // 解碼後發現Markdown語法，使用marked解析
-              contentWrapper.innerHTML = window.marked.parse(content);
-              this.postProcessMarkdown(contentWrapper);
+            // 使用 marked.js 解析
+            if (typeof window.marked !== 'undefined') {
+              contentDiv.innerHTML = window.marked.parse(content);
             } else {
-              // 仍然是純文本，直接使用
-              contentWrapper.innerText = content;
+              contentDiv.textContent = content;
             }
+            
+            // 後處理
+            this.postProcessMarkdown(contentDiv);
+          } catch (error) {
+            console.error('Markdown解析錯誤:', error);
+            contentDiv.textContent = content;
           }
-        } catch (error) {
-          console.error('Markdown解析錯誤:', error);
-          // 如果解析失敗，退回到純文本顯示
-          contentWrapper.innerText = content;
+        } else {
+          // 處理可能的HTML實體
+          if (content.includes('&lt;') || content.includes('&gt;')) {
+            try {
+              const decoded = this.decodeHtmlEntities(content);
+              contentDiv.innerHTML = decoded;
+            } catch (e) {
+              console.warn('HTML實體解碼失敗:', e);
+              contentDiv.textContent = content;
+            }
+          } else {
+            contentDiv.textContent = content;
+          }
         }
       } else {
         // 用戶消息使用純文本處理
-        contentWrapper.innerText = content;
+        contentDiv.textContent = content;
       }
-      
-      messageDiv.appendChild(contentWrapper);
       
       // 添加時間戳
       const timeSpan = document.createElement('span');
       timeSpan.classList.add('message-time');
-      
       const now = new Date();
       timeSpan.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
       
+      messageDiv.appendChild(contentDiv);
       messageDiv.appendChild(timeSpan);
+      
       this.elements.chatContainer.appendChild(messageDiv);
       
-      // 滾動到底部
+      // 為機器人訊息添加回饋按鈕（延遲執行確保 DOM 已渲染）
+      if (sender === 'bot') {
+        setTimeout(() => {
+          this.addFeedbackButtons(messageDiv, messageId);
+          // 同時保存訊息到 Neo4j
+          this.saveMessageToNeo4j(messageId, content, sender);
+        }, 100);
+      } else {
+        // 用戶訊息也保存到 Neo4j
+        this.saveMessageToNeo4j(messageId, content, sender);
+      }
+      
       this.scrollToBottom();
+      return messageDiv;
+    },
+
+    // 檢查是否包含Markdown語法
+    hasMarkdownSyntax: function(content) {
+      return /(\*\*|__|\*|_|##|###|```|---|>|!\[|\[|\|-)/.test(content);
     },
 
     // 添加一個HTML實體解碼函數
@@ -439,87 +441,376 @@ MedApp.chat.display = {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+    },
+
+    // 為機器人訊息添加回饋按鈕
+    addFeedbackButtons: function(messageDiv, messageId) {
+      // 檢查是否已經有回饋按鈕
+      if (messageDiv.querySelector('.feedback-container')) return;
+      
+      const feedbackContainer = document.createElement('div');
+      feedbackContainer.className = 'feedback-container';
+      feedbackContainer.innerHTML = `
+        <div class="feedback-buttons">
+          <button class="feedback-btn like-btn" data-feedback="like" data-message-id="${messageId}" title="有幫助">
+            <i class="fas fa-thumbs-up"></i>
+            <span class="feedback-text">有幫助</span>
+          </button>
+          <button class="feedback-btn dislike-btn" data-feedback="dislike" data-message-id="${messageId}" title="需要改進">
+            <i class="fas fa-thumbs-down"></i>
+            <span class="feedback-text">需要改進</span>
+          </button>
+        </div>
+        <div class="feedback-details" style="display: none;">
+          <div class="feedback-form">
+            <textarea class="feedback-text-input" placeholder="請告訴我們如何改進（選填）" maxlength="500"></textarea>
+            <div class="feedback-actions">
+              <button class="feedback-submit">送出回饋</button>
+              <button class="feedback-cancel">取消</button>
+            </div>
+          </div>
+        </div>
+        <div class="feedback-status" style="display: none;"></div>
+      `;
+      
+      messageDiv.appendChild(feedbackContainer);
+      
+      // 綁定事件監聽器
+      this.bindFeedbackEvents(feedbackContainer, messageId);
+    },
+
+    // 綁定回饋按鈕事件
+    bindFeedbackEvents: function(container, messageId) {
+      const likeBtn = container.querySelector('.like-btn');
+      const dislikeBtn = container.querySelector('.dislike-btn');
+      const feedbackDetails = container.querySelector('.feedback-details');
+      const submitBtn = container.querySelector('.feedback-submit');
+      const cancelBtn = container.querySelector('.feedback-cancel');
+      const textInput = container.querySelector('.feedback-text-input');
+      
+      // 點讚按鈕事件
+      likeBtn.addEventListener('click', () => {
+        this.handleFeedback('like', messageId, likeBtn, dislikeBtn, container);
+      });
+      
+      // 倒讚按鈕事件
+      dislikeBtn.addEventListener('click', () => {
+        this.handleFeedback('dislike', messageId, likeBtn, dislikeBtn, container);
+        // 顯示詳細回饋選項
+        feedbackDetails.style.display = 'block';
+        textInput.focus();
+      });
+      
+      // 送出回饋事件
+      submitBtn.addEventListener('click', () => {
+        const feedbackText = textInput.value.trim();
+        this.submitDetailedFeedback(messageId, 'dislike', feedbackText, container);
+        feedbackDetails.style.display = 'none';
+        textInput.value = '';
+      });
+      
+      // 取消回饋事件
+      cancelBtn.addEventListener('click', () => {
+        feedbackDetails.style.display = 'none';
+        textInput.value = '';
+        // 重置按鈕狀態
+        dislikeBtn.classList.remove('active');
+        dislikeBtn.disabled = false;
+        likeBtn.disabled = false;
+      });
+    },
+
+    // 處理回饋點擊
+    handleFeedback: function(type, messageId, likeBtn, dislikeBtn, container) {
+      // 更新按鈕狀態
+      likeBtn.classList.toggle('active', type === 'like');
+      dislikeBtn.classList.toggle('active', type === 'dislike');
+      
+      // 禁用按鈕防止重複點擊
+      likeBtn.disabled = true;
+      dislikeBtn.disabled = true;
+      
+      // 如果是正讚，立即提交
+      if (type === 'like') {
+        this.submitDetailedFeedback(messageId, type, '', container);
+      }
+      
+      console.log(`用戶對訊息 ${messageId} 給予 ${type} 回饋`);
+    },
+
+    // 提交詳細回饋
+    submitDetailedFeedback: function(messageId, type, details, container) {
+      const feedbackId = this.generateFeedbackId();
+      const chatId = MedApp.state.currentChatId || 'default';
+      
+      const feedbackData = {
+        feedback_id: feedbackId,
+        message_id: messageId,
+        chat_id: chatId,
+        type: type,
+        details: details,
+        timestamp: new Date().toISOString(),
+        session_id: this.getSessionId()
+      };
+      
+      // 儲存到本地存儲
+      this.saveFeedbackToLocalStorage(feedbackData);
+      
+      // 發送到伺服器
+      this.sendFeedbackToServer(feedbackData, container);
+    },
+
+    // 生成唯一的回饋 ID
+    generateFeedbackId: function() {
+      return `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    },
+
+    // 獲取會話 ID
+    getSessionId: function() {
+      // 嘗試從多個來源獲取會話 ID
+      return MedApp.state.currentChatId || 
+             sessionStorage.getItem('sessionId') || 
+             localStorage.getItem('sessionId') || 
+             'anonymous_' + Date.now();
+    },
+
+    // 儲存回饋到本地存儲
+    saveFeedbackToLocalStorage: function(feedbackData) {
+      try {
+        let feedbacks = JSON.parse(localStorage.getItem('chatFeedbacks') || '[]');
+        
+        // 移除該訊息的舊回饋
+        feedbacks = feedbacks.filter(f => f.message_id !== feedbackData.message_id);
+        
+        // 添加新回饋
+        feedbacks.push(feedbackData);
+        
+        localStorage.setItem('chatFeedbacks', JSON.stringify(feedbacks));
+        console.log('回饋已儲存到本地存儲:', feedbackData.feedback_id);
+      } catch (error) {
+        console.error('儲存回饋到本地存儲失敗:', error);
+      }
+    },
+
+    // 發送回饋到伺服器
+    sendFeedbackToServer: function(feedbackData, container) {
+      const statusDiv = container.querySelector('.feedback-status');
+      
+      // 顯示載入狀態
+      this.showFeedbackStatus(statusDiv, '正在送出回饋...', 'loading');
+      
+      fetch('/api/feedback/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': this.getCSRFToken()
+        },
+        body: JSON.stringify(feedbackData)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('回饋已送出:', data);
+        this.showFeedbackStatus(statusDiv, '感謝您的回饋！', 'success');
+        
+        // 3秒後隱藏狀態訊息
+        setTimeout(() => {
+          statusDiv.style.display = 'none';
+        }, 3000);
+      })
+      .catch(error => {
+        console.error('送出回饋時發生錯誤:', error);
+        this.showFeedbackStatus(statusDiv, '回饋送出失敗，已儲存到本地', 'error');
+        
+        // 重新啟用按鈕
+        const buttons = container.querySelectorAll('.feedback-btn');
+        buttons.forEach(btn => btn.disabled = false);
+        
+        // 5秒後隱藏錯誤訊息
+        setTimeout(() => {
+          statusDiv.style.display = 'none';
+        }, 5000);
+      });
+    },
+
+    // 顯示回饋狀態
+    showFeedbackStatus: function(statusDiv, message, type) {
+      statusDiv.textContent = message;
+      statusDiv.className = `feedback-status ${type}`;
+      statusDiv.style.display = 'block';
+    },
+
+    // 獲取 CSRF Token
+    getCSRFToken: function() {
+      const token = document.querySelector('[name=csrf-token]')?.content ||
+                    document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+                    MedApp.config.csrfToken;
+      
+      if (!token) {
+        console.warn('找不到 CSRF Token');
+      }
+      
+      return token;
+    },
+
+    // 保存訊息到 Neo4j（透過後端 API）
+    saveMessageToNeo4j: function(messageId, content, sender) {
+      const chatId = MedApp.state.currentChatId || 'default';
+      
+      // 如果還沒有對話 ID，創建一個新的對話
+      if (!MedApp.state.conversationCreated) {
+        this.createConversationInNeo4j(chatId);
+        MedApp.state.conversationCreated = true;
+      }
+      
+      const messageData = {
+        message_id: messageId,
+        chat_id: chatId,
+        content: content,
+        sender: sender,
+        timestamp: new Date().toISOString(),
+        session_id: this.getSessionId()
+      };
+      
+      fetch('/api/messages/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': this.getCSRFToken()
+        },
+        body: JSON.stringify(messageData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('訊息已儲存到 Neo4j:', data);
+      })
+      .catch(error => {
+        console.error('儲存訊息到 Neo4j 失敗:', error);
+      });
+    },
+
+    // 在 Neo4j 中創建對話
+    createConversationInNeo4j: function(chatId) {
+      const conversationData = {
+        chat_id: chatId,
+        session_id: this.getSessionId(),
+        metadata: {
+          started_at: new Date().toISOString(),
+          user_agent: navigator.userAgent,
+          platform: navigator.platform
+        }
+      };
+      
+      fetch('/api/conversations/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': this.getCSRFToken()
+        },
+        body: JSON.stringify(conversationData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('對話已創建在 Neo4j:', data);
+      })
+      .catch(error => {
+        console.error('創建對話失敗:', error);
+      });
+    },
+
+    // 修復 Markdown 顯示的函數
+    fixMarkdownDisplay: function() {
+      console.log('開始修復 Markdown 顯示...');
+      
+      // 查找所有機器人訊息
+      const botMessages = document.querySelectorAll('.message.bot');
+      if (botMessages.length === 0) {
+        console.log('沒有找到機器人訊息');
+        return;
+      }
+      
+      console.log(`找到 ${botMessages.length} 條機器人訊息`);
+      
+      // 確保 marked.js 已載入
+      if (typeof marked === 'undefined') {
+        console.error('Marked.js 未載入，無法修復 Markdown');
+        return;
+      }
+      
+      // 遍歷每條訊息
+      botMessages.forEach((messageDiv, index) => {
+        // 尋找訊息內容元素
+        const contentEl = messageDiv.querySelector('.message-content');
+        if (!contentEl) return;
+        
+        // 獲取原始內容
+        const originalContent = contentEl.innerHTML || contentEl.textContent;
+        
+        // 處理 HTML 實體
+        let decodedContent = originalContent;
+        if (originalContent.includes('&lt;') || originalContent.includes('&gt;')) {
+          try {
+            // 解碼 HTML 實體
+            decodedContent = this.decodeHtmlEntities(originalContent);
+          } catch (e) {
+            console.warn(`無法解碼訊息 #${index} 的 HTML 實體:`, e);
+          }
+        }
+        
+        // 嘗試重新解析為 Markdown
+        try {
+          // 預處理內容
+          decodedContent = this.preprocessMarkdown(decodedContent);
+          
+          // 使用 marked.js 解析
+          contentEl.innerHTML = marked.parse(decodedContent);
+          
+          // 後處理
+          this.postProcessMarkdown(contentEl);
+          
+          console.log(`成功修復訊息 #${index}`);
+        } catch (error) {
+          console.error(`修復訊息 #${index} 時出錯:`, error);
+        }
+      });
+      
+      console.log('Markdown 修復完成');
     }
   };
 
-  function fixMarkdownDisplay() {
-  console.log('開始修復 Markdown 顯示...');
-  
-  // 查找所有機器人訊息
-  const botMessages = document.querySelectorAll('.message.bot');
-  if (botMessages.length === 0) {
-    console.log('沒有找到機器人訊息');
-    return;
-  }
-  
-  console.log(`找到 ${botMessages.length} 條機器人訊息`);
-  
-  // 確保 marked.js 已載入
-  if (typeof marked === 'undefined') {
-    console.error('Marked.js 未載入，無法修復 Markdown');
-    return;
-  }
-  
-  // 遍歷每條訊息
-  botMessages.forEach((messageDiv, index) => {
-    // 尋找訊息內容元素
-    const contentEl = messageDiv.querySelector('.message-content');
-    if (!contentEl) return;
-    
-    // 獲取原始內容
-    const originalContent = contentEl.innerHTML || contentEl.textContent;
-    
-    // 處理 HTML 實體
-    let decodedContent = originalContent;
-    if (originalContent.includes('&lt;') || originalContent.includes('&gt;')) {
-      try {
-        // 解碼 HTML 實體
-        const textarea = document.createElement('textarea');
-        textarea.innerHTML = originalContent;
-        decodedContent = textarea.value;
-      } catch (e) {
-        console.warn(`無法解碼訊息 #${index} 的 HTML 實體:`, e);
+// 全域函數：頁面載入完成後自動修復
+function initMarkdownFixer() {
+  document.addEventListener('DOMContentLoaded', function() {
+    // 等待 MedApp 初始化完成
+    setTimeout(function() {
+      if (window.MedApp && MedApp.initialized && MedApp.chat && MedApp.chat.display) {
+        console.log('MedApp 已初始化，開始修復 Markdown');
+        MedApp.chat.display.fixMarkdownDisplay();
+      } else {
+        console.log('等待 MedApp 初始化...');
+        // 再等一會兒
+        setTimeout(() => {
+          if (window.MedApp && MedApp.chat && MedApp.chat.display) {
+            MedApp.chat.display.fixMarkdownDisplay();
+          }
+        }, 2000);
       }
-    }
-    
-    // 嘗試重新解析為 Markdown
-    try {
-      // 預處理內容
-      if (MedApp.chat && MedApp.chat.display && typeof MedApp.chat.display.preprocessMarkdown === 'function') {
-        decodedContent = MedApp.chat.display.preprocessMarkdown(decodedContent);
-      }
-      
-      // 使用 marked.js 解析
-      contentEl.innerHTML = marked.parse(decodedContent);
-      
-      // 後處理
-      if (MedApp.chat && MedApp.chat.display && typeof MedApp.chat.display.postProcessMarkdown === 'function') {
-        MedApp.chat.display.postProcessMarkdown(contentEl);
-      }
-      
-      console.log(`成功修復訊息 #${index}`);
-    } catch (error) {
-      console.error(`修復訊息 #${index} 時出錯:`, error);
-    }
+    }, 1000);
   });
-  
-  console.log('Markdown 修復完成');
 }
 
-// 頁面載入完成後自動修復
-document.addEventListener('DOMContentLoaded', function() {
-  // 等待 MedApp 初始化完成
-  setTimeout(function() {
-    if (window.MedApp && MedApp.initialized) {
-      console.log('MedApp 已初始化，開始修復 Markdown');
-      fixMarkdownDisplay();
-    } else {
-      console.log('等待 MedApp 初始化...');
-      // 再等一會兒
-      setTimeout(fixMarkdownDisplay, 2000);
-    }
-  }, 1000);
-});
+// 初始化修復器
+initMarkdownFixer();
 
 // 也可以從控制台手動呼叫
-window.fixMarkdownDisplay = fixMarkdownDisplay;
+window.fixMarkdownDisplay = function() {
+  if (window.MedApp && MedApp.chat && MedApp.chat.display) {
+    MedApp.chat.display.fixMarkdownDisplay();
+  } else {
+    console.error('MedApp.chat.display 未初始化');
+  }
+};

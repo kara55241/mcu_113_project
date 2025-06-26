@@ -5,13 +5,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from langchain_core.messages import HumanMessage
 from graph_rag_agent.multi_agent import app
+from .feedback_graph import get_feedback_graph
 import json
 import logging
 import os
 import uuid
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
-
+feedback_graph = get_feedback_graph()
 # 簡單的聊天歷史模型（可替代為實際的資料庫模型）
 class ChatHistory:
     _chat_history = {}
@@ -98,7 +100,14 @@ class ChatView(View):
                             logger.warning(f"無法解析座標: {coords}")
 
             metadata = {"location": location_info} if location_info else None
-            ChatHistory.add_message(session_id, user_message, 'user', metadata)
+            user_msg_id = str(uuid.uuid4())
+            feedback_graph.save_message(
+                chat_id=session_id,
+                message_id=user_msg_id,
+                content=user_message,
+                sender='user',
+                metadata=metadata
+            )
 
             is_location_query = any(k in user_message.lower() for k in ['位置', '附近', '醫院', '診所', '地點', '地圖'])
             context_prefix = ""
@@ -114,16 +123,18 @@ class ChatView(View):
             )
             messages = result.get("messages", [])
             filtered = app.filter_messages(messages)
-
-            # 只取最新一則回應
             output_text = filtered[-1] if filtered else "（無有效回應）"
 
-            logger.info(f"[MultiAgent] ChatID={session_id} 輸出回應：{output_text}")  # 👈 建議新增
-            ChatHistory.add_message(session_id, output_text, 'bot')
+            logger.info(f"[MultiAgent] ChatID={session_id} 輸出回應：{output_text}")
 
-
-
-            ChatHistory.add_message(session_id, output_text, 'bot')
+            bot_msg_id = str(uuid.uuid4())
+            feedback_graph.save_message(
+                chat_id=session_id,
+                message_id=bot_msg_id,
+                content=output_text,
+                sender='bot',
+                metadata=None
+            )
 
             return JsonResponse({
                 "output": output_text,
@@ -136,8 +147,7 @@ class ChatView(View):
             return JsonResponse({"error": "無效的JSON格式"}, status=400)
         except Exception as e:
             logger.exception("處理聊天請求時發生錯誤")
-            return JsonResponse({"error": f"處理請求時發生錯誤: {str(e)}"}, status=500)
-
+            return JsonResponse({"error": f"處理請求時發生錯誤: {str(e)}"}, status=500)    
 class NewChatView(View):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -231,3 +241,185 @@ class FileUploadView(View):
                 "success": False,
                 "error": f"處理檔案上傳時發生錯誤: {str(e)}"
             }, status=500)
+        
+
+
+class FeedbackAPIView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+
+            # 驗證必要欄位
+            required_fields = ['feedback_id', 'message_id', 'chat_id', 'type', 'timestamp']
+            for field in required_fields:
+                if field not in data:
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'缺少必要欄位: {field}'
+                    }, status=400)
+
+            # 驗證回饋類型
+            if data['type'] not in ['like', 'dislike']:
+                return JsonResponse({
+                    'success': False,
+                    'error': '回饋類型必須是 like 或 dislike'
+                }, status=400)
+
+            # 將 timestamp 轉為 ISO 格式（若非字串）
+            if isinstance(data['timestamp'], datetime):
+                data['timestamp'] = data['timestamp'].isoformat()
+
+            # 補全必要欄位
+            data.setdefault('details', '')
+            data.setdefault('session_id', data['chat_id'])
+
+            feedback_graph = get_feedback_graph()
+
+
+            # 根據回饋類型標記記憶節點或需要改進節點
+            try:
+                if data['type'] == 'like':
+                    feedback_graph.mark_key_memory(
+                        message_id=data['message_id'],
+                        feedback_type='like',
+                        details=data.get('details', '')
+                    )
+                elif data['type'] == 'dislike':
+                    feedback_graph.mark_failed_response(
+                        message_id=data['message_id'],
+                        reason=data.get('details', '')
+                    )
+            except Exception as e:
+                logger.warning(f"標記回饋節點失敗: {e}")
+
+            # 儲存回饋資訊
+            result = feedback_graph.save_feedback(data)
+
+            if result:
+                return JsonResponse({
+                    'success': True,
+                    'feedback_id': result['feedback_id'],
+                    'message': '回饋已成功儲存',
+                    'timestamp': str(result['timestamp'])
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error': '儲存回饋失敗'
+                }, status=500)
+
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False,
+                'error': '無效的 JSON 資料'
+            }, status=400)
+        except Exception as e:
+            logger.exception("Feedback POST failed")
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=500)
+
+class ConversationAPIView(View):
+    """處理對話管理的 API 端點"""
+    
+    def post(self, request):
+        """創建新對話"""
+        try:
+            data = json.loads(request.body)
+            
+            # 驗證必要欄位
+            required_fields = ['chat_id', 'session_id']
+            for field in required_fields:
+                if field not in data:
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'缺少必要欄位: {field}'
+                    }, status=400)
+            
+            feedback_graph = get_feedback_graph()
+            
+            # 創建對話會話
+            result = feedback_graph.create_chat_session(
+                chat_id=data['chat_id'],
+                session_id=data['session_id'],
+                metadata=data.get('metadata', {})
+            )
+            
+            if result:
+                logger.info(f"對話已創建: {data['chat_id']}")
+                return JsonResponse({
+                    'success': True,
+                    'chat_id': data['chat_id'],
+                    'created_at': str(result['created_at'])
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error': '創建對話失敗'
+                }, status=500)
+                
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False,
+                'error': '無效的 JSON 資料'
+            }, status=400)
+            
+        except Exception as e:
+            logger.error(f"創建對話時發生錯誤: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'error': '伺服器內部錯誤'
+            }, status=500)
+    
+    def get(self, request, chat_id=None):
+        """獲取對話及其回饋"""
+        try:
+            if not chat_id:
+                return JsonResponse({
+                    'success': False,
+                    'error': '需要提供 chat_id'
+                }, status=400)
+            
+            feedback_graph = get_feedback_graph()
+            conversation = feedback_graph.get_conversation_with_feedback(chat_id)
+            
+            return JsonResponse({
+                'success': True,
+                'chat_id': chat_id,
+                'conversation': conversation
+            })
+            
+        except Exception as e:
+            logger.error(f"獲取對話時發生錯誤: {str(e)}")
+            return JsonResponse({
+                'success': False,
+                'error': '獲取對話失敗'
+            }, status=500)
+class MessageAPIView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body)
+            required_fields = ['message_id', 'chat_id', 'content', 'sender', 'timestamp']
+            for field in required_fields:
+                if field not in data:
+                    return JsonResponse({'success': False, 'error': f'缺少必要欄位: {field}'}, status=400)
+
+            feedback_graph = get_feedback_graph()
+            result = feedback_graph.save_message(
+                chat_id=data['chat_id'],
+                message_id=data['message_id'],
+                content=data['content'],
+                sender=data['sender'],
+                metadata=data.get('metadata')
+            )
+
+            if result:
+                return JsonResponse({'success': True, 'message': '訊息已儲存'})
+            else:
+                return JsonResponse({'success': False, 'error': '儲存訊息失敗'}, status=500)
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': '無效的 JSON 資料'}, status=400)
+        except Exception as e:
+            logger.error(f"儲存訊息時發生錯誤: {str(e)}")
+            return JsonResponse({'success': False, 'error': '伺服器內部錯誤'}, status=500)

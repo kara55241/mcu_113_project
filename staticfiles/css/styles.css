@@ -1398,3 +1398,309 @@ gmpx-place-picker {
   margin-top: 0.25em;
   margin-bottom: 0.25em;
 }
+
+
+/* 在您的 styles.css 中新增以下樣式 */
+
+/* 回饋容器 */
+.feedback-container {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+  opacity: 0;
+  animation: fadeInFeedback 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeInFeedback {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 回饋按鈕容器 */
+.feedback-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* 回饋按鈕基本樣式 */
+.feedback-btn {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.feedback-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 點讚按鈕 */
+.feedback-btn.like-btn:hover {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.feedback-btn.like-btn.active {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
+}
+
+.feedback-btn.like-btn.active:hover {
+  background: #059669;
+  border-color: #059669;
+}
+
+/* 倒讚按鈕 */
+.feedback-btn.dislike-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.feedback-btn.dislike-btn.active {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+}
+
+.feedback-btn.dislike-btn.active:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+/* 回饋按鈕圖示 */
+.feedback-btn i {
+  font-size: 0.875rem;
+}
+
+.feedback-btn .feedback-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* 詳細回饋區域 */
+.feedback-details {
+  margin-top: 8px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 200px; }
+}
+
+/* 回饋表單 */
+.feedback-form {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+/* 回饋文字輸入框 */
+.feedback-text-input {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  resize: vertical;
+  background: white;
+  margin-bottom: 8px;
+}
+
+.feedback-text-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.feedback-text-input::placeholder {
+  color: #9ca3af;
+}
+
+/* 回饋操作按鈕 */
+.feedback-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.feedback-submit,
+.feedback-cancel {
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.feedback-submit {
+  background: #3b82f6;
+  color: white;
+}
+
+.feedback-submit:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.feedback-cancel {
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+.feedback-cancel:hover {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+/* 回饋狀態訊息 */
+.feedback-status {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.feedback-status.success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.feedback-status.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.feedback-status.loading {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+/* 載入動畫 */
+.feedback-status.loading::after {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #1e40af;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  margin-left: 8px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .feedback-buttons {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .feedback-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .feedback-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .feedback-submit,
+  .feedback-cancel {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* 機器人訊息中的回饋容器特殊樣式 */
+.message.bot .feedback-container {
+  border-left: 3px solid #e5e7eb;
+  padding-left: 12px;
+  margin-left: 8px;
+}
+
+/* 暗色主題支援（如果您的應用有暗色主題） */
+@media (prefers-color-scheme: dark) {
+  .feedback-container {
+    border-top-color: #374151;
+  }
+  
+  .feedback-btn {
+    background: #1f2937;
+    border-color: #374151;
+    color: #d1d5db;
+  }
+  
+  .feedback-btn:hover {
+    background: #374151;
+    border-color: #4b5563;
+  }
+  
+  .feedback-form {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .feedback-text-input {
+    background: #111827;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .feedback-text-input::placeholder {
+    color: #6b7280;
+  }
+  
+  .feedback-cancel {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .message.bot .feedback-container {
+    border-left-color: #374151;
+  }
+}

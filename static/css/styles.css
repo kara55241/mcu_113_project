@@ -1398,3 +1398,233 @@ gmpx-place-picker {
   margin-top: 0.25em;
   margin-bottom: 0.25em;
 }
+
+
+/* 在您的 styles.css 中新增以下樣式 */
+
+/* 回饋容器 */
+.feedback-container {
+  margin-top: 18px;
+  padding: 14px 0 0 0;
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 14px 14px;
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+  animation: none;
+}
+
+@keyframes fadeInFeedback {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 回饋按鈕容器 */
+.feedback-buttons {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 0;
+  justify-content: flex-start;
+}
+
+/* 回饋按鈕基本樣式 */
+.feedback-btn {
+  background: var(--background-dark);
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  min-width: 100px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feedback-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(124,158,255,0.10);
+}
+
+.feedback-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.feedback-btn.like-btn.active {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: var(--background-dark);
+}
+
+.feedback-btn.dislike-btn.active {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+
+.feedback-btn i {
+  font-size: 1.1em;
+}
+
+.feedback-btn .feedback-text {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.feedback-details {
+  margin-top: 10px;
+  background: var(--background-lighter);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 12px 14px 8px 14px;
+}
+
+.feedback-form {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.feedback-text-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 1em;
+  font-family: inherit;
+  resize: vertical;
+  background: var(--background-dark);
+  color: var(--text-color);
+  margin-bottom: 8px;
+}
+
+.feedback-text-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.feedback-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.feedback-submit {
+  background: var(--primary-color);
+  color: var(--background-dark);
+  border: none;
+  font-weight: 700;
+  padding: 7px 18px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.feedback-submit:hover {
+  background: var(--accent-color);
+}
+
+.feedback-cancel {
+  background: var(--background-lighter);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.feedback-cancel:hover {
+  background: var(--background-dark);
+  color: var(--primary-color);
+}
+
+.feedback-status {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.95em;
+  font-weight: 600;
+  text-align: center;
+  background: var(--background-lighter);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .feedback-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .feedback-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .feedback-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .feedback-submit,
+  .feedback-cancel {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* 機器人訊息中的回饋容器特殊樣式 */
+.message.bot .feedback-container {
+  border-left: 3px solid var(--primary-color);
+  padding-left: 14px;
+  margin-left: 0;
+}
+
+/* 暗色主題支援（如果您的應用有暗色主題） */
+@media (prefers-color-scheme: dark) {
+  .feedback-container {
+    border-top-color: #374151;
+  }
+  
+  .feedback-btn {
+    background: #1f2937;
+    border-color: #374151;
+    color: #d1d5db;
+  }
+  
+  .feedback-btn:hover {
+    background: #374151;
+    border-color: #4b5563;
+  }
+  
+  .feedback-form {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .feedback-text-input {
+    background: #111827;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .feedback-text-input::placeholder {
+    color: #6b7280;
+  }
+  
+  .feedback-cancel {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .message.bot .feedback-container {
+    border-left-color: #374151;
+  }
+}
