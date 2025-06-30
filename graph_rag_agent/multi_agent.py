@@ -1,4 +1,5 @@
 from langgraph.prebuilt import create_react_agent
+from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph_supervisor import create_supervisor
 from langgraph.checkpoint.sqlite import SqliteSaver
 import sqlite3
@@ -6,26 +7,27 @@ from langchain_core.tools import tool
 from graph_rag import graphrag_chronic,graphrag_cardiovascular
 from fact_check import search_fact_checks
 from cofacts_check import search_cofacts
-from langgraph.graph import MessagesState
-from langchain_core.messages import SystemMessage, HumanMessage
-from llm import llm_GPT, llm_gemini
-from typing import Literal
+from langchain_core.messages import HumanMessage
+from llm import llm_gemini
 from langchain_tavily import TavilySearch
 conn = sqlite3.connect("mcu_113_project/agent_checkpoint.sqlite", check_same_thread=False)
 memory=SqliteSaver(conn)
-class AgentState(MessagesState):
-    FactChecked: bool=False
+class State(AgentState):
+    summary: dict[str,any]
 
-@tool
+@tool(name_or_callable='net_search')
 def net_search(query: str):
     """
     Use this tool when you need to search the internet for information or other tool don't return answer.
+
+    Args:
+        query: The medical question or statement to be answered.
     """
-    tavily=TavilySearch(country='taiwan')
+    tavily=TavilySearch(country='taiwan',search_depth='advanced')
     result=tavily.invoke(query)
     return result
 
-@tool
+@tool(name_or_callable='cardiovascular_search')
 def cardiovascular_search(query: str) -> str:
     """
     You must use this tool when supervisor asks a medical question about cardiovascular diseases.
@@ -42,7 +44,7 @@ def cardiovascular_search(query: str) -> str:
     result = graphrag_cardiovascular(input=query)
     return result
 
-@tool
+@tool(name_or_callable='chronic_search')
 def chronic_search(query: str) -> str:
     """
     You must use this tool when supervisor asks a medical question about chronic diseases.
@@ -60,8 +62,8 @@ def chronic_search(query: str) -> str:
     return result
 
 
-@tool(parse_docstring=True)
-def google_fact_check_tool(query: str,state: AgentState) -> str:
+@tool(name_or_callable='google_fact_check_tool',parse_docstring=True)
+def google_fact_check_tool(query: str) -> str:
     """
     You must use this tool when supervisor asks you to fact-check a claim.
 
@@ -84,7 +86,6 @@ def google_fact_check_tool(query: str,state: AgentState) -> str:
                         result += f"  審查結果: {review.get('textualRating')}\n"
                         result += f"  來源連結: {review.get('url')}\n"
                 result += "-" * 20 + "\n"
-            state["FactChecked"]=True
         else:
             result += "查無相關審查結果\n"
     
@@ -92,7 +93,7 @@ def google_fact_check_tool(query: str,state: AgentState) -> str:
     
 chronic_agent = create_react_agent(
     model=llm_gemini,  
-    tools=[chronic_search,net_search], 
+    tools=[net_search], 
     name="chronic_agent",
     prompt=
     """
@@ -152,14 +153,29 @@ supervisor = create_supervisor(
     model=llm_gemini,
     prompt=(
         """
-        You are a supervisor who manages multiple agents.
-        First,you need to use the `cardiovascular_agent` or `chronic_agent` to answer medical questions.
-        Second, you need to use the `fact_check_agent` to check the user query for factual accuracy.
-        Last,you need to provide `fact_check_agent` and original answer to user.
+        Role:
+        You are the central coordinator (Supervisor) for a smart health consultation system. 
+        Your main responsibility is to precisely understand the user's health query and route it to the most suitable specialized agent for handling that specific problem.
+
+        Available Agents / Tools and Their Calling Conditions:
+
+        chronic_Agent:
+
+        Calling Condition: 
+        Invoke when the user asks questions related to general chronic diseases (e.g., diabetes, hypertension, chronic kidney disease, osteoporosis, gout, thyroid conditions) concerning their definition, symptoms, prevention, diet, lifestyle management, or general medication principles.
+
+        cardiovascular_Agent:
+
+        Calling Condition: 
+        Invoke when the user asks questions specifically related to heart and vascular system diseases (e.g., heart disease, stroke, myocardial infarction, arrhythmia, coronary artery disease, hyperlipidemia if strongly linked to cardiovascular risk, thrombosis) concerning their symptoms, risks, initial emergency assessment, or directly related cardiovascular health advice (diet/exercise).
+
+        fact_check_agent:
+
+        Calling Condition: 
+        Invoke when the user explicitly expresses doubt about the truthfulness of certain health information (e.g., "Is this true?", "Is this statement correct?", "I heard that... is that right?"), or when asking for the definition or source of a health concept.
         """
     )
 )
-
 
 # Compile and run
 
@@ -167,6 +183,5 @@ app = supervisor.compile(checkpointer=memory)
 config = {"configurable": {"thread_id": "1"}}
 while True:
     message=HumanMessage(content=input("輸入你的問題: "))
-    result = app.invoke(input={'messages':message},config=config)
-    for m in result["messages"]:
-        m.pretty_print()
+    for chunk,metadata in app.stream(input={'messages':message},config=config,stream_mode='messages'):
+        print(chunk.content)
