@@ -7,13 +7,25 @@ from langchain_core.tools import tool
 from graph_rag import graphrag_chronic,graphrag_cardiovascular
 from fact_check import search_fact_checks
 from cofacts_check import search_cofacts
-from langchain_core.messages import HumanMessage
+from langmem.short_term import SummarizationNode
+from langchain_core.messages.utils import count_tokens_approximately
 from llm import llm_gemini
 from langchain_tavily import TavilySearch
-conn = sqlite3.connect("mcu_113_project/agent_checkpoint.sqlite", check_same_thread=False)
+
+conn = sqlite3.connect("./agent_checkpoint.sqlite", check_same_thread=False)
 memory=SqliteSaver(conn)
 class State(AgentState):
-    summary: dict[str,any]
+    context: dict[str,any]
+
+
+summarization_node = SummarizationNode(
+    token_counter=count_tokens_approximately,
+    model=llm_gemini,
+    max_tokens=1500,
+    max_summary_tokens=750,
+    output_messages_key="llm_input_messages",
+)
+
 
 @tool(name_or_callable='net_search')
 def net_search(query: str):
@@ -93,7 +105,7 @@ def google_fact_check_tool(query: str) -> str:
     
 chronic_agent = create_react_agent(
     model=llm_gemini,  
-    tools=[net_search], 
+    tools=[net_search,chronic_search], 
     name="chronic_agent",
     prompt=
     """
@@ -105,7 +117,8 @@ chronic_agent = create_react_agent(
         **Prohibitions**:
             1.Languages other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
-            3. add source(the tool you used) at the end of your response.
+            3. add source(the tool you used) at the end of your response, then handoff to supervisor.
+            4. If you can't any useful information, just say that you don't know.
     """
 )
 
@@ -123,7 +136,8 @@ cardiovascular_agent = create_react_agent(
         **Prohibitions**:
             1.Languages other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
-            3. add source(the tool you used) at the end of your response.
+            3. add source(the tool you used) at the end of your response, then handoff to supervisor.
+            4. If you can't any useful information, just say that you don't know.
     """
 )
 
@@ -142,6 +156,7 @@ fact_check_agent = create_react_agent(
             1. Languages ​​other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
             3. Only use the provided tool to fact-check claims, do not use any other methods.
+            4. If nothing returned, just say that you don't know.
     """
     )
     
@@ -149,6 +164,7 @@ fact_check_agent = create_react_agent(
 
 supervisor = create_supervisor(
     agents=[chronic_agent, cardiovascular_agent,fact_check_agent],
+    state_schema=State,
     tools=[],
     model=llm_gemini,
     prompt=(
@@ -158,7 +174,7 @@ supervisor = create_supervisor(
         Your main responsibility is to precisely understand the user's health query and route it to the most suitable specialized agent for handling that specific problem.
 
         Available Agents / Tools and Their Calling Conditions:
-
+        ```
         chronic_Agent:
 
         Calling Condition: 
@@ -173,8 +189,13 @@ supervisor = create_supervisor(
 
         Calling Condition: 
         Invoke when the user explicitly expresses doubt about the truthfulness of certain health information (e.g., "Is this true?", "Is this statement correct?", "I heard that... is that right?"), or when asking for the definition or source of a health concept.
+       
+         ```
+        Rules:
+        - Only use the information provided by the agents, do not use pre-trained knowledge.
         """
-    )
+    ),
+    pre_model_hook=summarization_node,
 )
 
 # Compile and run
@@ -182,6 +203,6 @@ supervisor = create_supervisor(
 app = supervisor.compile(checkpointer=memory)
 config = {"configurable": {"thread_id": "1"}}
 while True:
-    message=HumanMessage(content=input("輸入你的問題: "))
-    for chunk,metadata in app.stream(input={'messages':message},config=config,stream_mode='messages'):
+    message=input("輸入你的問題: ")
+    for chunk,metadata in app.stream(input={'messages':[('user',message)]},config=config,stream_mode='messages'):
         print(chunk.content)
