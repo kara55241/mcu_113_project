@@ -876,3 +876,408 @@
 [2025-06-26 21:37:42,535] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
 [2025-06-26 21:37:43,944] [INFO] django.server: "POST / HTTP/1.1" 200 371
 [2025-06-26 21:37:44,070] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:55:39,922] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 20:56:41,370] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-07-10 20:56:41,861] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 20:56:48,628] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 20:57:08,516] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 20:57:27,622] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-07-10 20:57:28,486] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 20:57:38,832] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-07-10 20:57:39,700] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 20:58:44,143] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 20:58:55,929] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 20:58:55,964] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 34178
+[2025-07-10 20:58:55,972] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15605
+[2025-07-10 20:58:56,007] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-07-10 20:58:56,028] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-07-10 20:58:56,036] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 4455
+[2025-07-10 20:58:56,244] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 7499
+[2025-07-10 20:58:56,244] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-07-10 20:58:56,245] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 13344
+[2025-07-10 20:58:56,245] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-07-10 20:58:56,248] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5376
+[2025-07-10 20:58:56,248] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 17043
+[2025-07-10 20:58:56,256] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15084
+[2025-07-10 20:58:56,262] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-07-10 20:58:56,263] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-07-10 20:58:56,263] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-07-10 20:58:56,264] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 29655
+[2025-07-10 20:58:56,371] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 20:58:56,383] [INFO] django.server: "GET /chat/history/1750944230893/ HTTP/1.1" 200 44
+[2025-07-10 20:58:56,780] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 98
+[2025-07-10 20:58:57,287] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:58:57,301] [WARNING] django.request: Not Found: /favicon.ico
+[2025-07-10 20:58:57,301] [WARNING] django.server: "GET /favicon.ico HTTP/1.1" 404 4523
+[2025-07-10 20:58:58,492] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:58:58,524] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:58:58,537] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:58:58,626] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:58:58,643] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:58:59,612] [WARNING] django.request: Not Found: /chat/history/1750944230893/
+[2025-07-10 20:58:59,613] [WARNING] django.server: "DELETE /chat/history/1750944230893/ HTTP/1.1" 404 79
+[2025-07-10 20:58:59,625] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 20:59:00,491] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 20:59:02,858] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:59:04,185] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 20:59:04,185] [ERROR] django.server: "POST / HTTP/1.1" 500 131
+[2025-07-10 20:59:04,309] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:59:07,595] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 20:59:08,609] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 20:59:08,644] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:01:16,086] [INFO] django.utils.autoreload: C:\myproject\myproject\views.py changed, reloading.
+[2025-07-10 21:01:19,149] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:01:32,938] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:01:33,334] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:01:33,337] [INFO] django.server: "GET /chat/history/1752152340477/ HTTP/1.1" 200 44
+[2025-07-10 21:01:33,357] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 98
+[2025-07-10 21:01:35,405] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:01:35,485] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:01:36,342] [INFO] django.server: "POST / HTTP/1.1" 200 197
+[2025-07-10 21:01:36,476] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:01:41,176] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:01:43,106] [INFO] django.server: "POST / HTTP/1.1" 200 443
+[2025-07-10 21:01:43,236] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:01:47,028] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 177
+[2025-07-10 21:03:42,470] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:03:45,587] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:04:02,364] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:04:02,708] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:04:02,711] [INFO] django.server: "GET /chat/history/1752152340477/ HTTP/1.1" 200 44
+[2025-07-10 21:04:02,721] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 98
+[2025-07-10 21:04:02,851] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:04:04,499] [WARNING] django.request: Not Found: /chat/history/1752152340477/
+[2025-07-10 21:04:04,500] [WARNING] django.server: "DELETE /chat/history/1752152340477/ HTTP/1.1" 404 79
+[2025-07-10 21:04:04,511] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:04:04,811] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:04:04,826] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:04:04,882] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:04:04,897] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:04:49,535] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:04:53,794] [INFO] django.server: "POST / HTTP/1.1" 200 197
+[2025-07-10 21:04:54,593] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:05:17,136] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:05:18,656] [INFO] django.server: "POST / HTTP/1.1" 200 383
+[2025-07-10 21:05:18,775] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:05:23,820] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:05:30,001] [INFO] django.server: "POST / HTTP/1.1" 200 413
+[2025-07-10 21:05:30,114] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:06:00,152] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:06:01,902] [INFO] django.server: "POST / HTTP/1.1" 200 479
+[2025-07-10 21:06:02,603] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:06:11,448] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:06:39,523] [INFO] django.server: "POST / HTTP/1.1" 200 405
+[2025-07-10 21:06:40,608] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:11,130] [INFO] django.utils.autoreload: C:\myproject\myproject\views.py changed, reloading.
+[2025-07-10 21:12:14,200] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:12:41,353] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:12:42,104] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:12:42,106] [INFO] django.server: "GET /chat/history/1752152644496/ HTTP/1.1" 200 44
+[2025-07-10 21:12:42,178] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 98
+[2025-07-10 21:12:42,335] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:42,351] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:42,368] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:42,381] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:42,394] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:44,216] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:44,220] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:44,220] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:44,222] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:44,233] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:46,964] [WARNING] django.request: Not Found: /chat/history/1752152644496/
+[2025-07-10 21:12:46,965] [WARNING] django.server: "DELETE /chat/history/1752152644496/ HTTP/1.1" 404 79
+[2025-07-10 21:12:46,982] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:12:47,718] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:12:49,942] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:12:50,117] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:12:50,285] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:12:53,518] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:12:55,058] [INFO] django.server: "POST / HTTP/1.1" 200 197
+[2025-07-10 21:12:55,185] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:16:01,673] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:16:04,749] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:16:52,533] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:16:53,057] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:16:53,061] [INFO] django.server: "GET /chat/history/1752153170272/ HTTP/1.1" 200 44
+[2025-07-10 21:16:53,124] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 98
+[2025-07-10 21:16:53,286] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:16:55,144] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:16:55,914] [WARNING] django.request: Not Found: /chat/history/1752153170272/
+[2025-07-10 21:16:55,915] [WARNING] django.server: "DELETE /chat/history/1752153170272/ HTTP/1.1" 404 79
+[2025-07-10 21:16:55,927] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:16:58,331] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:17:25,158] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:17:26,411] [INFO] django.server: "POST / HTTP/1.1" 200 179
+[2025-07-10 21:17:26,534] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:17:30,797] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 177
+[2025-07-10 21:17:34,787] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:17:37,144] [INFO] django.server: "POST / HTTP/1.1" 200 711
+[2025-07-10 21:17:37,276] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:25:22,683] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:25:25,952] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:25:40,842] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:25:41,345] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:25:41,348] [INFO] django.server: "GET /chat/history/1752153418317/ HTTP/1.1" 200 44
+[2025-07-10 21:25:41,369] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:25:41,370] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:25:41,519] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:25:41,520] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:25:43,421] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:25:43,421] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:25:43,422] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:25:43,423] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:25:43,519] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:25:43,520] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:25:48,107] [WARNING] django.request: Not Found: /chat/history/1752153418317/
+[2025-07-10 21:25:48,107] [WARNING] django.server: "DELETE /chat/history/1752153418317/ HTTP/1.1" 404 79
+[2025-07-10 21:25:48,119] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:26:05,994] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:26:05,994] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:26:05,994] [ERROR] django.server: "POST / HTTP/1.1" 500 285
+[2025-07-10 21:26:05,995] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:26:06,118] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:26:06,118] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:26:09,018] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:26:09,134] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:26:09,134] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:26:09,134] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:26:09,134] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:26:13,648] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:26:13,649] [ERROR] django.server: "POST / HTTP/1.1" 500 285
+[2025-07-10 21:26:13,649] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:26:13,650] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:26:13,773] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:26:13,773] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:26:16,654] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:26:16,773] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:26:16,773] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:26:16,774] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:26:16,774] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:27:12,398] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:27:15,470] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:27:27,217] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:27:27,616] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:27:27,618] [INFO] django.server: "GET /chat/history/1752153948103/ HTTP/1.1" 200 44
+[2025-07-10 21:27:27,633] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:27:27,633] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:27:29,815] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:27:29,816] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:27:31,121] [WARNING] django.request: Not Found: /chat/history/1752153948103/
+[2025-07-10 21:27:31,121] [WARNING] django.server: "DELETE /chat/history/1752153948103/ HTTP/1.1" 404 79
+[2025-07-10 21:27:31,132] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:28:54,710] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:28:54,711] [ERROR] django.server: "POST / HTTP/1.1" 500 285
+[2025-07-10 21:28:54,822] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:28:54,842] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:28:57,729] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:28:57,853] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:28:57,869] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:05,849] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:05,850] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:29:05,850] [ERROR] django.server: "POST / HTTP/1.1" 500 285
+[2025-07-10 21:29:05,975] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:08,863] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:29:08,980] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:08,985] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:15,290] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:29:15,907] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:29:15,909] [INFO] django.server: "GET /chat/history/1752154051117/ HTTP/1.1" 200 44
+[2025-07-10 21:29:15,925] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:29:15,926] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:29:15,928] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:15,928] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:19,697] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:29:19,697] [ERROR] django.server: "POST / HTTP/1.1" 500 285
+[2025-07-10 21:29:19,737] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:19,816] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:22,717] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:29:22,836] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:22,839] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:30,799] [WARNING] django.request: Not Found: /chat/history/1752154051117/
+[2025-07-10 21:29:30,799] [WARNING] django.server: "DELETE /chat/history/1752154051117/ HTTP/1.1" 404 79
+[2025-07-10 21:29:30,811] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:29:31,466] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:29:31,634] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:29:31,810] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:29:34,521] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:29:34,521] [ERROR] django.server: "POST / HTTP/1.1" 500 285
+[2025-07-10 21:29:34,522] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:34,644] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:37,530] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:29:37,643] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:37,644] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:29:53,188] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:30:05,337] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:30:05,725] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:30:05,727] [INFO] django.server: "GET /chat/history/1752154171798/ HTTP/1.1" 200 44
+[2025-07-10 21:30:05,740] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:30:05,740] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:30:07,788] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:03,262] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:31:06,290] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:31:18,733] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:31:19,092] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:31:19,094] [INFO] django.server: "GET /chat/history/1752154171798/ HTTP/1.1" 200 44
+[2025-07-10 21:31:19,123] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:31:19,124] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:31:21,152] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:25,735] [WARNING] django.request: Not Found: /chat/history/1752154171798/
+[2025-07-10 21:31:25,736] [WARNING] django.server: "DELETE /chat/history/1752154171798/ HTTP/1.1" 404 79
+[2025-07-10 21:31:25,744] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:31:37,074] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:37,077] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:31:37,077] [ERROR] django.server: "POST / HTTP/1.1" 500 321
+[2025-07-10 21:31:37,196] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:40,095] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:31:40,209] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:40,215] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:47,461] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:47,463] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:31:47,463] [ERROR] django.server: "POST / HTTP/1.1" 500 321
+[2025-07-10 21:31:47,588] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:50,593] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:31:51,600] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:31:51,603] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:35:01,937] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:35:05,074] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:35:16,651] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:35:17,069] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:35:17,073] [INFO] django.server: "GET /chat/history/1752154285728/ HTTP/1.1" 200 44
+[2025-07-10 21:35:17,268] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:35:17,268] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:35:19,243] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:35:19,243] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:35:25,286] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:35:26,538] [INFO] django.server: "POST / HTTP/1.1" 200 173
+[2025-07-10 21:35:26,662] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:35:45,044] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:35:47,302] [INFO] django.server: "POST / HTTP/1.1" 200 609
+[2025-07-10 21:35:47,424] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:38:27,308] [WARNING] django.request: Not Found: /chat/history/1752154285728/
+[2025-07-10 21:38:27,309] [WARNING] django.server: "DELETE /chat/history/1752154285728/ HTTP/1.1" 404 79
+[2025-07-10 21:38:27,320] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:38:32,070] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:38:32,309] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:39:03,244] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:39:06,344] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:39:17,510] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:39:17,879] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:39:23,893] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:39:23,894] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:39:26,099] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:39:40,064] [INFO] django.server: "POST / HTTP/1.1" 200 311
+[2025-07-10 21:39:40,600] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:39:53,141] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 177
+[2025-07-10 21:39:56,264] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:39:58,416] [INFO] django.server: "POST / HTTP/1.1" 200 275
+[2025-07-10 21:39:58,603] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:40:05,524] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:40:17,525] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:40:17,525] [ERROR] django.server: "POST / HTTP/1.1" 500 764
+[2025-07-10 21:40:18,628] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:40:20,585] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:40:21,615] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:40:21,654] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:45:35,513] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:45:38,750] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:45:58,070] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:45:58,474] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:45:58,476] [INFO] django.server: "GET /chat/history/1752154757777/ HTTP/1.1" 200 44
+[2025-07-10 21:45:58,487] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:45:58,488] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:45:58,753] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:46:00,553] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:46:00,643] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:46:00,653] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:46:00,679] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:46:00,680] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:46:26,876] [WARNING] django.request: Not Found: /chat/history/1752154757777/
+[2025-07-10 21:46:26,876] [WARNING] django.server: "DELETE /chat/history/1752154757777/ HTTP/1.1" 404 79
+[2025-07-10 21:46:26,890] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:46:29,994] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:46:31,674] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:46:31,675] [ERROR] django.server: "POST / HTTP/1.1" 500 249
+[2025-07-10 21:46:31,796] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:46:31,796] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:46:35,592] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:46:36,606] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:46:36,606] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:46:36,607] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:46:36,607] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:47:14,934] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:47:15,093] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:47:15,095] [INFO] django.server: "GET /chat/history/1752155186872/ HTTP/1.1" 200 44
+[2025-07-10 21:47:15,105] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:47:15,105] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:47:15,113] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:47:29,205] [WARNING] django.request: Not Found: /chat/history/1752155186872/
+[2025-07-10 21:47:29,205] [WARNING] django.server: "DELETE /chat/history/1752155186872/ HTTP/1.1" 404 79
+[2025-07-10 21:47:29,216] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:47:30,213] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:47:30,373] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:47:34,098] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:47:34,098] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:47:34,115] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:47:35,512] [INFO] django.server: "POST / HTTP/1.1" 200 245
+[2025-07-10 21:47:35,657] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:49:55,084] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-07-10 21:49:58,309] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 21:50:10,252] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:50:10,621] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 21:50:10,624] [INFO] django.server: "GET /chat/history/1752155250264/ HTTP/1.1" 200 44
+[2025-07-10 21:50:10,634] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 21:50:10,635] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 21:50:10,815] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:50:12,758] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:50:27,132] [WARNING] django.request: Not Found: /chat/history/1752155250264/
+[2025-07-10 21:50:27,132] [WARNING] django.server: "DELETE /chat/history/1752155250264/ HTTP/1.1" 404 79
+[2025-07-10 21:50:27,145] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 21:50:34,756] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:50:34,757] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:50:36,146] [INFO] django.server: "POST / HTTP/1.1" 200 197
+[2025-07-10 21:50:36,284] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:51:04,063] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 21:51:06,052] [ERROR] django.request: Internal Server Error: /
+[2025-07-10 21:51:06,052] [ERROR] django.server: "POST / HTTP/1.1" 500 249
+[2025-07-10 21:51:06,174] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:51:06,174] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:51:09,596] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 21:51:10,600] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:51:10,600] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 21:51:10,600] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 21:51:10,601] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 22:04:03,939] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 22:04:04,205] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 22:04:04,209] [INFO] django.server: "GET /chat/history/1752155427128/ HTTP/1.1" 200 44
+[2025-07-10 22:04:04,256] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 22:04:04,256] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 22:04:04,269] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 22:04:04,270] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 22:04:04,357] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 22:04:05,892] [WARNING] django.request: Not Found: /chat/history/1752155427128/
+[2025-07-10 22:04:05,892] [WARNING] django.server: "DELETE /chat/history/1752155427128/ HTTP/1.1" 404 79
+[2025-07-10 22:04:05,905] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 22:04:06,283] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 22:04:23,047] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 22:04:23,198] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 22:04:25,882] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 22:04:25,882] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 22:04:25,897] [ERROR] django.request: Internal Server Error: /api/conversations/
+[2025-07-10 22:04:25,897] [ERROR] django.server: "POST /api/conversations/ HTTP/1.1" 500 73
+[2025-07-10 22:04:27,334] [INFO] django.server: "POST / HTTP/1.1" 200 197
+[2025-07-10 22:04:27,459] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 22:11:24,361] [INFO] django.utils.autoreload: C:\myproject\myproject\views.py changed, reloading.
+[2025-07-10 22:11:27,542] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-07-10 22:11:44,793] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-07-10 22:11:45,227] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 13
+[2025-07-10 22:11:45,322] [INFO] django.server: "GET /chat/history/1752156263095/ HTTP/1.1" 200 44
+[2025-07-10 22:11:45,371] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 45
+[2025-07-10 22:11:45,563] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 22:11:47,380] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 22:11:48,185] [INFO] django.server: "DELETE /chat/history/1752156263095/ HTTP/1.1" 200 62
+[2025-07-10 22:11:48,252] [INFO] django.server: "POST /chat/new/ HTTP/1.1" 200 109
+[2025-07-10 22:11:50,783] [ERROR] django.request: Internal Server Error: /api/messages/
+[2025-07-10 22:11:50,784] [ERROR] django.server: "POST /api/messages/ HTTP/1.1" 500 73
+[2025-07-10 22:11:53,479] [INFO] django.server: "POST / HTTP/1.1" 200 348
+[2025-07-10 22:11:53,607] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 62
+[2025-07-10 22:11:55,794] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 177
