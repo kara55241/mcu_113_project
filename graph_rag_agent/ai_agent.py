@@ -11,7 +11,7 @@ from langchain import hub
 from langchain_core.prompts import PromptTemplate
 from .research import graph_rag
 from .SearchTool import SearchTools
-from multi_agent import app  # 引入 Supervisor app
+from .multi_agent import app  # 引入 Supervisor app
 from langchain_core.messages import HumanMessage
 import re
 

@@ -1,3 +1,4 @@
+# research.py - 移除JSON格式限制的版本
 
 from neo4j import GraphDatabase
 from neo4j_graphrag.embeddings import OpenAIEmbeddings
@@ -12,8 +13,6 @@ from neo4j_graphrag.llm import OpenAILLM
 import os
 from dotenv import load_dotenv
 
-
-
 load_dotenv()
 NEO4J_URI = os.getenv("NEO4J_URI")
 NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
@@ -22,16 +21,17 @@ NEO4J_DATABASE= os.getenv("NEO4J_DATABASE")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GOOGLE_API_KEY=os.getenv("GOOGLE_API_KEY")
 
-
 driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD),database=NEO4J_DATABASE)
 embedder = OpenAIEmbeddings(model="text-embedding-ada-002", api_key=OPENAI_API_KEY)
-gen_config=GenerationConfig(temperature=0,response_mime_type="application/json")
-llm = OpenAILLM(model_name='gpt-4.1-mini',model_params={'temperature':0,"response_format": {"type": "json_object"}})
 
+# 🔧 修正：移除 JSON 格式限制，使用自然文字回應
+llm = OpenAILLM(
+    model_name='gpt-4.1-mini',
+    model_params={'temperature': 0}  # 移除 JSON 格式要求
+)
 
 create_vector_index(driver, name="text_embeddings", label="Chunk",
                    embedding_property="embedding", dimensions=1536, similarity_fn="cosine")
-
 
 vc_retriever = VectorCypherRetriever(
    driver,
@@ -54,52 +54,94 @@ RETURN '=== text ===n' + apoc.text.join([c in chunks | c.text], 'n---n') + 'nn==
 """
 )
 
-rag_template = RagTemplate(template=
-'''
-Answer the Question using the following Context. 
-To answer the question, you must follow these rules: 
-```
-Focus on providing useful information for elders.
-List all imformation may with answer the question as much as you can.
-response should be in Traditional Chinese.
-response should be in JSON format.
-response should be detailed and relevant to the question.
-Only respond with information mentioned in the Context.
-Don't use your pre-trained knowledge.
-If you are not sure about the answer, just say "I do not know the answer, please use another tool."
-```
-# Question:
-{query_text}
+# 🔧 修正：簡化並改善 RAG 模板
+rag_template = RagTemplate(
+    template='''
+請根據以下資料回答問題，並為長輩提供清晰易懂的健康資訊：
 
-# Context:
+問題：{query_text}
+
+參考資料：
 {context}
 
-# Answer:
-''', system_instructions="You are an expert in medcial field, your goal is provide imformation for elders using Neo4j.",expected_inputs=['query_text', 'context'])
+請遵循以下回答原則：
+- 使用繁體中文回答
+- 提供詳細且實用的資訊
+- 只根據提供的參考資料回答
+- 以清晰的段落和適當的標題組織內容
+- 如果資料不足以回答問題，請誠實說明
 
-rag  = GraphRAG(llm=llm, retriever=vc_retriever, prompt_template=rag_template)
+回答：
+''', 
+    system_instructions="您是專業的醫療健康顧問，專門為長輩提供易懂的健康資訊和建議。",
+    expected_inputs=['query_text', 'context']
+)
 
-def graph_rag(input:str):
-   
-   vc_res = vc_retriever.get_search_results(query_text=input, top_k=3)
-   kg_rel_pos = vc_res.records[0]['info'].find('nn=== kg_rels ===n')
+rag = GraphRAG(llm=llm, retriever=vc_retriever, prompt_template=rag_template)
+
+def graph_rag(input: str):
+    """執行圖形RAG查詢並返回清理後的結果"""
+    try:
+        # 執行RAG查詢
+        result = rag.search(input, retriever_config={'top_k': 5})
+        
+        # 獲取答案
+        answer = result.answer
+        
+        # 🔧 清理可能的JSON格式回應
+        if isinstance(answer, str) and answer.strip().startswith('{'):
+            try:
+                import json
+                parsed = json.loads(answer)
+                if isinstance(parsed, dict):
+                    # 將JSON轉換為自然文字格式
+                    answer = convert_json_to_text(parsed)
+            except json.JSONDecodeError:
+                # 如果解析失敗，保持原始文字
+                pass
+        
+        return answer
+        
+    except Exception as e:
+        error_msg = f"知識圖譜查詢遇到問題：{str(e)}"
+        print(f"❌ graph_rag 錯誤: {error_msg}")
+        return error_msg
+
+def convert_json_to_text(data):
+    """將JSON結構轉換為自然文字格式"""
+    if isinstance(data, dict):
+        result_parts = []
+        
+        # 處理主要標題
+        for main_key, main_value in data.items():
+            result_parts.append(f"## {main_key}")
+            
+            if isinstance(main_value, dict):
+                for key, value in main_value.items():
+                    if isinstance(value, dict):
+                        result_parts.append(f"\n**{key}：**")
+                        for sub_key, sub_value in value.items():
+                            if isinstance(sub_value, list):
+                                result_parts.append(f"- **{sub_key}：** {', '.join(map(str, sub_value))}")
+                            else:
+                                result_parts.append(f"- **{sub_key}：** {sub_value}")
+                    elif isinstance(value, list):
+                        result_parts.append(f"\n**{key}：**")
+                        for item in value:
+                            result_parts.append(f"- {item}")
+                    else:
+                        result_parts.append(f"\n**{key}：** {value}")
+            elif isinstance(main_value, list):
+                for item in main_value:
+                    result_parts.append(f"- {item}")
+            else:
+                result_parts.append(str(main_value))
+        
+        return '\n'.join(result_parts)
     
+    elif isinstance(data, list):
+        return '\n'.join([f"- {item}" for item in data])
     
-   kg_result_chunk = vc_res.records[0]['info'][:kg_rel_pos]
-   kg_result_relationships = vc_res.records[0]['info'][kg_rel_pos+len('nn=== kg_rels ===n'):]  
-    
-    # RAG answer
-   result = rag.search(input, retriever_config={'top_k':5})
-    
-    # 整理輸出
-   #answer_with_source = f"{result.answer}\n資料來源:\n{kg_result_chunk}{kg_result_relationships}"
-   answer_with_source = result.answer
-   return answer_with_source
-if __name__ == "__main__":
-      # 測試輸入
-      test_input = "糖尿病可以吃甜食嗎?"
-      answer = graph_rag(test_input)
-      print("RAG Answer:", answer)
-      
-    
+    else:
+        return str(data)
 

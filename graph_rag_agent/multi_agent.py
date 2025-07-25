@@ -1,205 +1,255 @@
+# multi_agent.py - LangGraph Supervisor with Feedback Enhancement (English Version)
+
 from langgraph.prebuilt import create_react_agent
-from langgraph.prebuilt.chat_agent_executor import AgentState
 from langgraph_supervisor import create_supervisor
 from langgraph.checkpoint.sqlite import SqliteSaver
-import sqlite3
 from langchain_core.tools import tool
-from graph_rag_agent.graph_rag import graphrag_chronic, graphrag_cardiovascular
-from graph_rag_agent.fact_check import search_fact_checks
-from graph_rag_agent.cofacts_check import search_cofacts
-from langmem.short_term import SummarizationNode
-from langchain_core.messages.utils import count_tokens_approximately
-from graph_rag_agent.llm import llm_gemini
-from langchain_tavily import TavilySearch
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+import sqlite3, time, os, json
+from .llm import llm_GPT, llm_gemini
 
-
+# Initialize Checkpoint
 conn = sqlite3.connect("./agent_checkpoint.sqlite", check_same_thread=False)
-memory=SqliteSaver(conn)
-class State(AgentState):
-    context: dict[str,any]
+memory = SqliteSaver(conn)
 
-
-summarization_node = SummarizationNode(
-    token_counter=count_tokens_approximately,
-    model=llm_gemini,
-    max_tokens=1500,
-    max_summary_tokens=750,
-    output_messages_key="llm_input_messages",
-)
-
-
-@tool(name_or_callable='net_search')
-def net_search(query: str):
-    """
-    Use this tool when you need to search the internet for information or other tool don't return answer.
-
-    Args:
-        query: The medical question or statement to be answered.
-    """
-    tavily=TavilySearch(country='taiwan',search_depth='advanced')
-    result=tavily.invoke(query)
-    return result
-
-@tool(name_or_callable='cardiovascular_search')
-def cardiovascular_search(query: str) -> str:
-    """
-    You must use this tool when supervisor asks a medical question about cardiovascular diseases.
-    This tool queries a medical knowledge graph to retrieve and generate answers.
-
-    Args:
-        query: The medical question or statement to be answered.
-
-    Returns:
-        A comprehensive answer based on the medical knowledge graph.
-        if answer is not found, it will return a message indicating that no answer was found.
-    """
-
-    result = graphrag_cardiovascular(input=query)
-    return result
-
-@tool(name_or_callable='chronic_search')
+# Tool functions
+@tool
 def chronic_search(query: str) -> str:
-    """
-    You must use this tool when supervisor asks a medical question about chronic diseases.
-    This tool queries a medical knowledge graph to retrieve and generate answers.
+    """Search for chronic disease knowledge graph information"""
+    try:
+        from .graph_rag import graphrag_chronic
+    except:
+        from graph_rag_agent.graph_rag import graphrag_chronic
+    return str(graphrag_chronic(query))
 
-    Args:
-        query: The medical question or statement to be answered.
+@tool
+def cardiovascular_search(query: str) -> str:
+    """Search for cardiovascular disease knowledge graph information"""
+    try:
+        from .graph_rag import graphrag_cardiovascular
+    except:
+        from graph_rag_agent.graph_rag import graphrag_cardiovascular
+    return str(graphrag_cardiovascular(query))
 
-    Returns:
-        A comprehensive answer based on the medical knowledge graph.
-        if answer is not found, it will return a message indicating that no answer was found.
-    """
+@tool
+def fact_check_tool(query: str) -> str:
+    """Search for health-related fact-checking results"""
+    try:
+        from .fact_check import search_fact_checks
+    except:
+        from graph_rag_agent.fact_check import search_fact_checks
+    result = search_fact_checks(query)
+    return f"Found {len(result.get('claims', []))} fact-check results" if result else "No results found"
 
-    result = graphrag_chronic(input=query)
-    return result
+@tool
+def net_search(query: str) -> str:
+    """Search online health information using Tavily"""
+    try:
+        from langchain_tavily import TavilySearch
+        tavily = TavilySearch(country='taiwan')
+        return str(tavily.invoke(query))[:2000]
+    except:
+        return "Online search currently unavailable"
 
+@tool
+def search_feedback_memories(query: str) -> str:
+    """Search for similar positively rated feedback memories"""
+    try:
+        from myproject.feedback_graph import search_similar_keymemories
+        memories = search_similar_keymemories(query, top_k=2)
+        if not memories:
+            return "No related feedback memory"
+        positive_memories = [m for m in memories if m.get('feedback_type') in ['positive', 'like']]
+        if not positive_memories:
+            return "No positive feedback memory"
+        memory = positive_memories[0]
+        content = memory.get('content', '')[:100]
+        return f"Reference example: {content}"
+    except Exception as e:
+        print(f"Error searching feedback memory: {e}")
+        return "Feedback memory search currently unavailable"
 
-@tool(name_or_callable='google_fact_check_tool',parse_docstring=True)
-def google_fact_check_tool(query: str) -> str:
-    """
-    You must use this tool when supervisor asks you to fact-check a claim.
+class FeedbackEnhancedAgent:
+    """Agent wrapper with feedback enhancement"""
 
-    Args:
-        query: The claim or statement to be fact-checked.
+    def __init__(self, agent, name):
+        self.agent = agent
+        self.name = name
+        self.tools = getattr(agent, 'tools', [])
+        self.model = getattr(agent, 'model', None)
 
-    Returns:
-        A  result of the fact-check results.
-    """
-    fact = search_fact_checks(query)
-    result = ""
-    if fact:
-        if 'claims' in fact:
-            result += f"找到 {len(fact['claims'])} 筆審查結果:\n"
-            for claim in fact['claims']:
-                result += f"- 聲明: {claim.get('text')}\n"
-                if 'claimReview' in claim and claim['claimReview']:
-                    for review in claim['claimReview']:
-                        result += f"  審查單位: {review.get('publisher', {}).get('name')}\n"
-                        result += f"  審查結果: {review.get('textualRating')}\n"
-                        result += f"  來源連結: {review.get('url')}\n"
-                result += "-" * 20 + "\n"
-        else:
-            result += "查無相關審查結果\n"
-    
-    return result
-    
-chronic_agent = create_react_agent(
-    model=llm_gemini,  
-    tools=[net_search,chronic_search], 
-    name="chronic_agent",
-    prompt=
-    """
-    Role:
-        You are a medical expert providing information about medical knowledge.
-    Task:
-        Your main task is to use the provided tool to search for answers whenever you receive a user inquiry about chronic, and return the search results.
-    Specific Requirements:
-        **Prohibitions**:
-            1.Languages other than Traditional Chinese are not allowed
-            2. Do not use pre-trained knowledge, only use the information provided in the context.
-            3. add source(the tool you used) at the end of your response, then handoff to supervisor.
-            4. If you can't any useful information, just say that you don't know.
-    """
-)
+    def invoke(self, state, config=None):
+        try:
+            enhanced_state = self._enhance_with_feedback(state)
+            result = self.agent.invoke(enhanced_state, config)
+            return result
+        except Exception as e:
+            print(f"FeedbackEnhancedAgent invoke error: {e}")
+            return self.agent.invoke(state, config)
 
-cardiovascular_agent = create_react_agent(
-    model=llm_gemini,  
-    tools=[cardiovascular_search,net_search], 
-    name="cardiovascular_agent",
-    prompt=
-    """
-    Role:
-        You are a medical expert providing information about medical knowledge.
-    Task:
-        Your main task is to use the provided tool to search for answers whenever you receive a user inquiry about cardiovascular, and return the search results.
-    Specific Requirements:
-        **Prohibitions**:
-            1.Languages other than Traditional Chinese are not allowed
-            2. Do not use pre-trained knowledge, only use the information provided in the context.
-            3. add source(the tool you used) at the end of your response, then handoff to supervisor.
-            4. If you can't any useful information, just say that you don't know.
-    """
-)
+    def _enhance_with_feedback(self, state):
+        try:
+            user_messages = [m for m in state.get("messages", []) if isinstance(m, HumanMessage)]
+            if not user_messages:
+                return state
+            latest_query = user_messages[-1].content
+            from myproject.feedback_graph import search_similar_keymemories
+            memories = search_similar_keymemories(latest_query, top_k=1)
+            positive_memories = [m for m in memories if m.get('feedback_type') in ['positive', 'like']]
+            if positive_memories:
+                memory = positive_memories[0]
+                memory_content = memory.get('content', '')[:300]
+                injected_hint = HumanMessage(
+                    content=f"\U0001F4A1 This is a highly rated suggestion from previous users. Please use its structure and logic to answer:\n{memory_content}"
+                )
+                new_messages = [injected_hint] + state["messages"]
+                print(f"\U0001F9E0 [Feedback Boost] Inserted prompt: {memory_content[:30]}...")
+                enhanced_state = state.copy()
+                enhanced_state["messages"] = new_messages
+                return enhanced_state
+            else:
+                print("⚠️ [Feedback Boost] No related positive memory found")
+        except Exception as e:
+            print(f"❌ Feedback boost error: {e}")
+        return state
 
-fact_check_agent = create_react_agent(
-    model=llm_gemini,
-    tools=[google_fact_check_tool], 
-    name="fact_check_agent",
-    prompt=
-    """
-    Role:
-        You are a fact-checking expert.
-    Task:
-        Your main task is to fact-check claims using the provided tool and return the results.
-    Rules:
-        **Prohibitions**:   
-            1. Languages ​​other than Traditional Chinese are not allowed
-            2. Do not use pre-trained knowledge, only use the information provided in the context.
-            3. Only use the provided tool to fact-check claims, do not use any other methods.
-            4. If nothing returned, just say that you don't know.
-    """
+    def __getattr__(self, name):
+        return getattr(self.agent, name)
+
+print("🤖 Creating base agents...")
+
+chronic_tools = [chronic_search, search_feedback_memories, net_search]
+cardiovascular_tools = [cardiovascular_search, search_feedback_memories, net_search]
+fact_check_tools = [fact_check_tool, net_search]
+
+try:
+    chronic_agent_base = create_react_agent(
+        model=llm_GPT,
+        tools=chronic_tools,
+        name="chronic_agent",
+        prompt="You are a chronic disease expert, providing professional and practical advice on diabetes, hypertension, etc."
     )
-    
 
+    cardiovascular_agent_base = create_react_agent(
+        model=llm_GPT,
+        tools=cardiovascular_tools,
+        name="cardiovascular_agent",
+        prompt="You are a cardiovascular expert, specialized in heart and vascular diseases. Provide professional medical advice."
+    )
 
-supervisor = create_supervisor(
-    agents=[chronic_agent, cardiovascular_agent,fact_check_agent],
-    state_schema=State,
-    tools=[],
-    model=llm_gemini,
-    prompt=(
-        """
-        Role:
-        You are the central coordinator (Supervisor) for a smart health consultation system. 
-        Your main responsibility is to precisely understand the user's health query and route it to the most suitable specialized agent for handling that specific problem.
+    fact_check_agent_base = create_react_agent(
+        model=llm_GPT,
+        tools=fact_check_tools,
+        name="fact_check_agent",
+        prompt="You are a health fact-checking expert. Verify the truthfulness of health-related information objectively and accurately."
+    )
 
-        Available Agents / Tools and Their Calling Conditions:
-        ```
-        chronic_Agent:
+    chronic_agent = FeedbackEnhancedAgent(chronic_agent_base, "chronic_agent")
+    cardiovascular_agent = FeedbackEnhancedAgent(cardiovascular_agent_base, "cardiovascular_agent")
+    fact_check_agent = FeedbackEnhancedAgent(fact_check_agent_base, "fact_check_agent")
 
-        Calling Condition: 
-        Invoke when the user asks questions related to general chronic diseases (e.g., diabetes, hypertension, chronic kidney disease, osteoporosis, gout, thyroid conditions) concerning their definition, symptoms, prevention, diet, lifestyle management, or general medication principles.
+    print("✅ Base agents created successfully")
 
-        cardiovascular_Agent:
+except Exception as e:
+    print(f"❌ Failed to create agents: {e}")
+    chronic_agent = None
+    cardiovascular_agent = None
+    fact_check_agent = None
 
-        Calling Condition: 
-        Invoke when the user asks questions specifically related to heart and vascular system diseases (e.g., heart disease, stroke, myocardial infarction, arrhythmia, coronary artery disease, hyperlipidemia if strongly linked to cardiovascular risk, thrombosis) concerning their symptoms, risks, initial emergency assessment, or directly related cardiovascular health advice (diet/exercise).
+print("🔧 Creating Supervisor...")
 
-        fact_check_agent:
+try:
+    supervisor_workflow = create_supervisor(
+        agents=[chronic_agent, cardiovascular_agent, fact_check_agent],
+        model=llm_GPT,
+        prompt="""You are a health consultation dispatcher. Choose the most suitable agent based on the user's question:
 
-        Calling Condition: 
-        Invoke when the user explicitly expresses doubt about the truthfulness of certain health information (e.g., "Is this true?", "Is this statement correct?", "I heard that... is that right?"), or when asking for the definition or source of a health concept.
-       
-         ```
-        Rules:
-        - Only use the information provided by the agents, do not use pre-trained knowledge.
-        """
-    ),
-    pre_model_hook=summarization_node,
-)
+chronic_agent: Handles general health issues, lifestyle, chronic diseases (e.g., diabetes, hypertension)
+cardiovascular_agent: Handles cardiovascular and heart-related issues
+fact_check_agent: Handles health information verification and rumor clarification
 
-# Compile and run
+Please assign the most appropriate expert and let them respond.
+""",
+        output_mode="last_message"
+    )
 
-app = supervisor.compile(checkpointer=memory)
-config = {"configurable": {"thread_id": "1"}}
+    app = supervisor_workflow.compile(checkpointer=memory)
+    print("✅ Supervisor created successfully")
+
+except Exception as e:
+    print(f"❌ Supervisor creation failed: {e}")
+
+    class FallbackApp:
+        def invoke(self, input_data, config=None):
+            try:
+                user_messages = [m for m in input_data.get("messages", []) if isinstance(m, HumanMessage)]
+                if user_messages:
+                    query = user_messages[-1].content.lower()
+                    if any(word in query for word in ['heart', 'cardio', 'blood pressure']):
+                        response = "For cardiovascular issues, please consult a professional physician."
+                    elif any(word in query for word in ['rumor', 'truth', 'verify']):
+                        response = "For health fact-checking, we recommend referring to official medical sources."
+                    else:
+                        response = "To stay healthy, maintain a good lifestyle and regular checkups."
+                    return {"messages": [AIMessage(content=response)]}
+                else:
+                    return {"messages": [AIMessage(content="Please provide your health-related question.")]}
+            except Exception:
+                return {"messages": [AIMessage(content="The system is temporarily unavailable.")]}
+
+        def filter_messages(self, messages):
+            if not messages:
+                return ["Ready to assist you with health consultation."]
+            agent_responses = []
+            supervisor_responses = []
+            for msg in messages:
+                if isinstance(msg, AIMessage):
+                    content = getattr(msg, 'content', '').strip()
+                    msg_name = getattr(msg, 'name', '')
+                    if content and len(content) > 15 and not content.startswith('Transferring'):
+                        if msg_name in ['chronic_agent', 'cardiovascular_agent', 'fact_check_agent']:
+                            agent_responses.append({'content': content, 'agent': msg_name, 'length': len(content)})
+                        elif msg_name == 'supervisor':
+                            supervisor_responses.append({'content': content, 'agent': msg_name, 'length': len(content)})
+            if agent_responses:
+                best = max(agent_responses, key=lambda x: x['length'])
+                return [best['content']]
+            elif supervisor_responses:
+                best = max(supervisor_responses, key=lambda x: x['length'])
+                return [best['content']]
+            else:
+                return ["Processing your question, please wait..."]
+
+    app = FallbackApp()
+
+print("📤 Multi-agent system ready")
+
+if not hasattr(app, 'filter_messages'):
+    def filter_messages(messages):
+        if not messages:
+            return ["Ready to assist you with health-related queries."]
+        agent_responses = []
+        supervisor_responses = []
+        for msg in messages:
+            if isinstance(msg, AIMessage):
+                content = getattr(msg, 'content', '').strip()
+                msg_name = getattr(msg, 'name', '')
+                if content and len(content) > 20 and not content.startswith('Transferring'):
+                    if msg_name in ['chronic_agent', 'cardiovascular_agent', 'fact_check_agent']:
+                        agent_responses.append({'content': content, 'agent': msg_name, 'length': len(content)})
+                    elif msg_name == 'supervisor':
+                        supervisor_responses.append({'content': content, 'agent': msg_name, 'length': len(content)})
+        if agent_responses:
+            best = max(agent_responses, key=lambda x: x['length'])
+            print(f"✅ Selected detailed response from {best['agent']} (length: {best['length']})")
+            return [best['content']]
+        elif supervisor_responses:
+            best = max(supervisor_responses, key=lambda x: x['length'])
+            print(f"📝 Using supervisor response (length: {best['length']})")
+            return [best['content']]
+        else:
+            print("⚠️ No valid responses found")
+            return ["Preparing professional advice for you, please wait..."]
+    app.filter_messages = filter_messages
+
+print("✅ Multi-agent system initialized")

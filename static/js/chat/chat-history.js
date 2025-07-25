@@ -1,6 +1,6 @@
 /**
- * chat-history.js - 聊天歷史管理
- * 負責處理對話歷史的存儲、加載和管理
+ * chat-history.js - 統一使用 feedback_graph API 的聊天歷史管理
+ * 所有操作都透過統一的 API 端點，移除本地存儲依賴
  */
 
 MedApp.chat.history = {
@@ -10,12 +10,19 @@ MedApp.chat.history = {
       currentChatTitle: null
     },
     
+    // 緩存已加載的對話（僅會話級別緩存）
+    loadedChats: new Map(),
+    loadedMessages: new Map(),
+    
+    // 加載狀態追蹤
+    isLoading: false,
+    
     // 初始化
     init: function() {
       this.initElements();
       this.fetchAllChatHistory();
       
-      MedApp.log('聊天歷史模組初始化完成', 'info');
+      MedApp.log('聊天歷史模組初始化完成 (統一 feedback_graph)', 'info');
     },
     
     // 初始化DOM元素引用
@@ -24,47 +31,276 @@ MedApp.chat.history = {
       this.elements.currentChatTitle = document.getElementById('currentChatTitle');
     },
     
-    // 添加對話到歷史列表
-    addToHistory: function(message, chatId = null) {
-      // 如果沒有提供 chatId，則使用當前的
-      if (!chatId) {
-        if (!MedApp.state.currentChatId) {
-          MedApp.state.currentChatId = Date.now().toString();
+    // 創建新對話（統一 API）
+    createNewChat: async function() {
+      const chatId = Date.now().toString();
+      
+      try {
+        const response = await fetch(`${MedApp.config.apiRoot || '/'}api/conversations/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': MedApp.config.csrfToken
+          },
+          body: JSON.stringify({ 
+            chat_id: chatId,
+            session_id: this.getSessionId(),
+            metadata: {
+              created_by: 'new_chat_button',
+              timestamp: new Date().toISOString()
+            }
+          })
+        });
+        
+        if (response.ok) {
+          MedApp.state.currentChatId = chatId;
+          this.clearChatDisplay();
+          this.refreshChatHistory();
+          MedApp.log('新對話已創建: ' + chatId, 'info');
+          return chatId;
+        } else {
+          throw new Error('創建對話失敗');
         }
-        chatId = MedApp.state.currentChatId;
+      } catch (error) {
+        MedApp.log('創建新對話錯誤: ' + error.message, 'error');
+        // 降級處理：僅在前端創建
+        MedApp.state.currentChatId = chatId;
+        this.clearChatDisplay();
+        return chatId;
+      }
+    },
+    
+    // 保存訊息到統一資料庫（唯一入口）
+    saveMessage: async function(chatId, content, sender, messageId = null) {
+      if (!messageId) {
+        messageId = this.generateMessageId();
       }
       
-      // 檢查此聊天ID是否已在列表中
-      const existingItem = document.querySelector(`#chatHistoryList li[data-chat-id="${chatId}"]`);
-      if (existingItem) {
-        // 更新現有項目
-        existingItem.querySelector('.chat-title').textContent = message.length > 20 ? message.substring(0, 20) + '...' : message;
-        existingItem.title = message;
+      // 防止重複保存
+      const messageKey = `${chatId}-${content}-${sender}`;
+      if (this.loadedMessages.has(messageKey)) {
+        MedApp.log('訊息已存在，跳過保存', 'debug');
+        return messageId;
+      }
+      
+      const messageData = {
+        message_id: messageId,
+        chat_id: chatId,
+        content: content,
+        sender: sender,
+        timestamp: new Date().toISOString(),
+        session_id: this.getSessionId(),
+        metadata: {}
+      };
+      
+      try {
+        const response = await fetch('/api/messages/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': this.getCSRFToken()
+          },
+          body: JSON.stringify(messageData)
+        });
         
-        // 移到列表頂部
-        if (this.elements.chatHistoryList && this.elements.chatHistoryList.firstChild !== existingItem) {
-          this.elements.chatHistoryList.insertBefore(existingItem, this.elements.chatHistoryList.firstChild);
+        if (response.ok) {
+          const result = await response.json();
+          // 標記為已保存
+          this.loadedMessages.set(messageKey, messageId);
+          MedApp.log('訊息已保存到統一資料庫: ' + messageId, 'debug');
+          
+          // 如果是用戶訊息，更新對話列表
+          if (sender === 'user') {
+            this.updateChatInHistory(chatId, content);
+          }
+          
+          return result.message_id || messageId;
+        } else {
+          throw new Error(`保存失敗: ${response.status}`);
+        }
+      } catch (error) {
+        MedApp.log('保存訊息到統一資料庫失敗: ' + error.message, 'error');
+        return messageId;
+      }
+    },
+    
+    // 從統一資料庫獲取所有聊天歷史
+    fetchAllChatHistory: async function() {
+      if (this.isLoading) return;
+      
+      this.isLoading = true;
+      this.showLoadingIndicator(true);
+      
+      try {
+        const response = await fetch(`${MedApp.config.apiRoot || '/'}chat/history/`, {
+          method: 'GET',
+          headers: {
+            'X-CSRFToken': MedApp.config.csrfToken
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
-        // 更新本地存儲
-        this.updateChatInStorage(chatId, message);
+        const data = await response.json();
+        
+        // 清空現有列表
+        if (this.elements.chatHistoryList) {
+          this.elements.chatHistoryList.innerHTML = '';
+        }
+        
+        if (data.chats && data.chats.length > 0) {
+          // 按時間排序
+          const sortedChats = data.chats.sort((a, b) => {
+            return new Date(b.last_message_at || b.created_at) - 
+                   new Date(a.last_message_at || a.created_at);
+          });
+          
+          // 渲染對話列表
+          sortedChats.forEach(chat => {
+            this.addChatToList(chat);
+            // 緩存對話信息
+            this.loadedChats.set(chat.chat_id, chat);
+          });
+          
+          // 自動選擇最新對話
+          if (sortedChats.length > 0 && !MedApp.state.currentChatId) {
+            const latestChatId = sortedChats[0].chat_id;
+            if (latestChatId && latestChatId !== 'undefined') {
+              this.loadChatHistory(latestChatId);
+            }
+          }
+        } else {
+          this.showEmptyState();
+        }
+        
+      } catch (error) {
+        MedApp.log('獲取聊天歷史失敗: ' + error.message, 'error');
+        this.showErrorState(error.message);
+      } finally {
+        this.isLoading = false;
+        this.showLoadingIndicator(false);
+      }
+    },
+    
+    // 載入特定對話的訊息
+    loadChatHistory: async function(chatId) {
+      if (this.isLoading) return;
+      
+      MedApp.state.currentChatId = chatId;
+      this.setActiveChat(chatId);
+      this.clearChatDisplay();
+      this.showLoadingIndicator(true);
+      
+      try {
+        const response = await fetch(`${MedApp.config.apiRoot || '/'}chat/history/${chatId}/`, {
+          method: 'GET',
+          headers: {
+            'X-CSRFToken': MedApp.config.csrfToken
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        // 更新對話標題
+        if (data.chat && data.chat.title) {
+          this.updateChatTitle(data.chat.title);
+        }
+        
+        // 渲染訊息
+        if (data.messages && data.messages.length > 0) {
+          data.messages.forEach(msg => {
+            // 檢測並處理Markdown
+            const isMarkdown = this.detectMarkdown(msg.content);
+            if (MedApp.chat.display && MedApp.chat.display.appendMessage) {
+              MedApp.chat.display.appendMessage(msg.content, msg.sender, isMarkdown, msg.message_id, true);
+            }
+            
+            // 緩存訊息
+            const messageKey = `${chatId}-${msg.content}-${msg.sender}`;
+            this.loadedMessages.set(messageKey, msg.message_id);
+          });
+        } else {
+          // 顯示歡迎訊息
+          this.showWelcomeMessage();
+        }
+        
+      } catch (error) {
+        MedApp.log('載入對話歷史失敗: ' + error.message, 'error');
+        if (MedApp.chat.display && MedApp.chat.display.appendMessage) {
+          MedApp.chat.display.appendMessage('載入對話歷史時發生錯誤', 'bot', false, null, true);
+        }
+      } finally {
+        this.showLoadingIndicator(false);
+      }
+    },
+    
+    // 刪除對話
+    deleteChat: async function(chatId, listItem) {
+      if (!confirm("確定要刪除此對話嗎？此操作無法復原。")) {
         return;
       }
       
-      // 創建新的歷史記錄項目
-      const now = new Date();
-      const dateTime = `${now.getMonth()+1}月${now.getDate()}日 ${now.getHours()}:${now.getMinutes()}`;
+      // 立即從UI移除，提供快速反饋
+      if (listItem) {
+        listItem.remove();
+      }
+      
+      // 從緩存移除
+      this.loadedChats.delete(chatId);
+      
+      // 如果是當前對話，創建新對話
+      if (chatId === MedApp.state.currentChatId) {
+        this.createNewChat();
+      }
+      
+      try {
+        const response = await fetch(`${MedApp.config.apiRoot || '/'}chat/history/${chatId}/`, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRFToken': MedApp.config.csrfToken,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          MedApp.log('對話已從統一資料庫刪除: ' + chatId, 'info');
+          MedApp.log(`刪除統計: 對話 ${result.deleted_chats}, 訊息 ${result.deleted_messages}, 回饋 ${result.deleted_feedbacks}`, 'info');
+        } else {
+          MedApp.log('從統一資料庫刪除對話失敗: ' + response.status, 'warn');
+          // 如果刪除失敗，重新載入列表
+          this.fetchAllChatHistory();
+        }
+      } catch (error) {
+        MedApp.log('刪除對話請求失敗: ' + error.message, 'error');
+        this.fetchAllChatHistory();
+      }
+    },
+    
+    // 添加對話到列表
+    addChatToList: function(chat) {
+      if (!this.elements.chatHistoryList) return;
       
       const li = document.createElement('li');
-      li.dataset.chatId = chatId;
-      li.title = `${message} (${dateTime})`;
+      li.dataset.chatId = chat.chat_id;
+      li.title = chat.title || '未命名對話';
       
-      // 創建 HTML 結構
+      const displayTitle = chat.title || '未命名對話';
+      const truncatedTitle = displayTitle.length > 20 ? 
+                           displayTitle.substring(0, 20) + '...' : 
+                           displayTitle;
+      
       li.innerHTML = `
         <div class="chat-item-container">
           <div class="chat-item-content">
             <i class="fas fa-comment-dots"></i>
-            <span class="chat-title">${message.length > 20 ? message.substring(0, 20) + '...' : message}</span>
+            <span class="chat-title">${truncatedTitle}</span>
           </div>
           <button class="delete-chat" title="刪除對話" aria-label="刪除對話">
             <i class="fas fa-trash"></i>
@@ -72,413 +308,148 @@ MedApp.chat.history = {
         </div>
       `;
       
-      // 添加點擊事件
+      // 綁定事件
       li.querySelector('.chat-item-content').addEventListener('click', () => {
-        // 移除所有項目的活動狀態
-        document.querySelectorAll('#chatHistoryList li').forEach(item => {
-          item.classList.remove('active');
-        });
-        
-        // 添加活動狀態到當前項目
-        li.classList.add('active');
-        
-        // 載入此對話
-        this.loadChatHistory(chatId);
+        this.loadChatHistory(chat.chat_id);
       });
       
-      // 添加刪除事件
       li.querySelector('.delete-chat').addEventListener('click', (event) => {
-        event.stopPropagation(); // 防止觸發對話載入
-        this.deleteChat(chatId, li);
+        event.stopPropagation();
+        this.deleteChat(chat.chat_id, li);
       });
       
-      // 添加到列表頂部
-      if (this.elements.chatHistoryList) {
-        if (this.elements.chatHistoryList.firstChild) {
-          this.elements.chatHistoryList.insertBefore(li, this.elements.chatHistoryList.firstChild);
-        } else {
-          this.elements.chatHistoryList.appendChild(li);
-        }
-      }
-      
-      // 保存到本地存儲
-      this.saveChatToStorage(chatId, message);
+      this.elements.chatHistoryList.appendChild(li);
     },
     
-    // 刪除對話
-    deleteChat: function(chatId, listItem) {
-      // 確認刪除
-      if (!confirm("確定要刪除此對話嗎？")) {
-        return;
-      }
-      
-      // 先從界面和本地刪除，提供即時反饋
-      // 從列表中刪除
-      if (listItem) {
-        listItem.remove();
-      } else {
-        const item = document.querySelector(`#chatHistoryList li[data-chat-id="${chatId}"]`);
-        if (item) item.remove();
-      }
-      
-      // 從本地存儲刪除
-      let chats = JSON.parse(localStorage.getItem('chats') || '{}');
-      if (chats[chatId]) {
-        delete chats[chatId];
-        localStorage.setItem('chats', JSON.stringify(chats));
-      }
-      
-      // 如果刪除的是當前對話，創建新對話
-      if (chatId === MedApp.state.currentChatId) {
-        MedApp.chat.core.createNewChat();
-      }
-      
-      // 然後從伺服器刪除 (不等待響應)
-      try {
-        fetch(`${MedApp.config.apiRoot || '/'}chat/history/${chatId}/`, {
-          method: 'DELETE',
-          headers: {
-            'X-CSRFToken': MedApp.config.csrfToken,
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => {
-          if (response.ok) {
-            MedApp.log("對話已從服務器刪除", 'info');
-          } else {
-            MedApp.log("服務器刪除對話失敗，狀態碼: " + response.status, 'warn');
-          }
-        })
-        .catch(error => {
-          MedApp.log("從服務器刪除對話時出錯: " + error.message, 'error');
-        });
-      } catch (e) {
-        MedApp.log("刪除請求執行出錯: " + e.message, 'error');
-      }
-    },
-    
-    // 保存聊天到本地存儲
-    saveChatToStorage: function(chatId, message) {
-      let chats = JSON.parse(localStorage.getItem('chats') || '{}');
-      
-      if (!chats[chatId]) {
-        chats[chatId] = {
-          id: chatId,
-          title: message,
-          lastUpdate: new Date().toISOString(),
-          messages: []
-        };
-      }
-      
-      localStorage.setItem('chats', JSON.stringify(chats));
-    },
-    
-    // 更新本地存儲中的聊天
-    updateChatInStorage: function(chatId, message) {
-      let chats = JSON.parse(localStorage.getItem('chats') || '{}');
-      
-      if (chats[chatId]) {
-        chats[chatId].title = message;
-        chats[chatId].lastUpdate = new Date().toISOString();
-        localStorage.setItem('chats', JSON.stringify(chats));
-      }
-    },
-    
-    // 保存消息到本地存儲
-    saveMessageToStorage: function(chatId, content, sender) {
-      let chats = JSON.parse(localStorage.getItem('chats') || '{}');
-      
-      if (!chats[chatId]) {
-        chats[chatId] = {
-          id: chatId,
-          title: content.length > 20 ? content.substring(0, 20) + '...' : content,
-          lastUpdate: new Date().toISOString(),
-          messages: []
-        };
-      }
-      
-      // 添加新消息
-      chats[chatId].messages.push({
-        content: content,
-        sender: sender,
-        timestamp: new Date().toISOString()
-      });
-      
-      if (sender === 'user') {
-        chats[chatId].lastUpdate = new Date().toISOString();
-      }
-      
-      localStorage.setItem('chats', JSON.stringify(chats));
-      
-      // 更新側邊欄的對話標題
-      this.updateChatTitle(chatId, chats[chatId].title);
-    },
-    
-    // 更新側邊欄中的對話標題
-    updateChatTitle: function(chatId, title) {
+    // 更新對話歷史中的對話
+    updateChatInHistory: function(chatId, message) {
+      // 先更新UI
       const chatItem = document.querySelector(`#chatHistoryList li[data-chat-id="${chatId}"]`);
       if (chatItem) {
         const titleElement = chatItem.querySelector('.chat-title');
         if (titleElement) {
-          titleElement.textContent = title.length > 20 ? title.substring(0, 20) + '...' : title;
-          chatItem.title = title;
-        }
-      }
-    },
-    
-    // 載入聊天歷史
-    loadChatHistory: function(chatId) {
-      // 設置當前聊天ID
-      MedApp.state.currentChatId = chatId;
-      
-      // 嘗試從本地存儲載入
-      const chats = JSON.parse(localStorage.getItem('chats') || '{}');
-      
-      if (chats[chatId]) {
-        // 更新聊天標題
-        if (this.elements.currentChatTitle) {
-          this.elements.currentChatTitle.textContent = chats[chatId].title;
+          const truncatedTitle = message.length > 20 ? 
+                                message.substring(0, 20) + '...' : 
+                                message;
+          titleElement.textContent = truncatedTitle;
+          chatItem.title = message;
         }
         
-        // 清空聊天容器
-        const chatContainer = document.getElementById('chatContainer');
-        if (chatContainer) {
-          chatContainer.innerHTML = '';
+        // 移到列表頂部
+        if (this.elements.chatHistoryList.firstChild !== chatItem) {
+          this.elements.chatHistoryList.insertBefore(chatItem, this.elements.chatHistoryList.firstChild);
         }
-        
-        // 隱藏歡迎消息
-        const welcomeMessage = document.querySelector('.welcome-message');
-        if (welcomeMessage) {
-          welcomeMessage.style.display = 'none';
-        }
-        
-        // 從服務器獲取消息
-        MedApp.chat.core.showLoading(true);
-        
-        fetch(`${MedApp.config.apiRoot || '/'}chat/history/${chatId}/`, {
-          method: 'GET',
-          headers: {
-            'X-CSRFToken': MedApp.config.csrfToken
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          MedApp.chat.core.showLoading(false);
-          
-          if (data.messages && data.messages.length > 0) {
-            // 渲染所有消息
-            data.messages.forEach(msg => {
-              MedApp.chat.display.appendMessage(msg.content, msg.sender);
-              
-              // 同步到本地存儲
-              if (!chats[chatId].messages.some(m => 
-                m.content === msg.content && m.sender === msg.sender
-              )) {
-                this.saveMessageToStorage(chatId, msg.content, msg.sender);
-              }
-            });
-          } else {
-            // 如果服務器沒有數據，嘗試從本地存儲渲染
-            this.renderMessagesFromStorage(chatId);
-          }
-        })
-        .catch(error => {
-          MedApp.log("載入歷史記錄錯誤: " + error.message, 'error');
-          MedApp.chat.core.showLoading(false);
-          
-          // 從本地存儲渲染
-          this.renderMessagesFromStorage(chatId);
-        });
       } else {
-        MedApp.log("找不到聊天ID: " + chatId, 'error');
-        MedApp.chat.display.appendMessage("無法找到此對話的歷史記錄", "bot");
+        // 如果不存在，添加新的對話項目
+        const newChat = {
+          chat_id: chatId,
+          title: message,
+          created_at: new Date().toISOString()
+        };
+        this.addChatToList(newChat);
       }
     },
     
-    // 從本地存儲渲染消息
-    renderMessagesFromStorage: function(chatId) {
-      const chats = JSON.parse(localStorage.getItem('chats') || '{}');
-      const welcomeMessage = document.querySelector('.welcome-message');
+    // 工具函數
+    generateMessageId: function() {
+      return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    },
+    
+    getSessionId: function() {
+      return MedApp.state.currentChatId || 
+             sessionStorage.getItem('sessionId') || 
+             'anonymous_' + Date.now();
+    },
+    
+    getCSRFToken: function() {
+      return document.querySelector('[name=csrf-token]')?.content ||
+             document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
+             MedApp.config.csrfToken;
+    },
+    
+    detectMarkdown: function(content) {
+      return /(\*\*|__|\*|_|##|###|```|---|>|!\[|\[|\|-)/.test(content);
+    },
+    
+    // UI 控制函數
+    clearChatDisplay: function() {
+      const chatContainer = document.getElementById('chatContainer');
+      if (chatContainer) {
+        chatContainer.innerHTML = '';
+      }
       
-      if (chats[chatId] && chats[chatId].messages) {
-        if (chats[chatId].messages.length === 0 && welcomeMessage) {
-          // 如果沒有消息，顯示歡迎消息
-          welcomeMessage.style.display = 'block';
-          return;
-        }
-        
-        // 清空聊天容器
-        const chatContainer = document.getElementById('chatContainer');
-        if (chatContainer) {
-          chatContainer.innerHTML = '';
-        }
-        
-        // 渲染所有消息
-        chats[chatId].messages.forEach(msg => {
-          MedApp.chat.display.appendMessage(msg.content, msg.sender);
-        });
-      } else if (welcomeMessage) {
-        // 如果沒有找到聊天，顯示歡迎消息
+      const welcomeMessage = document.querySelector('.welcome-message');
+      if (welcomeMessage) {
+        welcomeMessage.style.display = 'none';
+      }
+    },
+    
+    showWelcomeMessage: function() {
+      const welcomeMessage = document.querySelector('.welcome-message');
+      if (welcomeMessage) {
         welcomeMessage.style.display = 'block';
       }
     },
     
-    // 初始化聊天歷史列表
-    initChatHistory: function() {
-      // 從本地存儲加載所有聊天
-      const chats = JSON.parse(localStorage.getItem('chats') || '{}');
-      
-      // 按最後更新時間排序
-      const sortedChats = Object.values(chats).sort((a, b) => {
-        return new Date(b.lastUpdate) - new Date(a.lastUpdate);
+    setActiveChat: function(chatId) {
+      // 移除所有活動狀態
+      document.querySelectorAll('#chatHistoryList li').forEach(item => {
+        item.classList.remove('active');
       });
       
-      // 清空現有列表
+      // 設置當前活動狀態
+      const currentItem = document.querySelector(`#chatHistoryList li[data-chat-id="${chatId}"]`);
+      if (currentItem) {
+        currentItem.classList.add('active');
+      }
+    },
+    
+    updateChatTitle: function(title) {
+      if (this.elements.currentChatTitle) {
+        this.elements.currentChatTitle.textContent = title || 'AI助手已就緒';
+      }
+    },
+    
+    showLoadingIndicator: function(show) {
+      // 可以在這裡添加載入指示器
+      if (MedApp.chat.core && MedApp.chat.core.showLoading) {
+        MedApp.chat.core.showLoading(show);
+      }
+    },
+    
+    showEmptyState: function() {
       if (this.elements.chatHistoryList) {
-        this.elements.chatHistoryList.innerHTML = '';
-      
-        // 添加到列表
-        sortedChats.forEach(chat => {
-          const li = document.createElement('li');
-          li.dataset.chatId = chat.id;
-          li.title = chat.title;
-          
-          // 添加刪除按鈕和標題
-          li.innerHTML = `
-            <div class="chat-item-container">
-              <div class="chat-item-content">
-                <i class="fas fa-comment-dots"></i>
-                <span class="chat-title">${chat.title.length > 20 ? chat.title.substring(0, 20) + '...' : chat.title}</span>
-              </div>
-              <button class="delete-chat" title="刪除對話" aria-label="刪除對話">
-                <i class="fas fa-trash"></i>
+        this.elements.chatHistoryList.innerHTML = `
+          <li class="empty-state">
+            <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
+              <i class="fas fa-comments" style="font-size: 24px; margin-bottom: 10px;"></i>
+              <p>還沒有對話記錄</p>
+              <p style="font-size: 14px;">開始新對話來建立歷史記錄</p>
+            </div>
+          </li>
+        `;
+      }
+    },
+    
+    showErrorState: function(error) {
+      if (this.elements.chatHistoryList) {
+        this.elements.chatHistoryList.innerHTML = `
+          <li class="error-state">
+            <div style="text-align: center; padding: 20px; color: var(--warning-color);">
+              <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+              <p>載入歷史記錄失敗</p>
+              <p style="font-size: 14px;">${error}</p>
+              <button onclick="MedApp.chat.history.fetchAllChatHistory()" 
+                      style="margin-top: 10px; padding: 5px 15px; border: 1px solid var(--border-color); background: var(--background-lighter); color: var(--text-color); border-radius: 4px; cursor: pointer;">
+                重試
               </button>
             </div>
-          `;
-          
-          // 添加點擊事件
-          li.querySelector('.chat-item-content').addEventListener('click', () => {
-            // 移除所有項目的活動狀態
-            document.querySelectorAll('#chatHistoryList li').forEach(item => {
-              item.classList.remove('active');
-            });
-            
-            // 添加活動狀態到當前項目
-            li.classList.add('active');
-            
-            // 載入此對話
-            this.loadChatHistory(chat.id);
-          });
-          
-          // 添加刪除事件
-          li.querySelector('.delete-chat').addEventListener('click', (event) => {
-            event.stopPropagation(); // 防止觸發對話載入
-            this.deleteChat(chat.id, li);
-          });
-          
-          this.elements.chatHistoryList.appendChild(li);
-        });
-      }
-      
-      // 加載最新的對話（如果有）
-      if (sortedChats.length > 0) {
-        const latestChat = sortedChats[0];
-        MedApp.state.currentChatId = latestChat.id;
-        
-        // 標記最新對話為活動狀態
-        const latestChatItem = document.querySelector(`#chatHistoryList li[data-chat-id="${latestChat.id}"]`);
-        if (latestChatItem) {
-          latestChatItem.classList.add('active');
-        }
-        
-        // 加載最新對話
-        this.loadChatHistory(latestChat.id);
+          </li>
+        `;
       }
     },
     
-    // 從服務器獲取所有聊天歷史
-    fetchAllChatHistory: function() {
-      MedApp.chat.core.showLoading(true);
-      
-      fetch(`${MedApp.config.apiRoot || '/'}chat/history/`, {
-        method: 'GET',
-        headers: {
-          'X-CSRFToken': MedApp.config.csrfToken
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        MedApp.chat.core.showLoading(false);
-        
-        if (data.chats && data.chats.length > 0) {
-          // 同步到本地存儲
-          data.chats.forEach(chat => {
-            // 檢查本地是否已有此聊天
-            let chats = JSON.parse(localStorage.getItem('chats') || '{}');
-            if (!chats[chat.id]) {
-              // 如果本地沒有，添加到本地存儲
-              chats[chat.id] = {
-                id: chat.id,
-                title: chat.title,
-                lastUpdate: chat.timestamp,
-                messages: []
-              };
-              localStorage.setItem('chats', JSON.stringify(chats));
-            }
-          });
-          
-          // 重新初始化聊天歷史列表
-          this.initChatHistory();
-        } else {
-          // 即使沒有聊天記錄，也初始化列表（基於本地存儲）
-          this.initChatHistory();
-        }
-      })
-      .catch(error => {
-        MedApp.log("獲取所有聊天歷史錯誤: " + error.message, 'error');
-        MedApp.chat.core.showLoading(false);
-        
-        // 如果無法從服務器獲取，使用本地存儲初始化
-        this.initChatHistory();
-      });
-    },
-    
-    // 同步對話歷史到服務器
-    syncChatHistory: function() {
-      try {
-        const chats = JSON.parse(localStorage.getItem('chats') || '{}');
-        
-        Object.values(chats).forEach(chat => {
-          // 對每個聊天記錄嘗試同步
-          if (chat.messages && chat.messages.length > 0) {
-            // 檢查是否是新對話（無對應的伺服器記錄）
-            fetch(`${MedApp.config.apiRoot || '/'}chat/history/${chat.id}/`, {
-              method: 'GET',
-              headers: {
-                'X-CSRFToken': MedApp.config.csrfToken
-              }
-            })
-            .then(response => {
-              if (!response.ok && response.status === 404) {
-                // 如果對話在伺服器上不存在，創建它
-                return fetch(`${MedApp.config.apiRoot || '/'}chat/new/`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': MedApp.config.csrfToken
-                  },
-                  body: JSON.stringify({ chat_id: chat.id })
-                });
-              }
-              return null;
-            })
-            .catch(error => {
-              MedApp.log("同步對話時出錯: " + error.message, 'error');
-            });
-          }
-        });
-      } catch (e) {
-        MedApp.log("同步對話歷史時發生錯誤: " + e.message, 'error');
-      }
+    refreshChatHistory: function() {
+      this.fetchAllChatHistory();
     }
-  }
+  };
