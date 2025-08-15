@@ -7,3 +7,4 @@ __pycache__/
 agent_checkpoint.sqlite-shm
 agent_checkpoint.sqlite-wal
 agent_checkpoint.sqlite
+graph_rag_agent/mcp_log/browserlog.log
