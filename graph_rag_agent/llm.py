@@ -28,7 +28,7 @@ llm_GPT = ChatOpenAI(
 
 # 建立 Google 的 LLM 模型實例
 llm_gemini = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash-preview-04-17",
+    model="gemini-2.5-flash",
     temperature=0,
     max_retries=2,
     cache=False,
