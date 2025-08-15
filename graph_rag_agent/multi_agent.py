@@ -1,8 +1,13 @@
 from langgraph.prebuilt import create_react_agent
 from langgraph.prebuilt.chat_agent_executor import AgentState
-from langgraph_supervisor import create_supervisor
 from langgraph.checkpoint.sqlite import SqliteSaver
+from typing import Annotated
+from langchain_core.tools import tool, InjectedToolCallId
+from langgraph.prebuilt import InjectedState
+from langgraph.graph import StateGraph, START, MessagesState,END
+from langgraph.types import Command
 import sqlite3
+from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
 from graph_rag import graphrag_chronic,graphrag_cardiovascular
 from fact_check import search_fact_checks
@@ -14,7 +19,7 @@ from langchain_tavily import TavilySearch
 
 conn = sqlite3.connect("./agent_checkpoint.sqlite", check_same_thread=False)
 memory=SqliteSaver(conn)
-class State(AgentState):
+class State(MessagesState):
     context: dict[str,any]
 
 
@@ -26,6 +31,33 @@ summarization_node = SummarizationNode(
     output_messages_key="llm_input_messages",
 )
 
+# Handoff tool set define
+def create_handoff_tool(*, agent_name: str, description: str | None = None):
+    name = f"transfer_to_{agent_name}"
+    description = description or f"Ask {agent_name} for the answer."
+
+    @tool(name, description=description)
+    def handoff_tool(
+        state: Annotated[MessagesState, InjectedState],
+        tool_call_id: Annotated[str, InjectedToolCallId],
+    ) -> Command:
+        tool_message = {
+            "role": "tool",
+            "content": f"Successfully transferred to {agent_name}",
+            "name": name,
+            "tool_call_id": tool_call_id,
+        }
+        return Command(
+            goto=agent_name,  
+            update={**state, "messages": state["messages"] + [tool_message]},  
+            graph=Command.PARENT,  
+        )
+
+    return handoff_tool
+
+handoff_to_chronic_agent=create_handoff_tool(agent_name='chronic_agent',description='assign task to chronic agent')
+handoff_to_cardiovascular_agent=create_handoff_tool(agent_name='cardiovascular_agent',description='assign task to cardiovascular agent')
+handoff_to_fact_check_agent=create_handoff_tool(agent_name='fact_check_agent',description='assign task to fact check agent')
 
 @tool(name_or_callable='net_search')
 def net_search(query: str):
@@ -103,12 +135,13 @@ def google_fact_check_tool(query: str) -> str:
     
     return result
     
+
+
 chronic_agent = create_react_agent(
     model=llm_gemini,  
     tools=[net_search,chronic_search], 
     name="chronic_agent",
-    prompt=
-    """
+    prompt="""
     Role:
         You are a medical expert providing information about medical knowledge.
     Task:
@@ -117,8 +150,7 @@ chronic_agent = create_react_agent(
         **Prohibitions**:
             1.Languages other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
-            3. add source(the tool you used) at the end of your response, then handoff to supervisor.
-            4. If you can't any useful information, just say that you don't know.
+            3. If you can't any useful information, just say that you don't know.
     """
 )
 
@@ -126,8 +158,7 @@ cardiovascular_agent = create_react_agent(
     model=llm_gemini,  
     tools=[cardiovascular_search,net_search], 
     name="cardiovascular_agent",
-    prompt=
-    """
+    prompt="""
     Role:
         You are a medical expert providing information about medical knowledge.
     Task:
@@ -136,8 +167,7 @@ cardiovascular_agent = create_react_agent(
         **Prohibitions**:
             1.Languages other than Traditional Chinese are not allowed
             2. Do not use pre-trained knowledge, only use the information provided in the context.
-            3. add source(the tool you used) at the end of your response, then handoff to supervisor.
-            4. If you can't any useful information, just say that you don't know.
+            3. If you can't any useful information, just say that you don't know.
     """
 )
 
@@ -145,8 +175,7 @@ fact_check_agent = create_react_agent(
     model=llm_gemini,
     tools=[google_fact_check_tool], 
     name="fact_check_agent",
-    prompt=
-    """
+    prompt="""
     Role:
         You are a fact-checking expert.
     Task:
@@ -160,49 +189,45 @@ fact_check_agent = create_react_agent(
     """
     )
     
-
-
-supervisor = create_supervisor(
-    agents=[chronic_agent, cardiovascular_agent,fact_check_agent],
-    state_schema=State,
-    tools=[],
+supervisor= create_react_agent(
     model=llm_gemini,
-    prompt=(
-        """
+    tools=[handoff_to_cardiovascular_agent,handoff_to_chronic_agent,handoff_to_fact_check_agent],
+    pre_model_hook=summarization_node,
+    name="supervisor",
+    checkpointer=memory,
+    prompt="""
         Role:
-        You are the central coordinator (Supervisor) for a smart health consultation system. 
-        Your main responsibility is to precisely understand the user's health query and route it to the most suitable specialized agent for handling that specific problem.
+        You are the Supervisor for a medical health system. 
+        Your main task is understand the user's question and route it to the most suitable specialized agent for handling that specific problem.
 
-        Available Agents / Tools and Their Calling Conditions:
-        ```
-        chronic_Agent:
-
-        Calling Condition: 
-        Invoke when the user asks questions related to general chronic diseases (e.g., diabetes, hypertension, chronic kidney disease, osteoporosis, gout, thyroid conditions) concerning their definition, symptoms, prevention, diet, lifestyle management, or general medication principles.
-
-        cardiovascular_Agent:
-
-        Calling Condition: 
-        Invoke when the user asks questions specifically related to heart and vascular system diseases (e.g., heart disease, stroke, myocardial infarction, arrhythmia, coronary artery disease, hyperlipidemia if strongly linked to cardiovascular risk, thrombosis) concerning their symptoms, risks, initial emergency assessment, or directly related cardiovascular health advice (diet/exercise).
-
-        fact_check_agent:
-
-        Calling Condition: 
-        Invoke when the user explicitly expresses doubt about the truthfulness of certain health information (e.g., "Is this true?", "Is this statement correct?", "I heard that... is that right?"), or when asking for the definition or source of a health concept.
-       
-         ```
         Rules:
         - Only use the information provided by the agents, do not use pre-trained knowledge.
+        - Your response should be in Traditional Chinese.
+        - You can only use tools once per response.
+        - Assign work to one agent at a time, do not call agents in parallel.
+        - Do not do any work yourself.
+        - If you need to use a tool, don't say anything.Just call the tool.
         """
-    ),
-    pre_model_hook=summarization_node,
 )
 
-# Compile and run
+workflow=(
+    StateGraph(State)
+    # destinations是為了方便視覺化用的
+    .add_node(supervisor,destinations=('chronic_agent','cardiovascular_agent','fact_check_agent',END))
+    .add_node(chronic_agent)
+    .add_node(cardiovascular_agent)
+    .add_node(fact_check_agent)
+    .add_edge(START,'supervisor')
+    .add_edge('chronic_agent','supervisor')
+    .add_edge('cardiovascular_agent','supervisor')
+    .add_edge('fact_check_agent','supervisor')
+    .compile(checkpointer=memory)
+)
 
-app = supervisor.compile(checkpointer=memory)
 config = {"configurable": {"thread_id": "1"}}
 while True:
     message=input("輸入你的問題: ")
-    for chunk,metadata in app.stream(input={'messages':[('user',message)]},config=config,stream_mode='messages'):
-        print(chunk.content)
+    for chunks,metadata in workflow.stream(input={'messages':[{'role': 'user','content': message}]},config=config,stream_mode='messages'):
+        print(chunks.content)
+#目前會一直報 langchain_google_genai.chat_models.ChatGoogleGenerativeAIError: 
+#Invalid argument provided to Gemini: 400 Please ensure that function call turn comes immediately after a user turn or after a function response turn.
