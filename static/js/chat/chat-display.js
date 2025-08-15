@@ -118,7 +118,8 @@ MedApp.chat.display = {
           if (content.includes('&lt;') || content.includes('&gt;')) {
             try {
               const decoded = this.decodeHtmlEntities(content);
-              contentDiv.innerHTML = decoded;
+              // 安全設置：使用 textContent 避免 XSS
+              contentDiv.textContent = decoded;
             } catch (e) {
               console.warn('HTML實體解碼失敗:', e);
               contentDiv.textContent = content;
@@ -165,13 +166,31 @@ MedApp.chat.display = {
       return /(\*\*|__|\*|_|##|###|```|---|>|!\[|\[|\|-)/.test(content);
     },
 
-    // 添加一個HTML實體解碼函數
+    // 安全的HTML實體解碼函數（防止XSS）
     decodeHtmlEntities: function(str) {
       if (!str) return '';
       
-      const textarea = document.createElement('textarea');
-      textarea.innerHTML = str;
-      return textarea.value;
+      // 只解碼安全的HTML實體，避免XSS
+      const safeEntities = {
+        '&lt;': '<',
+        '&gt;': '>',
+        '&amp;': '&',
+        '&quot;': '"',
+        '&#39;': "'",
+        '&#x27;': "'",
+        '&#x2F;': '/'
+      };
+      
+      return str.replace(/&[a-zA-Z0-9#]+;/g, function(entity) {
+        return safeEntities[entity] || entity;
+      });
+    },
+
+    // 安全的HTML清理函數
+    sanitizeHtml: function(html) {
+      const div = document.createElement('div');
+      div.textContent = html;
+      return div.innerHTML;
     },
         
     // 預處理Markdown內容

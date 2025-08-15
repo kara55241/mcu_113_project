@@ -10,7 +10,7 @@ window.MedApp = {
     apiRoot: window.appConfig?.apiRoot || '/',
     mapApiKey: window.appConfig?.mapApiKey || '',
     csrfToken: document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-    debug: true  // 啟用調試模式以便更容易追蹤問題
+    debug: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'  // 只在開發環境啟用調試
   },
   
   // 子模組容器
@@ -158,7 +158,9 @@ window.MedApp = {
           }
           
           // 通知用戶
-          alert('已建立新對話');
+          if (MedApp.utils.notifications) {
+            MedApp.utils.notifications.success('已建立新對話');
+          }
         }
       });
     }
@@ -232,10 +234,14 @@ window.MedApp = {
               window.speechSynthesis.speak(utterance);
               MedApp.log('正在朗讀最後一條訊息', 'info');
             } else {
-              alert('您的瀏覽器不支持語音合成功能');
+              if (MedApp.utils.notifications) {
+                MedApp.utils.notifications.warning('您的瀏覽器不支持語音合成功能');
+              }
             }
           } else {
-            alert('找不到可朗讀的訊息');
+            if (MedApp.utils.notifications) {
+              MedApp.utils.notifications.info('找不到可朗讀的訊息');
+            }
           }
         }
       });

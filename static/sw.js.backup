@@ -1,0 +1,339 @@
+/**
+ * Service Worker - 提供離線功能和快取策略
+ */
+
+const CACHE_NAME = 'ai-chat-v1.0.0';
+const STATIC_CACHE = 'static-v1.0.0';
+const DYNAMIC_CACHE = 'dynamic-v1.0.0';
+
+// 需要快取的靜態資源
+const STATIC_ASSETS = [
+    '/',
+    '/static/css/styles.css',
+    '/static/js/app-core.js',
+    '/static/js/loader.js',
+    '/static/js/utils/error-handler.js',
+    '/static/js/utils/performance-monitor.js',
+    '/static/js/utils/api-manager.js',
+    '/static/js/utils/security-config.js',
+    '/static/js/utils/accessibility.js',
+    '/static/js/utils/notifications.js',
+    '/static/js/utils/speech.js',
+    '/static/js/chat/chat-core.js',
+    '/static/js/chat/chat-history.js',
+    '/static/js/chat/chat-input.js',
+    '/static/js/chat/chat-display.js',
+    '/static/js/maps/maps-core.js',
+    '/static/js/maps/maps-search.js',
+    '/static/js/maps/maps-hospital.js',
+    '/static/js/maps/maps-direction.js',
+    '/static/js/lib/marked.min.js',
+    '/static/images/bot.png',
+    '/static/manifest.json'
+];
+
+// 不需要快取的 URL 模式
+const EXCLUDED_URLS = [
+    /\/admin\//,
+    /\/api\/feedback\//,
+    /\/api\/messages\//,
+    /\/api\/conversations\//,
+    /chrome-extension:/,
+    /maps\.googleapis\.com/,
+    /fonts\.googleapis\.com/,
+    /fonts\.gstatic\.com/,
+    /cdnjs\.cloudflare\.com/
+];
+
+// 安裝事件 - 快取靜態資源
+self.addEventListener('install', (event) => {
+    console.log('[SW] 安裝中...');
+    
+    event.waitUntil(
+        caches.open(STATIC_CACHE)
+            .then((cache) => {
+                console.log('[SW] 快取靜態資源');
+                return cache.addAll(STATIC_ASSETS);
+            })
+            .then(() => {
+                console.log('[SW] 安裝完成');
+                return self.skipWaiting();
+            })
+            .catch((error) => {
+                console.error('[SW] 安裝失敗:', error);
+            })
+    );
+});
+
+// 啟用事件 - 清理舊快取
+self.addEventListener('activate', (event) => {
+    console.log('[SW] 啟用中...');
+    
+    event.waitUntil(
+        caches.keys()
+            .then((cacheNames) => {
+                const deletePromises = cacheNames
+                    .filter((cacheName) => {
+                        return cacheName !== STATIC_CACHE && 
+                               cacheName !== DYNAMIC_CACHE &&
+                               cacheName !== CACHE_NAME;
+                    })
+                    .map((cacheName) => {
+                        console.log('[SW] 刪除舊快取:', cacheName);
+                        return caches.delete(cacheName);
+                    });
+                
+                return Promise.all(deletePromises);
+            })
+            .then(() => {
+                console.log('[SW] 啟用完成');
+                return self.clients.claim();
+            })
+    );
+});
+
+// 抓取事件 - 快取策略
+self.addEventListener('fetch', (event) => {
+    const { request } = event;
+    const url = new URL(request.url);
+    
+    // 跳過不需要處理的請求
+    if (shouldExcludeUrl(url)) {
+        return;
+    }
+    
+    // 根據請求類型使用不同策略
+    if (request.method === 'GET') {
+        if (isStaticAsset(url)) {
+            // 靜態資源：快取優先
+            event.respondWith(cacheFirst(request));
+        } else if (isApiRequest(url)) {
+            // API 請求：網路優先
+            event.respondWith(networkFirst(request));
+        } else {
+            // 其他請求：快取回退
+            event.respondWith(networkWithCacheFallback(request));
+        }
+    }
+});
+
+// 訊息事件 - 處理來自主執行緒的訊息
+self.addEventListener('message', (event) => {
+    const { type, payload } = event.data;
+    
+    switch (type) {
+        case 'SKIP_WAITING':
+            self.skipWaiting();
+            break;
+            
+        case 'CLEAR_CACHE':
+            clearAllCaches()
+                .then(() => {
+                    event.ports[0].postMessage({ success: true });
+                })
+                .catch((error) => {
+                    event.ports[0].postMessage({ success: false, error: error.message });
+                });
+            break;
+            
+        case 'GET_CACHE_STATUS':
+            getCacheStatus()
+                .then((status) => {
+                    event.ports[0].postMessage(status);
+                })
+                .catch((error) => {
+                    event.ports[0].postMessage({ error: error.message });
+                });
+            break;
+    }
+});
+
+// 快取策略實現
+
+// 快取優先策略
+async function cacheFirst(request) {
+    try {
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+        
+        const networkResponse = await fetch(request);
+        if (networkResponse.status === 200) {
+            const cache = await caches.open(STATIC_CACHE);
+            cache.put(request, networkResponse.clone());
+        }
+        
+        return networkResponse;
+    } catch (error) {
+        console.error('[SW] 快取優先策略失敗:', error);
+        return new Response('離線模式 - 資源不可用', { status: 503 });
+    }
+}
+
+// 網路優先策略
+async function networkFirst(request) {
+    try {
+        const networkResponse = await fetch(request);
+        
+        if (networkResponse.status === 200) {
+            const cache = await caches.open(DYNAMIC_CACHE);
+            cache.put(request, networkResponse.clone());
+        }
+        
+        return networkResponse;
+    } catch (error) {
+        console.log('[SW] 網路請求失敗，嘗試快取:', request.url);
+        
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+        
+        // 如果是 API 請求且沒有快取，返回離線回應
+        if (isApiRequest(new URL(request.url))) {
+            return new Response(JSON.stringify({
+                error: '目前離線，請稍後再試',
+                offline: true
+            }), {
+                status: 503,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+        
+        return new Response('離線模式 - 資源不可用', { status: 503 });
+    }
+}
+
+// 網路回退到快取策略
+async function networkWithCacheFallback(request) {
+    try {
+        const networkResponse = await fetch(request);
+        
+        if (networkResponse.status === 200) {
+            const cache = await caches.open(DYNAMIC_CACHE);
+            cache.put(request, networkResponse.clone());
+        }
+        
+        return networkResponse;
+    } catch (error) {
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+        
+        // 返回離線頁面或基本回應
+        return new Response(`
+            <!DOCTYPE html>
+            <html lang="zh-Hant">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>離線模式</title>
+                <style>
+                    body { 
+                        font-family: sans-serif; 
+                        text-align: center; 
+                        padding: 50px; 
+                        background: #2d2d3a; 
+                        color: #e8e8e8; 
+                    }
+                    .offline-message {
+                        max-width: 400px;
+                        margin: 0 auto;
+                        padding: 30px;
+                        border-radius: 10px;
+                        background: #3a3a4a;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="offline-message">
+                    <h1>🔌 目前離線</h1>
+                    <p>請檢查您的網路連線，然後重新整理頁面。</p>
+                    <button onclick="location.reload()">重新整理</button>
+                </div>
+            </body>
+            </html>
+        `, {
+            status: 503,
+            headers: { 'Content-Type': 'text/html; charset=utf-8' }
+        });
+    }
+}
+
+// 工具函數
+
+function shouldExcludeUrl(url) {
+    return EXCLUDED_URLS.some(pattern => pattern.test(url.href));
+}
+
+function isStaticAsset(url) {
+    return url.pathname.match(/\.(css|js|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)$/);
+}
+
+function isApiRequest(url) {
+    return url.pathname.startsWith('/api/') || 
+           url.pathname.startsWith('/chat/') ||
+           url.pathname.includes('ajax');
+}
+
+async function clearAllCaches() {
+    const cacheNames = await caches.keys();
+    const deletePromises = cacheNames.map(cacheName => caches.delete(cacheName));
+    return Promise.all(deletePromises);
+}
+
+async function getCacheStatus() {
+    const cacheNames = await caches.keys();
+    const cacheStatus = {};
+    
+    for (const cacheName of cacheNames) {
+        const cache = await caches.open(cacheName);
+        const keys = await cache.keys();
+        cacheStatus[cacheName] = keys.length;
+    }
+    
+    return {
+        caches: cacheStatus,
+        totalCaches: cacheNames.length,
+        timestamp: new Date().toISOString()
+    };
+}
+
+// 推送通知支援 (未來擴展)
+self.addEventListener('push', (event) => {
+    if (event.data) {
+        const data = event.data.json();
+        
+        const options = {
+            body: data.body,
+            icon: '/static/images/pwa-192x192.png',
+            badge: '/static/images/pwa-192x192.png',
+            vibrate: [100, 50, 100],
+            data: data.data || {},
+            actions: data.actions || []
+        };
+        
+        event.waitUntil(
+            self.registration.showNotification(data.title, options)
+        );
+    }
+});
+
+// 通知點擊處理
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    
+    if (event.action) {
+        // 處理動作按鈕點擊
+        console.log('[SW] 通知動作:', event.action);
+    } else {
+        // 處理通知本體點擊
+        event.waitUntil(
+            clients.openWindow('/')
+        );
+    }
+});
+
+console.log('[SW] Service Worker 已載入');

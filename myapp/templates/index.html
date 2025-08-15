@@ -1,14 +1,59 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-<meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
     <meta name="description" content="AI 聊天助手 - 提供健康諮詢與醫療設施查詢">
-    <title>AI 聊天助手</title>
+    <meta name="keywords" content="AI助手,健康諮詢,醫療設施,聊天機器人,台灣醫療">
+    <meta name="author" content="AI 聊天助手">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#2d2d3a">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="AI 聊天助手 - 健康諮詢與醫療服務">
+    <meta property="og:description" content="提供專業的健康諮詢與醫療設施查詢服務，讓您隨時獲得可靠的醫療資訊">
+    <meta property="og:image" content="{% static 'images/og-image.png' %}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta property="twitter:title" content="AI 聊天助手 - 健康諮詢與醫療服務">
+    <meta property="twitter:description" content="提供專業的健康諮詢與醫療設施查詢服務">
+    <meta property="twitter:image" content="{% static 'images/og-image.png' %}">
+    
+    <title>AI 聊天助手 - 健康諮詢與醫療服務</title>
+    
+    <!-- 結構化數據 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI 聊天助手",
+        "description": "提供專業的健康諮詢與醫療設施查詢服務",
+        "url": "{{ request.build_absolute_uri }}",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "TWD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "AI 聊天助手團隊"
+        }
+    }
+    </script>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
     
     <!-- 預載關鍵資源 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,13 +76,8 @@
     
     <!-- CSS 資源 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
-    <!-- 在 CSS 資源下方添加 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <!-- 添加 Marked.js 庫 -->
 </head>
 <body>
     <!-- 輔助功能區 -->
@@ -56,18 +96,18 @@
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <img src="{% static 'images/bot.png' %}" alt="AI Logo" width="40" height="40">
+                    <img src="{% static 'images/bot.png' %}" alt="AI 聊天助手標誌" width="40" height="40">
                 </div>
-                <h1>AI 聊天助手</h1>
+                <h1 id="app-title">AI 聊天助手</h1>
             </div>
             <div class="new-chat sidebar-section">
                 <button id="newChatButton" title="新對話" aria-label="新對話">
                     <i class="fas fa-plus-circle"></i> 新對話
                 </button>
             </div>
-            <div class="chat-history">
-                <h2 class="section-title">最近對話</h2>
-                <ul id="chatHistoryList"></ul>
+            <div class="chat-history" role="region" aria-labelledby="chat-history-title">
+                <h2 id="chat-history-title" class="section-title">最近對話</h2>
+                <ul id="chatHistoryList" role="list" aria-label="對話歷史列表"></ul>
             </div>
         </aside>
 
@@ -77,8 +117,8 @@
                 <span class="status"></span>
                 <h2 id="currentChatTitle">AI助手已就緒</h2>
             </div>
-            <div class="chat-container" id="chatContainer">
-                <div class="welcome-message" id="welcomeMessage">
+            <div class="chat-container" id="chatContainer" role="log" aria-live="polite" aria-label="聊天對話區域">
+                <div class="welcome-message" id="welcomeMessage" role="banner">
                     <h2>歡迎使用 AI 聊天助手</h2>
                     <p>我能幫您查詢資訊、解答問題或提供建議。您可以直接輸入問題，或點擊下方建議開始對話。</p>
                     <div class="welcome-suggestions">
@@ -156,13 +196,24 @@
         // 應用程式初始化狀態
         window.appConfig = {
             apiRoot: '{% url "home" %}',
-            mapApiKey: 'AIzaSyAEW_iMaTrOPg0vQJJN3pMiy84-u8C_ZiE',
+            mapApiKey: '{{ GOOGLE_MAPS_API_KEY|default:"" }}',
             staticPath: '{% static "js/" %}'
         };
         
         // 頁面載入事件
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM已載入，初始化應用程式...');
+            
+            // 註冊 Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker 註冊成功:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker 註冊失敗:', error);
+                    });
+            }
         });
         
         // 定義全局 initMap 函數作為 Google Maps API 的回調
@@ -215,10 +266,12 @@
     <script src="{% static 'js/loader.js' %}"></script>
     
     <!-- Google Maps API - 按需載入 -->
+    {% if GOOGLE_MAPS_API_KEY %}
     <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEW_iMaTrOPg0vQJJN3pMiy84-u8C_ZiE&callback=initMap&libraries=places"
+    src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initMap&libraries=places"
     async defer>
     </script>
+    {% endif %}
     
     <!-- 谷歌地圖元件庫 - 按需載入 -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js"></script>

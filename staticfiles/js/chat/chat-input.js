@@ -91,77 +91,63 @@ MedApp.chat.input = {
       // 確保所有按鈕事件已綁定
       MedApp.log('聊天輸入事件已綁定', 'debug');
       
-      // 添加緊急事件處理 - 以防模組加載順序有問題
-      this.addEmergencyHandlers();
+      // 添加備用事件處理
+      this.addFallbackHandlers();
     },
     
-    // 添加緊急事件處理 - 確保按鈕功能
-    addEmergencyHandlers: function() {
-      // 全局快速修復函數
-      window.fixChatInput = () => {
-        MedApp.log('執行聊天輸入模塊緊急修復', 'info');
-        
-        const inputField = document.getElementById('userInput');
-        const sendButton = document.getElementById('sendButton');
-        
-        if (inputField && sendButton) {
-          // 移除所有現有事件處理器，避免重複
-          const newSendButton = sendButton.cloneNode(true);
-          sendButton.parentNode.replaceChild(newSendButton, sendButton);
-          
-          // 添加新的事件處理器
-          newSendButton.addEventListener('click', () => {
-            const message = inputField.value.trim();
-            if (message) {
-              if (typeof MedApp.chat.core.sendMessage === 'function') {
-                MedApp.chat.core.sendMessage(message);
-              } else {
-                // 備用發送方法
-                const chatContainer = document.getElementById('chatContainer');
-                const welcomeMessage = document.querySelector('.welcome-message');
-                
-                // 隱藏歡迎消息
-                if (welcomeMessage) {
-                  welcomeMessage.style.display = 'none';
-                }
-                
-                // 添加用戶消息
-                const userMsg = document.createElement('div');
-                userMsg.classList.add('message', 'user');
-                userMsg.textContent = message;
-                
-                const timeSpan = document.createElement('span');
-                timeSpan.classList.add('message-time');
-                const now = new Date();
-                timeSpan.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-                
-                userMsg.appendChild(timeSpan);
-                chatContainer.appendChild(userMsg);
-                
-                // 清空輸入框
-                inputField.value = '';
-              }
-            }
-          });
-          
-          MedApp.log('聊天輸入模塊緊急修復完成', 'info');
-        }
-      };
-      
-      // 3秒後自動檢查並修復
+    // 添加備用事件處理 - 簡化版本
+    addFallbackHandlers: function() {
+      // 延遲檢查核心功能是否正常工作
       setTimeout(() => {
-        // 如果點擊發送按鈕沒反應，嘗試修復
-        const testSend = () => {
-          const sendButton = document.getElementById('sendButton');
-          if (sendButton && typeof sendButton.onclick !== 'function') {
-            MedApp.log('檢測到發送按鈕沒有事件處理，自動修復', 'warn');
-            window.fixChatInput();
+        if (!this.elements.sendButton || !this.elements.inputField) {
+          MedApp.log('輸入元素未正確初始化', 'warn');
+          return;
+        }
+        
+        // 檢查是否需要重新綁定事件
+        const testInput = () => {
+          if (!MedApp.chat.core || typeof MedApp.chat.core.sendMessage !== 'function') {
+            MedApp.log('核心聊天功能未準備就緒，啟用備用模式', 'warn');
+            this.enableFallbackMode();
           }
         };
         
-        // 檢查並自動修復
-        testSend();
-      }, 3000);
+        testInput();
+      }, 2000);
+    },
+    
+    // 啟用備用模式
+    enableFallbackMode: function() {
+      if (!this.elements.sendButton || !this.elements.inputField) return;
+      
+      // 添加備用發送功能
+      const fallbackSend = () => {
+        const message = this.elements.inputField.value.trim();
+        if (!message) return;
+        
+        // 簡單的訊息顯示
+        const chatContainer = document.getElementById('chatContainer');
+        if (chatContainer) {
+          const messageEl = document.createElement('div');
+          messageEl.className = 'message user';
+          messageEl.textContent = message;
+          chatContainer.appendChild(messageEl);
+          
+          this.elements.inputField.value = '';
+          
+          if (MedApp.utils.notifications) {
+            MedApp.utils.notifications.warning('聊天功能正在加載中，請稍後再試');
+          }
+        }
+      };
+      
+      // 只在需要時添加備用事件
+      this.elements.sendButton.addEventListener('click', fallbackSend);
+      this.elements.inputField.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') fallbackSend();
+      });
+      
+      MedApp.log('備用聊天模式已啟用', 'info');
     },
     
     // 設置語音辨識

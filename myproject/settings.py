@@ -9,8 +9,11 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 安全與環境設置
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-...')
-DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-temporary-key-for-development-only')
+if not SECRET_KEY or SECRET_KEY == '123':
+    print("WARNING: Using weak SECRET_KEY. Please set a secure SECRET_KEY in .env file")
+    SECRET_KEY = 'django-insecure-temporary-key-for-development-only'
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 # Neo4j 連接設置
@@ -55,7 +58,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'myapp', 'templates')],
+        'DIRS': [BASE_DIR / 'myapp' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,16 +97,19 @@ USE_TZ = True
 
 # 靜態檔案設定
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# 確保靜態文件服務正常運作
+import mimetypes
+mimetypes.add_type("application/javascript", ".js", True)
+mimetypes.add_type("text/css", ".css", True)
 
 # 媒體檔案設定
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # 會話設定
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -127,9 +133,10 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'chat.log'),
+            'filename': BASE_DIR / 'logs' / 'chat.log',
             'formatter': 'standard',
             'level': 'DEBUG',
+            'encoding': 'utf-8',
         },
     },
     'loggers': {
@@ -152,7 +159,7 @@ LOGGING = {
 }
 
 # 確保日誌目錄存在
-os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
+(BASE_DIR / 'logs').mkdir(exist_ok=True)
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

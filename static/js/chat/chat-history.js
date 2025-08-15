@@ -242,7 +242,13 @@ MedApp.chat.history = {
     
     // 刪除對話
     deleteChat: async function(chatId, listItem) {
-      if (!confirm("確定要刪除此對話嗎？此操作無法復原。")) {
+      // 使用現代化的確認對話框
+      const confirmed = await this.showConfirmDialog(
+        "確定要刪除此對話嗎？",
+        "此操作無法復原。"
+      );
+      
+      if (!confirmed) {
         return;
       }
       
@@ -451,5 +457,125 @@ MedApp.chat.history = {
     
     refreshChatHistory: function() {
       this.fetchAllChatHistory();
+    },
+    
+    // 現代化確認對話框
+    showConfirmDialog: function(title, message) {
+      return new Promise((resolve) => {
+        // 創建對話框元素
+        const dialog = document.createElement('div');
+        dialog.className = 'confirm-dialog-overlay';
+        dialog.innerHTML = `
+          <div class="confirm-dialog">
+            <div class="confirm-dialog-header">
+              <h3>${title}</h3>
+            </div>
+            <div class="confirm-dialog-body">
+              <p>${message}</p>
+            </div>
+            <div class="confirm-dialog-footer">
+              <button class="btn btn-secondary confirm-cancel">取消</button>
+              <button class="btn btn-danger confirm-delete">刪除</button>
+            </div>
+          </div>
+        `;
+        
+        // 添加樣式
+        if (!document.getElementById('confirm-dialog-styles')) {
+          const style = document.createElement('style');
+          style.id = 'confirm-dialog-styles';
+          style.textContent = `
+            .confirm-dialog-overlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.5);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 10000;
+            }
+            .confirm-dialog {
+              background: var(--background-color, #2a2a3a);
+              border-radius: 8px;
+              min-width: 300px;
+              max-width: 500px;
+              box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            .confirm-dialog-header {
+              padding: 16px 20px;
+              border-bottom: 1px solid var(--border-color, #3a3a4a);
+            }
+            .confirm-dialog-header h3 {
+              margin: 0;
+              color: var(--text-color, #e8e8e8);
+            }
+            .confirm-dialog-body {
+              padding: 20px;
+              color: var(--text-secondary, #b0b0b0);
+            }
+            .confirm-dialog-footer {
+              padding: 16px 20px;
+              border-top: 1px solid var(--border-color, #3a3a4a);
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+            }
+            .confirm-dialog .btn {
+              padding: 8px 16px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 14px;
+            }
+            .confirm-dialog .btn-secondary {
+              background: var(--background-lighter, #3a3a4a);
+              color: var(--text-color, #e8e8e8);
+            }
+            .confirm-dialog .btn-danger {
+              background: #dc3545;
+              color: white;
+            }
+            .confirm-dialog .btn:hover {
+              opacity: 0.9;
+            }
+          `;
+          document.head.appendChild(style);
+        }
+        
+        // 添加到 DOM
+        document.body.appendChild(dialog);
+        
+        // 綁定事件
+        dialog.querySelector('.confirm-cancel').addEventListener('click', () => {
+          dialog.remove();
+          resolve(false);
+        });
+        
+        dialog.querySelector('.confirm-delete').addEventListener('click', () => {
+          dialog.remove();
+          resolve(true);
+        });
+        
+        // ESC 鍵取消
+        const handleEscape = (e) => {
+          if (e.key === 'Escape') {
+            dialog.remove();
+            document.removeEventListener('keydown', handleEscape);
+            resolve(false);
+          }
+        };
+        document.addEventListener('keydown', handleEscape);
+        
+        // 點擊遮罩取消
+        dialog.addEventListener('click', (e) => {
+          if (e.target === dialog) {
+            dialog.remove();
+            resolve(false);
+          }
+        });
+      });
     }
   };

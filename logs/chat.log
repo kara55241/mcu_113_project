@@ -3837,3 +3837,2043 @@ django.template.exceptions.TemplateDoesNotExist: index.html
 [2025-07-25 22:40:35,439] [INFO] django.server: "GET /chat/history/1753454409849/ HTTP/1.1" 200 2561
 [2025-07-25 22:41:33,563] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
 [2025-07-25 22:41:34,409] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 19:54:02,848] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 19:54:22,461] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 19:54:22,556] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 34178
+[2025-08-01 19:54:22,586] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15605
+[2025-08-01 19:54:22,592] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-01 19:54:22,598] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 4455
+[2025-08-01 19:54:22,634] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-01 19:54:22,844] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 15587
+[2025-08-01 19:54:22,844] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-01 19:54:22,849] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5376
+[2025-08-01 19:54:22,849] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-01 19:54:22,850] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-01 19:54:22,852] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 13344
+[2025-08-01 19:54:22,866] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15084
+[2025-08-01 19:54:22,866] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-01 19:54:22,866] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 18569
+[2025-08-01 19:54:22,873] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-01 19:54:22,874] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-01 19:54:23,219] [WARNING] django.request: Not Found: /favicon.ico
+[2025-08-01 19:54:23,220] [WARNING] django.server: "GET /favicon.ico HTTP/1.1" 404 4181
+[2025-08-01 19:54:31,113] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 19:54:50,614] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 19:54:55,025] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 19:54:57,762] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2651
+[2025-08-01 19:55:08,484] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 19:55:08,830] [WARNING] django.request: Not Found: /favicon.ico
+[2025-08-01 19:55:08,830] [WARNING] django.server: "GET /favicon.ico HTTP/1.1" 404 4181
+[2025-08-01 19:55:09,472] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2651
+[2025-08-01 19:55:12,945] [INFO] django.server: "GET /chat/history/1753454409849/ HTTP/1.1" 200 2561
+[2025-08-01 19:55:13,487] [INFO] django.server: "GET /chat/history/1753453662377/ HTTP/1.1" 200 2038
+[2025-08-01 19:55:14,711] [INFO] django.server: "GET /chat/history/1753452646379/ HTTP/1.1" 200 12221
+[2025-08-01 19:55:15,690] [INFO] django.server: "GET /chat/history/1753453378317/ HTTP/1.1" 200 3163
+[2025-08-01 19:55:17,931] [INFO] django.server: "GET /chat/history/1753451795147/ HTTP/1.1" 200 1086
+[2025-08-01 19:55:18,340] [INFO] django.server: "GET /chat/history/1753450679303/ HTTP/1.1" 200 8857
+[2025-08-01 19:55:19,547] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 19:55:19,771] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2985
+[2025-08-01 19:55:23,560] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 19:55:29,096] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 345
+[2025-08-01 19:55:29,108] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 19:55:34,461] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 345
+[2025-08-01 19:57:13,262] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-01 19:57:13,262] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 4292
+[2025-08-01 20:06:31,794] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 20:06:33,481] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:06:35,970] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 3018
+[2025-08-01 20:06:39,082] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 20:06:39,115] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:06:43,772] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 345
+[2025-08-01 20:06:43,789] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:07:15,105] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 20:07:17,037] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:07:19,513] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 3395
+[2025-08-01 20:07:23,856] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 20:07:23,890] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:07:34,632] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 411
+[2025-08-01 20:07:34,645] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:34:35,992] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-08-01 20:34:36,791] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 20:36:23,113] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:36:25,584] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 3773
+[2025-08-01 20:36:28,227] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 20:36:28,255] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:36:37,143] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 411
+[2025-08-01 20:36:37,157] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:37:12,351] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:37:12,568] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 4484
+[2025-08-01 20:37:17,456] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:37:25,153] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 1957
+[2025-08-01 20:37:25,162] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:38:28,667] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:38:28,963] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 20:39:24,288] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:39:24,475] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 20:39:27,168] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 20:39:27,318] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 171
+[2025-08-01 20:39:34,505] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2295
+[2025-08-01 20:39:34,523] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:39:49,919] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 205
+[2025-08-01 20:39:54,444] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:39:54,655] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 751
+[2025-08-01 20:39:57,073] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 171
+[2025-08-01 20:40:05,355] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2120
+[2025-08-01 20:40:05,363] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:40:11,941] [INFO] django.server: "DELETE /chat/history/1754051967151/ HTTP/1.1" 200 153
+[2025-08-01 20:40:13,372] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:40:13,385] [INFO] django.server: "DELETE /chat/history/1754051994420/ HTTP/1.1" 200 153
+[2025-08-01 20:40:13,387] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 374
+[2025-08-01 20:40:22,356] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:40:22,558] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 20:40:31,768] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 20:40:31,845] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:40:44,218] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2666
+[2025-08-01 20:40:44,232] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:40:51,316] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:40:52,817] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:40:53,035] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 751
+[2025-08-01 20:41:10,068] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:41:17,188] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2354
+[2025-08-01 20:41:17,191] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:41:31,390] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:41:33,034] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:41:34,153] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:41:34,882] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:41:37,592] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:41:40,300] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:41:41,008] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:41:41,447] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:41:42,120] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:41:42,809] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:41:43,474] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:41:46,210] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:41:48,329] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:41:49,011] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:44:22,591] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:44:41,565] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:45:44,093] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:45:44,301] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1118
+[2025-08-01 20:45:45,849] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:45:48,364] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:45:50,459] [INFO] django.server: "GET /chat/history/1754052344081/ HTTP/1.1" 200 508
+[2025-08-01 20:45:55,373] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2390
+[2025-08-01 20:45:55,389] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:46:13,979] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:46:16,085] [INFO] django.server: "GET /chat/history/1754052344081/ HTTP/1.1" 200 2803
+[2025-08-01 20:46:18,203] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:46:20,675] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:46:20,884] [INFO] django.server: "GET /chat/history/1754052344081/ HTTP/1.1" 200 2803
+[2025-08-01 20:46:23,356] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:46:23,571] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1485
+[2025-08-01 20:46:23,703] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:46:31,201] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:46:51,103] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:46:52,856] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:46:53,460] [INFO] django.server: "GET /chat/history/1754052344081/ HTTP/1.1" 200 2803
+[2025-08-01 20:46:55,496] [INFO] django.server: "GET /chat/history/1754052383347/ HTTP/1.1" 200 520
+[2025-08-01 20:46:56,988] [INFO] django.server: "GET /chat/history/1754052344081/ HTTP/1.1" 200 2803
+[2025-08-01 20:46:58,378] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:46:58,876] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:47:09,317] [INFO] django.server: "GET /chat/history/1754052383347/ HTTP/1.1" 200 520
+[2025-08-01 20:47:18,625] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:47:18,654] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:47:18,655] [INFO] django.server: - Broken pipe from ('127.0.0.1', 59373)
+[2025-08-01 20:47:18,938] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1518
+[2025-08-01 20:47:19,638] [INFO] django.server: "GET /chat/history/1754052383347/ HTTP/1.1" 200 728
+[2025-08-01 20:47:29,265] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2237
+[2025-08-01 20:47:29,294] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:47:29,872] [INFO] django.server: - Broken pipe from ('127.0.0.1', 59372)
+[2025-08-01 20:49:03,285] [INFO] django.server: "GET /chat/history/1754052344081/ HTTP/1.1" 200 2803
+[2025-08-01 20:49:04,881] [INFO] django.server: "GET /chat/history/1754052052790/ HTTP/1.1" 200 2755
+[2025-08-01 20:49:05,383] [INFO] django.server: "GET /chat/history/1754052031748/ HTTP/1.1" 200 3108
+[2025-08-01 20:49:12,237] [INFO] django.server: "GET /chat/history/1754052383347/ HTTP/1.1" 200 5913
+[2025-08-01 20:49:18,953] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:49:20,418] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:49:20,424] [INFO] django.server: "DELETE /chat/history/1754052383347/ HTTP/1.1" 200 153
+[2025-08-01 20:49:20,434] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1485
+[2025-08-01 20:49:21,156] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:49:21,388] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1819
+[2025-08-01 20:49:23,579] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:49:52,096] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 3955
+[2025-08-01 20:49:52,107] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:50:03,061] [INFO] django.server: "GET /chat/history/1754052560402/ HTTP/1.1" 200 296
+[2025-08-01 20:50:04,006] [INFO] django.server: "GET /chat/history/1754052561142/ HTTP/1.1" 200 4380
+[2025-08-01 20:50:08,340] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:50:09,333] [INFO] django.server: "DELETE /chat/history/1754052560402/ HTTP/1.1" 200 153
+[2025-08-01 20:50:10,175] [INFO] django.server: "GET /chat/history/1754052344081/ HTTP/1.1" 200 2803
+[2025-08-01 20:50:23,122] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:50:23,400] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 20:50:26,765] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 20:50:26,863] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:50:33,762] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2640
+[2025-08-01 20:50:33,774] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:50:54,952] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:50:55,161] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 751
+[2025-08-01 20:50:56,087] [INFO] django.server: "GET /chat/history/1754052626754/ HTTP/1.1" 200 3075
+[2025-08-01 20:50:56,604] [INFO] django.server: "GET /chat/history/1754052654929/ HTTP/1.1" 200 296
+[2025-08-01 20:50:57,142] [INFO] django.server: "GET /chat/history/1754052626754/ HTTP/1.1" 200 3075
+[2025-08-01 20:50:57,780] [INFO] django.server: "GET /chat/history/1754052654929/ HTTP/1.1" 200 296
+[2025-08-01 20:50:59,397] [INFO] django.server: "GET /chat/history/1754052626754/ HTTP/1.1" 200 3075
+[2025-08-01 20:51:03,315] [INFO] django.server: "GET /chat/history/1754052654929/ HTTP/1.1" 200 296
+[2025-08-01 20:51:08,507] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:51:19,023] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2421
+[2025-08-01 20:51:19,027] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:51:24,725] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:51:24,853] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:51:24,930] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1118
+[2025-08-01 20:51:28,000] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:51:36,314] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 3604
+[2025-08-01 20:51:36,323] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:53:19,071] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:53:19,280] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1485
+[2025-08-01 20:53:22,826] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 20:53:43,683] [INFO] django.server: "GET /chat/history/1754052684709/ HTTP/1.1" 200 4029
+[2025-08-01 20:53:59,471] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 6584
+[2025-08-01 20:53:59,487] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:54:32,176] [INFO] django.server: "GET /chat/history/1754052799057/ HTTP/1.1" 200 6997
+[2025-08-01 20:54:35,462] [INFO] django.server: "GET /chat/history/1754052684709/ HTTP/1.1" 200 4029
+[2025-08-01 20:54:40,344] [INFO] django.server: "GET /chat/history/1754052654929/ HTTP/1.1" 200 2883
+[2025-08-01 20:54:43,417] [INFO] django.server: "GET /chat/history/1754052799057/ HTTP/1.1" 200 6997
+[2025-08-01 20:55:12,518] [INFO] django.server: "GET /chat/history/1754052626754/ HTTP/1.1" 200 3075
+[2025-08-01 20:55:15,351] [INFO] django.server: "GET /chat/history/1754052654929/ HTTP/1.1" 200 2883
+[2025-08-01 20:55:43,947] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:55:43,960] [INFO] django.server: "GET /chat/history/1754052684709/ HTTP/1.1" 200 4029
+[2025-08-01 20:55:46,246] [INFO] django.server: "GET /chat/history/1754052799057/ HTTP/1.1" 200 6997
+[2025-08-01 20:55:46,426] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:55:49,159] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:57:14,211] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:57:14,501] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 20:57:16,021] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 20:57:16,230] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 384
+[2025-08-01 20:57:19,077] [INFO] django.server: "DELETE /chat/history/1754053035997/ HTTP/1.1" 200 153
+[2025-08-01 20:57:19,077] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:57:19,082] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 374
+[2025-08-01 20:57:20,241] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:57:20,411] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 374
+[2025-08-01 20:57:22,918] [INFO] django.server: "DELETE /chat/history/1754053039065/ HTTP/1.1" 200 153
+[2025-08-01 20:57:24,040] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 20:57:24,210] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 20:57:25,006] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 20:57:25,211] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 384
+[2025-08-01 20:57:54,890] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 171
+[2025-08-01 20:58:01,766] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 1194
+[2025-08-01 20:58:01,781] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:58:08,267] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 20:58:11,145] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:58:11,352] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 751
+[2025-08-01 20:58:40,274] [INFO] django.server: "GET /chat/history/1754053044998/ HTTP/1.1" 200 1666
+[2025-08-01 20:59:13,045] [INFO] django.server: "GET /chat/history/1754053091134/ HTTP/1.1" 200 296
+[2025-08-01 20:59:13,219] [INFO] django.server: "GET /chat/history/1754053091134/ HTTP/1.1" 200 296
+[2025-08-01 20:59:15,349] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 171
+[2025-08-01 20:59:21,597] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 1398
+[2025-08-01 20:59:21,603] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 20:59:30,376] [INFO] django.server: "GET /chat/history/1754053044998/ HTTP/1.1" 200 1666
+[2025-08-01 20:59:31,314] [INFO] django.server: "GET /chat/history/1754053091134/ HTTP/1.1" 200 1829
+[2025-08-01 20:59:34,035] [INFO] django.server: "GET /chat/history/1754053044998/ HTTP/1.1" 200 1666
+[2025-08-01 20:59:35,410] [INFO] django.server: "GET /chat/history/1754053091134/ HTTP/1.1" 200 1829
+[2025-08-01 20:59:57,284] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 20:59:57,491] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1118
+[2025-08-01 21:00:06,134] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:00:14,321] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2190
+[2025-08-01 21:00:14,333] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:00:28,775] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:00:29,005] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1485
+[2025-08-01 21:00:34,362] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:00:39,919] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 1194
+[2025-08-01 21:00:39,943] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:00:48,762] [INFO] django.server: "GET /chat/history/1754053044998/ HTTP/1.1" 200 1666
+[2025-08-01 21:00:49,375] [INFO] django.server: "GET /chat/history/1754053091134/ HTTP/1.1" 200 1829
+[2025-08-01 21:00:51,343] [INFO] django.server: "GET /chat/history/1754053044998/ HTTP/1.1" 200 1666
+[2025-08-01 21:00:52,496] [INFO] django.server: "GET /chat/history/1754053228767/ HTTP/1.1" 200 1607
+[2025-08-01 21:00:54,252] [INFO] django.server: "GET /chat/history/1754053044998/ HTTP/1.1" 200 1666
+[2025-08-01 21:01:54,283] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:01:54,528] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1852
+[2025-08-01 21:01:56,334] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 171
+[2025-08-01 21:02:02,679] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 1506
+[2025-08-01 21:02:02,682] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:02:13,478] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:02:13,691] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2219
+[2025-08-01 21:02:14,770] [INFO] django.server: "GET /chat/history/1754053333470/ HTTP/1.1" 200 296
+[2025-08-01 21:02:15,228] [INFO] django.server: "GET /chat/history/1754053314271/ HTTP/1.1" 200 2003
+[2025-08-01 21:02:16,338] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:02:16,547] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2553
+[2025-08-01 21:02:20,584] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:02:20,597] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2887
+[2025-08-01 21:02:20,648] [INFO] django.server: "DELETE /chat/history/1754053336328/ HTTP/1.1" 200 153
+[2025-08-01 21:02:23,529] [INFO] django.server: "DELETE /chat/history/1754053340577/ HTTP/1.1" 200 153
+[2025-08-01 21:02:23,529] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:02:23,533] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2553
+[2025-08-01 21:02:25,292] [INFO] django.server: "DELETE /chat/history/1754053343518/ HTTP/1.1" 200 153
+[2025-08-01 21:02:25,292] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:02:25,301] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2553
+[2025-08-01 21:02:25,965] [INFO] django.server: "GET /chat/history/1754053345280/ HTTP/1.1" 200 296
+[2025-08-01 21:02:26,430] [INFO] django.server: "GET /chat/history/1754053345280/ HTTP/1.1" 200 296
+[2025-08-01 21:02:26,614] [INFO] django.server: "GET /chat/history/1754053345280/ HTTP/1.1" 200 296
+[2025-08-01 21:02:26,777] [INFO] django.server: "GET /chat/history/1754053345280/ HTTP/1.1" 200 296
+[2025-08-01 21:02:27,736] [INFO] django.server: "GET /chat/history/1754053333470/ HTTP/1.1" 200 296
+[2025-08-01 21:02:29,303] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 21:02:29,516] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2553
+[2025-08-01 21:02:31,226] [INFO] django.server: "DELETE /chat/history/1754053345280/ HTTP/1.1" 200 153
+[2025-08-01 21:02:32,822] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 21:02:32,994] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2219
+[2025-08-01 21:02:34,974] [INFO] django.server: "DELETE /chat/history/1754053333470/ HTTP/1.1" 200 153
+[2025-08-01 21:02:35,836] [INFO] django.server: "GET /chat/history/1754053314271/ HTTP/1.1" 200 2003
+[2025-08-01 21:02:37,315] [INFO] django.server: "GET /chat/history/1754053228767/ HTTP/1.1" 200 1607
+[2025-08-01 21:02:37,746] [INFO] django.server: "GET /chat/history/1754053314271/ HTTP/1.1" 200 2003
+[2025-08-01 21:02:38,470] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:02:38,682] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2219
+[2025-08-01 21:02:39,663] [INFO] django.server: "GET /chat/history/1754053358457/ HTTP/1.1" 200 296
+[2025-08-01 21:02:41,726] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:02:47,317] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 1723
+[2025-08-01 21:02:47,329] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:07:12,900] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-08-01 21:07:14,050] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 21:09:22,048] [INFO] django.utils.autoreload: C:\myproject\myproject\feedback_graph.py changed, reloading.
+[2025-08-01 21:09:22,576] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 21:09:25,612] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 21:09:28,029] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 21:12:53,680] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 21:12:53,758] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:13:04,641] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2461
+[2025-08-01 21:13:04,662] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:13:13,972] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 21:13:21,470] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:13:21,680] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 751
+[2025-08-01 21:13:24,046] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:13:30,181] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2048
+[2025-08-01 21:13:30,192] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:13:51,272] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 21:13:51,506] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 21:13:52,490] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 21:13:52,693] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 384
+[2025-08-01 21:14:10,910] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:14:18,357] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 1534
+[2025-08-01 21:14:18,377] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:14:25,465] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:14:25,678] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 751
+[2025-08-01 21:14:27,614] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 171
+[2025-08-01 21:14:36,465] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2417
+[2025-08-01 21:14:36,486] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:14:44,848] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 21:14:44,848] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:14:45,058] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1118
+[2025-08-01 21:14:47,347] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:14:57,760] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2232
+[2025-08-01 21:14:57,770] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:15:36,018] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 21:15:36,307] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-01 21:15:37,304] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-01 21:15:37,513] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 384
+[2025-08-01 21:15:47,604] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:15:53,279] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 956
+[2025-08-01 21:15:53,295] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:16:01,374] [INFO] django.server: "POST /api/feedback/ HTTP/1.1" 200 204
+[2025-08-01 21:16:14,243] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:16:14,451] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 751
+[2025-08-01 21:16:15,256] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:16:21,999] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 296
+[2025-08-01 21:16:23,875] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 21:16:29,428] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 956
+[2025-08-01 21:16:29,434] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:16:34,162] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:16:34,371] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1118
+[2025-08-01 21:16:35,593] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 296
+[2025-08-01 21:16:51,611] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 171
+[2025-08-01 21:16:58,288] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 1338
+[2025-08-01 21:16:58,309] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:19:57,892] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:20:00,155] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:20:01,684] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:20:02,610] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 21:20:06,138] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:20:06,766] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:20:07,682] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:20:08,150] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 21:20:11,083] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:20:12,558] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:20:15,609] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 21:20:16,660] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:20:17,508] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 21:23:21,766] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:25:05,889] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:25:08,808] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:25:09,298] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:25:09,905] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:25:10,275] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:25:11,298] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:25:18,702] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:25:28,971] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 21:57:43,797] [INFO] django.utils.autoreload: C:\myproject\graph_rag_agent\multi_agent.py changed, reloading.
+[2025-08-01 21:57:44,682] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 21:57:49,314] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 21:57:51,901] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1151
+[2025-08-01 21:57:53,045] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 1489
+[2025-08-01 21:57:57,433] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 373
+[2025-08-01 21:57:57,446] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 21:58:40,880] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-01 21:58:42,552] [INFO] django.server: "GET / HTTP/1.1" 200 10923
+[2025-08-01 21:58:44,959] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1151
+[2025-08-01 21:58:51,111] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:58:59,289] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-01 21:58:59,499] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1485
+[2025-08-01 21:59:01,011] [INFO] django.server: "GET /chat/history/1754056739275/ HTTP/1.1" 200 296
+[2025-08-01 21:59:03,556] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 1405
+[2025-08-01 21:59:12,940] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 956
+[2025-08-01 21:59:12,952] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-01 22:01:12,455] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 22:01:13,470] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-01 22:01:15,666] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-01 22:01:16,869] [INFO] django.server: "GET /chat/history/1754056739275/ HTTP/1.1" 200 296
+[2025-08-01 22:01:18,027] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-01 22:01:28,379] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-01 22:01:30,681] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 22:01:32,440] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-01 22:01:32,955] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-01 22:04:03,969] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-01 22:04:23,278] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 22:04:24,051] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-01 22:04:39,067] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-01 22:05:14,754] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 22:06:15,918] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-01 22:06:17,176] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 1739
+[2025-08-01 22:16:46,423] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-01 22:24:27,623] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-15 18:59:18,202] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 18:59:23,762] [INFO] django.server: "GET / HTTP/1.1" 301 0
+[2025-08-15 18:59:23,770] [INFO] django.server: code 400, message Bad request version ('QvA')
+[2025-08-15 18:59:23,771] [ERROR] django.server: You're accessing the development server over HTTPS, but it only supports HTTP.
+[2025-08-15 18:59:23,840] [ERROR] django.server: You're accessing the development server over HTTPS, but it only supports HTTP.
+[2025-08-15 18:59:32,590] [ERROR] django.server: You're accessing the development server over HTTPS, but it only supports HTTP.
+[2025-08-15 18:59:32,592] [ERROR] django.server: You're accessing the development server over HTTPS, but it only supports HTTP.
+[2025-08-15 18:59:32,594] [INFO] django.server: code 400, message Bad request version ('\x02h2\x08http/1.1\x00')
+[2025-08-15 18:59:32,594] [ERROR] django.server: You're accessing the development server over HTTPS, but it only supports HTTP.
+[2025-08-15 18:59:32,598] [ERROR] django.server: You're accessing the development server over HTTPS, but it only supports HTTP.
+[2025-08-15 19:00:54,162] [INFO] django.utils.autoreload: C:\myproject\myproject\settings.py changed, reloading.
+[2025-08-15 19:02:40,216] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:02:43,066] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:02:43,098] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:02:43,099] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:02:43,103] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:02:43,104] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:02:43,104] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:02:43,105] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:02:43,163] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:02:43,163] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:02:43,171] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:02:43,171] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:02:43,461] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:02:43,463] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:02:43,569] [WARNING] django.request: Not Found: /static/manifest.json
+[2025-08-15 19:02:43,570] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:02:43,570] [WARNING] django.server: "GET /static/manifest.json HTTP/1.1" 404 5064
+[2025-08-15 19:02:43,570] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:02:43,575] [WARNING] django.request: Not Found: /static/images/favicon-16x16.png
+[2025-08-15 19:02:43,576] [WARNING] django.server: "GET /static/images/favicon-16x16.png HTTP/1.1" 404 5064
+[2025-08-15 19:03:19,221] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:03:19,690] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:04:24,319] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:04:28,007] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:04:28,497] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:04:28,497] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:05:42,069] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:05:42,123] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:05:42,124] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:05:42,800] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:05:42,839] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:05:42,840] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:05:43,020] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:05:43,054] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:05:43,054] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:05:51,724] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:05:53,531] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:05:53,693] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:05:53,693] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:05:55,016] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:05:55,056] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:05:55,056] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:05:58,583] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:05:58,622] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:05:58,622] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:08:00,168] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:08:00,659] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:08:14,857] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:08:16,858] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:08:17,524] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:08:17,524] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:08:19,124] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:08:19,166] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:08:19,167] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:08:20,228] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:08:20,266] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:08:20,266] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:08:20,643] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:08:20,684] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:08:20,685] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:08:20,839] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:08:20,878] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:08:20,879] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:09:16,316] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:09:16,776] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:09:44,264] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:09:46,681] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:09:46,851] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:09:46,852] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:09:49,200] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:09:49,238] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:09:49,238] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:09:50,257] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:09:50,293] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:09:50,296] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:09:50,610] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:09:50,648] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:09:50,648] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:09:50,823] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:09:50,860] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:09:50,861] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:09:51,033] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:09:51,075] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:09:51,075] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:10:43,713] [INFO] django.utils.autoreload: C:\myproject\myproject\settings.py changed, reloading.
+[2025-08-15 19:10:44,220] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:11:08,962] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:11:10,588] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:11:10,826] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:11:10,826] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:11:11,811] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:11:11,851] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:11:11,851] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:11:12,479] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:11:12,532] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:11:12,533] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:11:12,682] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:11:12,721] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:11:12,721] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:11:12,870] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:11:12,911] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:11:12,911] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:11:50,225] [WARNING] django.request: Not Found: /static/test.txt
+[2025-08-15 19:11:50,225] [WARNING] django.server: "GET /static/test.txt HTTP/1.1" 404 5064
+[2025-08-15 19:11:50,368] [WARNING] django.request: Not Found: /favicon.ico
+[2025-08-15 19:11:50,368] [WARNING] django.server: "GET /favicon.ico HTTP/1.1" 404 5064
+[2025-08-15 19:13:11,155] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:13:13,106] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:13:13,215] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:13:13,216] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:15,891] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:13:15,908] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:13:15,909] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:13:15,916] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:13:15,917] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:13:15,917] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:15,919] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:15,921] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:13:15,922] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:13:15,923] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:15,923] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,066] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:13:16,066] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,189] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:13:16,189] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,644] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:13:16,670] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:13:16,670] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,673] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:13:16,675] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:13:16,675] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:13:16,675] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,676] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:13:16,677] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,677] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,677] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,809] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:13:16,809] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,845] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:13:16,862] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:13:16,863] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,870] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:13:16,870] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:13:16,871] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,871] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,871] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:13:16,872] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:13:16,873] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,873] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:13:16,994] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:13:16,995] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,033] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:13:17,054] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:13:17,055] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,055] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:13:17,055] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:13:17,055] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,055] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,063] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:13:17,064] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:13:17,064] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,064] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,185] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:13:17,191] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,285] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:13:17,285] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,716] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:13:17,739] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:13:17,740] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,741] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:13:17,741] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:13:17,741] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,741] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,741] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:13:17,741] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:13:17,741] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,741] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,891] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:13:17,891] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:13:17,901] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:13:17,902] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:13:23,959] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:13:23,959] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:14:31,152] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:14:31,627] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:14:37,597] [INFO] django.utils.autoreload: C:\myproject\myproject\settings.py changed, reloading.
+[2025-08-15 19:14:38,098] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:14:48,964] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:14:49,374] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:14:49,374] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:14:50,345] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:14:50,364] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:14:50,365] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:14:50,370] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:14:50,370] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:14:50,372] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:14:50,372] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:14:50,373] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:14:50,374] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:14:50,375] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:14:50,375] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:14:50,536] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:14:50,536] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:14:50,661] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:14:50,662] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:15:03,388] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:15:05,062] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:15:05,275] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:15:05,275] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:06,345] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:15:06,368] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:15:06,369] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:15:06,370] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:15:06,370] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:06,371] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:15:06,372] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:06,377] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:15:06,379] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:15:06,379] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:06,379] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:15:06,479] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:15:06,480] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:06,589] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:15:06,590] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,387] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:15:07,405] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:15:07,406] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,413] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:15:07,413] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:15:07,414] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,415] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:15:07,415] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,416] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,418] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:15:07,418] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,544] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:15:07,545] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,551] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:15:07,568] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:15:07,569] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:15:07,570] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:15:07,570] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,571] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,571] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,573] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:15:07,574] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,575] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:15:07,575] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,690] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:15:07,707] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:15:07,707] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:15:07,707] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:15:07,713] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:15:07,713] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,713] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,715] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,716] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,717] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:15:07,717] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,843] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:15:07,844] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:15:07,933] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:15:07,933] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:15:21,753] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:15:21,753] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:16:00,767] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:16:01,328] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:16:18,416] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:16:20,047] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:16:20,228] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:16:20,229] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:16:54,204] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:16:54,690] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:17:04,063] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:04,168] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:04,168] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:05,525] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:05,552] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:17:05,552] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:17:05,554] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:17:05,554] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:05,556] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:17:05,557] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:17:05,557] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:05,558] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:05,560] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:17:05,561] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:17:05,741] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:05,741] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:05,820] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:17:05,821] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,308] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:06,325] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:17:06,325] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,333] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:17:06,335] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:17:06,335] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:17:06,335] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:17:06,336] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,337] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,337] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,338] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,406] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:06,407] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,467] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:06,494] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:17:06,495] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,496] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:17:06,496] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:17:06,497] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,497] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,503] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:17:06,504] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,505] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:17:06,506] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,634] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:06,635] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:06,752] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:17:06,753] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:17:16,134] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:17:18,643] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:18,741] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:18,741] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:19,926] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:19,966] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:19,966] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:20,813] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:20,855] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:20,855] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:21,407] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:21,449] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:21,449] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:21,583] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:21,622] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:21,623] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:21,765] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:21,803] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:21,803] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:54,184] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:17:54,205] [WARNING] django.request: Not Found: /static/css/styles.css
+[2025-08-15 19:17:54,205] [WARNING] django.server: "GET /static/css/styles.css HTTP/1.1" 404 5064
+[2025-08-15 19:17:54,205] [WARNING] django.request: Not Found: /static/js/lib/marked.min.js
+[2025-08-15 19:17:54,212] [WARNING] django.request: Not Found: /static/js/app-core.js
+[2025-08-15 19:17:54,212] [WARNING] django.server: "GET /static/js/app-core.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:54,213] [WARNING] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:54,215] [WARNING] django.request: Not Found: /static/js/loader.js
+[2025-08-15 19:17:54,216] [WARNING] django.request: Not Found: /static/images/bot.png
+[2025-08-15 19:17:54,217] [WARNING] django.server: "GET /static/js/loader.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:54,217] [WARNING] django.server: "GET /static/images/bot.png HTTP/1.1" 404 5064
+[2025-08-15 19:17:54,369] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:17:54,369] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:17:54,539] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:17:54,539] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:17:56,523] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:17:56,530] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:18:01,290] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:18:01,812] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:18:08,835] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:18:09,357] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:18:15,348] [INFO] django.utils.autoreload: C:\myproject\myproject\settings.py changed, reloading.
+[2025-08-15 19:18:15,837] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:18:30,859] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:18:33,466] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:18:33,635] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:18:33,635] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:18:34,545] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:18:34,583] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:18:34,583] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:18:35,001] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:18:35,039] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:18:35,039] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:18:35,189] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:18:35,231] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:18:35,231] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:18:35,364] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:18:35,401] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:18:35,401] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:18:35,545] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:18:35,586] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:18:35,587] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:18:35,735] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:18:35,778] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:18:35,778] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:18:48,729] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:18:48,729] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:20:19,600] [INFO] django.utils.autoreload: C:\myproject\myproject\settings.py changed, reloading.
+[2025-08-15 19:20:20,102] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:21:02,602] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:21:04,656] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:21:05,193] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:21:05,194] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:21:06,646] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:21:06,687] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:21:06,687] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:21:07,110] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:21:07,150] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:21:07,151] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:21:08,678] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:21:08,678] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:21:27,621] [WARNING] django.request: Not Found: /favicon.ico
+[2025-08-15 19:21:27,621] [WARNING] django.server: "GET /favicon.ico HTTP/1.1" 404 5064
+[2025-08-15 19:21:47,756] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:21:48,231] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:22:31,004] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:22:31,004] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:23:05,267] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:23:29,486] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:23:29,693] [WARNING] django.request: Not Found: /static/sw.js
+[2025-08-15 19:23:29,694] [WARNING] django.server: "GET /static/sw.js HTTP/1.1" 404 5064
+[2025-08-15 19:23:41,196] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:23:41,196] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:23:56,456] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:23:56,457] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:23:58,014] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:23:58,015] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:26:15,326] [INFO] django.utils.autoreload: C:\myproject\myproject\settings.py changed, reloading.
+[2025-08-15 19:26:15,884] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:26:29,995] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:26:29,995] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:26:31,916] [WARNING] django.request: Not Found: /static/test.txt
+[2025-08-15 19:26:31,919] [WARNING] django.server: "GET /static/test.txt HTTP/1.1" 404 5064
+[2025-08-15 19:26:31,944] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:26:31,944] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:26:32,004] [WARNING] django.request: Not Found: /favicon.ico
+[2025-08-15 19:26:32,005] [WARNING] django.server: "GET /favicon.ico HTTP/1.1" 404 5064
+[2025-08-15 19:27:36,990] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:27:37,518] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:27:55,204] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:27:59,284] [INFO] django.server: "GET /static/test.txt HTTP/1.1" 200 9
+[2025-08-15 19:27:59,321] [WARNING] django.request: Not Found: /favicon.ico
+[2025-08-15 19:27:59,322] [WARNING] django.server: "GET /favicon.ico HTTP/1.1" 404 5064
+[2025-08-15 19:28:02,093] [INFO] django.server: "GET /static/test.txt HTTP/1.1" 304 0
+[2025-08-15 19:28:22,936] [INFO] django.utils.autoreload: C:\myproject\myproject\settings.py changed, reloading.
+[2025-08-15 19:28:23,439] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:28:30,444] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:28:30,927] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:28:53,489] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:28:55,054] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:28:55,423] [INFO] django.server: "GET /static/sw.js HTTP/1.1" 200 382
+[2025-08-15 19:29:00,604] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:29:01,490] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:29:01,706] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:29:08,151] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:29:08,152] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:29:45,745] [INFO] django.utils.autoreload: C:\myproject\myproject\urls.py changed, reloading.
+[2025-08-15 19:29:46,270] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:30:05,517] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:30:07,328] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:30:07,354] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 41589
+[2025-08-15 19:30:07,356] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 19:30:07,359] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 19:30:07,360] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 19:30:07,361] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 19:30:07,542] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 19:30:07,542] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 19:30:07,542] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 19:30:07,542] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 19:30:07,548] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 19:30:07,548] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 19:30:07,548] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 19:30:07,552] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 19:30:07,552] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 19:30:07,561] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 19:30:07,562] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 19:30:07,562] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 19:30:07,563] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 19:30:07,563] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 19:30:07,564] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 19:30:07,792] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:30:07,792] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:30:10,015] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1485
+[2025-08-15 19:30:29,257] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-15 19:30:29,594] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-15 19:30:37,568] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 524
+[2025-08-15 19:30:40,323] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-15 19:30:41,240] [INFO] django.server: "GET /chat/history/1754056739275/ HTTP/1.1" 200 296
+[2025-08-15 19:30:41,754] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-15 19:31:09,488] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 3282
+[2025-08-15 19:31:09,511] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-15 19:33:25,447] [INFO] django.server: "GET / HTTP/1.1" 200 13376
+[2025-08-15 19:33:25,485] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 41589
+[2025-08-15 19:33:25,494] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 19:33:25,494] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 19:33:25,529] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 19:33:25,529] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 19:33:25,647] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 19:33:25,647] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 19:33:25,654] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 19:33:25,654] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 19:33:25,659] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 19:33:25,660] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 19:33:25,660] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 19:33:25,665] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 19:33:25,665] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 19:33:25,673] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 19:33:25,674] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 19:33:25,674] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 19:33:25,675] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 19:33:25,675] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 19:33:25,675] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 19:33:25,795] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:33:25,853] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:33:25,854] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:33:54,631] [INFO] django.utils.autoreload: C:\myproject\myproject\views.py changed, reloading.
+[2025-08-15 19:33:55,634] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:36:07,085] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:36:08,919] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:36:11,427] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:36:26,429] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:36:28,064] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:36:30,666] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:36:33,296] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:36:33,297] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:37:16,407] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:37:18,215] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:37:18,241] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 42078
+[2025-08-15 19:37:18,253] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 19:37:18,253] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 19:37:18,253] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:37:18,255] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:37:18,301] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 19:37:18,301] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 19:37:18,425] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 19:37:18,425] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 19:37:18,426] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 19:37:18,427] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 19:37:18,440] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 19:37:18,441] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 19:37:18,441] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 19:37:18,449] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 19:37:18,450] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 19:37:18,488] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 19:37:18,488] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 19:37:18,489] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 19:37:18,489] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 19:37:18,489] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 19:37:18,490] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 19:37:18,635] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:37:18,697] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:37:18,697] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:37:19,813] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 19:37:20,513] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:37:52,610] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:37:52,639] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:37:52,640] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:37:52,925] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:41:15,086] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:41:16,747] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:41:19,352] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:41:23,285] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:41:23,307] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 43795
+[2025-08-15 19:41:23,310] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 19:41:23,310] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 19:41:23,312] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 19:41:23,320] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 19:41:23,469] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 19:41:23,474] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 19:41:23,474] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 19:41:23,475] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 19:41:23,483] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 19:41:23,483] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 19:41:23,484] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 19:41:23,494] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 19:41:23,494] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 19:41:23,503] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 19:41:23,503] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 19:41:23,503] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 19:41:23,503] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 19:41:23,504] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 19:41:23,504] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 19:41:23,618] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:41:23,863] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:41:23,863] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:41:28,687] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:41:32,132] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-15 19:41:32,696] [INFO] django.server: "GET /chat/history/1754056739275/ HTTP/1.1" 200 296
+[2025-08-15 19:41:34,994] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-15 19:41:35,780] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:41:36,747] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 19:41:37,321] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:41:39,496] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-15 19:41:40,635] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 19:41:41,209] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:41:41,615] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-15 19:41:45,425] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:41:45,425] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:41:53,397] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:41:53,424] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:41:53,424] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:41:53,425] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 43795
+[2025-08-15 19:41:53,427] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 19:41:53,428] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 19:41:53,470] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 19:41:53,470] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 19:41:53,661] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 19:41:53,661] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 19:41:53,661] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 19:41:53,662] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 19:41:53,673] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 19:41:53,674] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 19:41:53,674] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 19:41:53,681] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 19:41:53,681] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 19:41:53,693] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 19:41:53,693] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 19:41:53,693] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 19:41:53,693] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 19:41:53,694] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 19:41:53,694] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 19:41:53,830] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:41:53,911] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:41:53,911] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:43:13,172] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 19:44:06,275] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:44:06,830] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-15 19:44:09,024] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-15 19:44:10,136] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-15 19:44:10,715] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:44:11,491] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 19:46:45,957] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:46:48,832] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:46:51,417] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:46:53,419] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:46:53,441] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 45694
+[2025-08-15 19:46:53,447] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 19:46:53,448] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 19:46:53,450] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 19:46:53,452] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 19:46:53,597] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 19:46:53,597] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 19:46:53,598] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 19:46:53,598] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 19:46:53,605] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 19:46:53,605] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 19:46:53,605] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 19:46:53,620] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 19:46:53,620] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 19:46:53,630] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 19:46:53,631] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 19:46:53,631] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 19:46:53,631] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 19:46:53,632] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 19:46:53,632] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 19:46:53,775] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:46:53,929] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:46:53,929] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:47:08,128] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:47:09,745] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:47:12,195] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:47:14,686] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:47:14,711] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 19:47:14,713] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 45694
+[2025-08-15 19:47:14,713] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 19:47:14,715] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 19:47:14,715] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 19:47:14,885] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 19:47:14,887] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 19:47:14,889] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 19:47:14,890] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 19:47:14,910] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 19:47:14,910] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 19:47:14,910] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 19:47:14,920] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 19:47:14,920] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 19:47:14,933] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 19:47:14,933] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 19:47:14,934] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 19:47:14,934] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 19:47:14,935] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 19:47:14,935] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 19:47:15,058] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 1862
+[2025-08-15 19:47:15,243] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:47:15,244] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:47:20,714] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 19:47:24,590] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 139
+[2025-08-15 19:47:24,801] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2196
+[2025-08-15 19:47:27,218] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-15 19:47:39,001] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 321
+[2025-08-15 19:47:39,012] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-15 19:47:51,843] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:47:51,843] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:51:33,021] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:51:34,755] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:51:36,147] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:51:36,173] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 19:51:36,175] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 46062
+[2025-08-15 19:51:36,176] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 19:51:36,177] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 19:51:36,183] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 19:51:36,333] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 19:51:36,333] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 19:51:36,333] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 19:51:36,333] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 19:51:36,344] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 19:51:36,344] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 19:51:36,344] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 19:51:36,350] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 19:51:36,350] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 19:51:36,360] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 19:51:36,360] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 19:51:36,361] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 19:51:36,361] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 19:51:36,361] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 19:51:36,361] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 19:51:36,546] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 19:51:36,547] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 19:51:37,439] [INFO] django.server: - Broken pipe from ('127.0.0.1', 57964)
+[2025-08-15 19:51:38,528] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 19:51:43,534] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 19:51:45,505] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 19:51:46,313] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 19:51:47,088] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 19:52:39,114] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:52:39,114] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 19:54:33,119] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 19:54:34,879] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 19:54:37,381] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 19:54:40,148] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 19:57:10,013] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 19:57:10,014] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 20:01:32,376] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:01:33,972] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:01:36,043] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:01:36,542] [INFO] django.server: - Broken pipe from ('127.0.0.1', 58627)
+[2025-08-15 20:01:36,860] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:01:37,034] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:01:37,209] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:01:37,376] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:01:38,150] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:01:38,274] [INFO] django.server: - Broken pipe from ('127.0.0.1', 58628)
+[2025-08-15 20:01:39,388] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:01:39,558] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:01:40,422] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:01:41,457] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:01:41,476] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 46539
+[2025-08-15 20:01:41,479] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:01:41,479] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:01:41,484] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:01:41,485] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:01:41,609] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:01:41,610] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:01:41,610] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:01:41,611] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:01:41,617] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:01:41,617] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:01:41,617] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:01:41,622] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:01:41,623] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:01:41,637] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:01:41,639] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:01:41,639] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:01:41,640] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:01:41,640] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:01:41,640] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:01:41,760] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:01:41,878] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:01:41,879] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:01:42,552] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:01:51,999] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 20:01:52,000] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 20:01:58,270] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:01:59,058] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 20:02:02,841] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:04:35,099] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:04:36,272] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 20:04:41,492] [INFO] django.server: "GET /chat/history/1754056739275/ HTTP/1.1" 200 296
+[2025-08-15 20:04:45,231] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-15 20:07:13,406] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:07:15,057] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:07:17,678] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:07:21,909] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:07:24,557] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:07:24,584] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 47283
+[2025-08-15 20:07:24,590] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:07:24,591] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:07:24,591] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:07:24,592] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:07:24,720] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:07:24,721] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:07:24,721] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:07:24,722] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:07:24,736] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:07:24,736] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:07:24,737] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:07:24,744] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:07:24,745] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:07:24,755] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:07:24,756] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:07:24,756] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:07:24,756] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:07:24,757] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:07:24,757] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:07:24,873] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:07:24,990] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:07:24,990] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:07:25,724] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:08:07,521] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:08:09,170] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:08:11,616] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:08:11,640] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 48249
+[2025-08-15 20:08:11,648] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:08:11,649] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:08:11,650] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:08:11,650] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:08:11,744] [INFO] django.server: - Broken pipe from ('127.0.0.1', 59060)
+[2025-08-15 20:08:11,777] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:08:11,777] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:08:11,777] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:08:11,778] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:08:11,790] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:08:11,790] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:08:11,790] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:08:11,797] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:08:11,797] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:08:11,808] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:08:11,809] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:08:11,809] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:08:11,809] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:08:11,811] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:08:11,811] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:08:11,934] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:08:12,060] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:08:12,060] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:08:12,944] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:08:17,898] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 20:08:17,899] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 20:10:29,574] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:10:31,125] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:10:33,637] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:10:33,837] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:10:33,860] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 48794
+[2025-08-15 20:10:33,867] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:10:33,868] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:10:33,875] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:10:33,875] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:10:34,018] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:10:34,018] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:10:34,019] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:10:34,019] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:10:34,024] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:10:34,024] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:10:34,024] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:10:34,031] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:10:34,031] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:10:34,041] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:10:34,041] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:10:34,042] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:10:34,042] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:10:34,042] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:10:34,045] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:10:34,161] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:10:34,297] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:10:34,298] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:10:35,858] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:10:58,575] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:11:00,201] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:11:01,621] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:11:01,646] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 48791
+[2025-08-15 20:11:01,653] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:11:01,654] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:11:01,655] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:11:01,656] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:11:01,729] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:11:01,730] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:11:01,730] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:11:01,730] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:11:01,735] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:11:01,735] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:11:01,736] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:11:01,741] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:11:01,741] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:11:01,753] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:11:01,753] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:11:01,753] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:11:01,754] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:11:01,754] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:11:01,755] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:11:02,124] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:11:02,125] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:11:02,809] [INFO] django.server: - Broken pipe from ('127.0.0.1', 59272)
+[2025-08-15 20:11:03,917] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:11:05,319] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:12:05,282] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:12:06,801] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:12:07,995] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:12:08,014] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49039
+[2025-08-15 20:12:08,022] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:12:08,024] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:12:08,025] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:12:08,029] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:12:08,153] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:12:08,158] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:12:08,159] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:12:08,159] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:12:08,166] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:12:08,167] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:12:08,168] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:12:08,172] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:12:08,172] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:12:08,183] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:12:08,184] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:12:08,184] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:12:08,185] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:12:08,185] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:12:08,189] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:12:08,463] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:12:08,464] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:12:09,288] [INFO] django.server: - Broken pipe from ('127.0.0.1', 59381)
+[2025-08-15 20:12:10,341] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:12:11,095] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:12:13,525] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:12:13,551] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49039
+[2025-08-15 20:12:13,555] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:12:13,557] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:12:13,556] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:12:13,556] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:12:13,633] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:12:13,634] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:12:13,634] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:12:13,634] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:12:13,644] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:12:13,644] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:12:13,644] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:12:13,655] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:12:13,655] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:12:13,663] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:12:13,664] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:12:13,664] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:12:13,664] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:12:13,664] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:12:13,665] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:12:13,781] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:12:13,892] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:12:13,893] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:12:15,344] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:13:09,422] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:13:11,097] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:13:13,715] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:13:14,794] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:13:18,990] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:13:19,021] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:13:19,022] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49437
+[2025-08-15 20:13:19,022] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:13:19,026] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:13:19,026] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:13:19,132] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:13:19,132] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:13:19,132] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:13:19,133] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:13:19,138] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:13:19,139] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:13:19,140] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:13:19,145] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:13:19,145] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:13:19,170] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:13:19,170] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:13:19,170] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:13:19,170] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:13:19,171] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:13:19,171] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:13:19,289] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:13:19,404] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:13:19,405] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:13:19,834] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:13:19,855] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49437
+[2025-08-15 20:13:19,858] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:13:19,859] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:13:19,860] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:13:19,865] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:13:20,000] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:13:20,021] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49437
+[2025-08-15 20:13:20,024] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:13:20,025] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:13:20,031] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:13:20,033] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:13:20,102] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:13:20,105] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:13:20,105] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:13:20,105] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:13:20,111] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:13:20,111] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:13:20,111] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:13:20,117] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:13:20,117] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:13:20,131] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:13:20,131] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:13:20,131] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:13:20,132] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:13:20,133] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:13:20,133] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:13:20,261] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:13:20,289] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:13:20,289] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:13:21,555] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:13:31,395] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 20:13:31,396] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 20:14:26,278] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:14:27,943] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:14:29,222] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:14:29,247] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49620
+[2025-08-15 20:14:29,253] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:14:29,254] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:14:29,256] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:14:29,257] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:14:29,401] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:14:29,402] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:14:29,402] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:14:29,402] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:14:29,413] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:14:29,413] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:14:29,413] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:14:29,420] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:14:29,420] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:14:29,429] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:14:29,430] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:14:29,431] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:14:29,432] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:14:29,432] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:14:29,434] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:14:29,630] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:14:29,631] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:14:30,614] [INFO] django.server: - Broken pipe from ('127.0.0.1', 59602)
+[2025-08-15 20:14:31,590] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:14:32,489] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:15:00,901] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:15:01,664] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 20:15:03,060] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:15:03,462] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:15:10,433] [INFO] django.server: "GET /chat/history/1754054194148/ HTTP/1.1" 200 2183
+[2025-08-15 20:15:14,885] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-15 20:15:15,072] [INFO] django.server: "GET /chat/history/1754054174232/ HTTP/1.1" 200 2516
+[2025-08-15 20:15:15,792] [INFO] django.server: "GET /chat/history/1754056739275/ HTTP/1.1" 200 296
+[2025-08-15 20:15:17,367] [INFO] django.server: "GET /chat/history/1754054137280/ HTTP/1.1" 200 2091
+[2025-08-15 20:15:19,081] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:15:24,165] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:15:24,191] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49620
+[2025-08-15 20:15:24,196] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:15:24,196] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:15:24,233] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:15:24,234] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:15:24,353] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:15:24,356] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:15:24,356] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:15:24,356] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:15:24,394] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:15:24,394] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:15:24,394] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:15:24,401] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:15:24,401] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:15:24,412] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:15:24,412] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:15:24,413] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:15:24,413] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:15:24,413] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:15:24,414] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:15:24,531] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:15:24,555] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:15:24,555] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:15:25,923] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:15:26,653] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:15:27,761] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:15:27,783] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49620
+[2025-08-15 20:15:27,791] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:15:27,791] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:15:27,793] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:15:27,794] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:15:27,861] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:15:27,861] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:15:27,862] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:15:27,862] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:15:27,868] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:15:27,868] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:15:27,868] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:15:27,874] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:15:27,875] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:15:27,884] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:15:27,885] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:15:27,886] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:15:27,886] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:15:27,886] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:15:27,885] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:15:28,018] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2229
+[2025-08-15 20:15:28,123] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:15:28,123] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:15:28,862] [INFO] django.server: "POST /api/conversations/ HTTP/1.1" 200 149
+[2025-08-15 20:15:28,877] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 204
+[2025-08-15 20:16:01,779] [INFO] django.server: "POST /chat/ HTTP/1.1" 200 2962
+[2025-08-15 20:16:01,790] [INFO] django.server: "POST /api/messages/ HTTP/1.1" 200 188
+[2025-08-15 20:22:45,156] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:22:47,591] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:22:56,137] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-15 20:22:57,993] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:22:58,017] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49614
+[2025-08-15 20:22:58,019] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:22:58,019] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:22:58,026] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:22:58,026] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:22:58,174] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:22:58,174] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:22:58,174] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:22:58,174] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:22:58,183] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:22:58,183] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:22:58,183] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:22:58,191] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:22:58,191] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:22:58,201] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:22:58,201] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:22:58,202] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:22:58,202] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:22:58,202] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:22:58,202] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:22:58,338] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:22:58,338] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:23:02,425] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 42
+[2025-08-15 20:27:58,094] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:28:00,026] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:28:02,967] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:28:04,079] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:28:07,828] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:28:07,854] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49187
+[2025-08-15 20:28:07,856] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:28:07,858] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:28:07,863] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:28:07,863] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:28:08,016] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:28:08,016] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:28:08,017] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:28:08,017] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:28:08,023] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:28:08,023] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:28:08,023] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:28:08,030] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:28:08,030] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:28:08,040] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:28:08,041] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:28:08,042] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:28:08,042] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:28:08,043] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:28:08,043] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:28:08,175] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:28:08,231] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:28:08,232] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:28:09,562] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:28:13,802] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:28:14,706] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:28:15,705] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:28:34,985] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:30:32,126] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:30:36,856] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:30:38,634] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:30:40,765] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:30:40,785] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 47955
+[2025-08-15 20:30:40,793] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:30:40,794] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:30:40,794] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:30:40,794] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:30:40,963] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:30:40,964] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:30:40,964] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:30:40,964] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:30:40,970] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:30:40,971] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:30:40,972] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:30:40,978] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:30:40,978] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:30:40,988] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:30:40,989] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:30:40,990] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:30:40,990] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:30:40,991] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:30:40,992] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:30:41,099] [INFO] django.server: - Broken pipe from ('127.0.0.1', 60756)
+[2025-08-15 20:30:41,120] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:30:41,184] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:30:41,184] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:30:41,333] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:30:41,354] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 47955
+[2025-08-15 20:30:41,357] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:30:41,358] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:30:41,359] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:30:41,361] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:30:41,458] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:30:41,458] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:30:41,458] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:30:41,458] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:30:41,465] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:30:41,465] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:30:41,465] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:30:41,470] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:30:41,471] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:30:41,481] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:30:41,481] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:30:41,482] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:30:41,482] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:30:41,482] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:30:41,482] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:30:41,608] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:30:41,627] [INFO] django.server: - Broken pipe from ('127.0.0.1', 60783)
+[2025-08-15 20:30:41,633] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 47955
+[2025-08-15 20:30:41,640] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:30:41,641] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:30:41,641] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:30:41,642] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:30:41,790] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:30:41,790] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:30:41,791] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:30:41,791] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:30:41,806] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:30:41,806] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:30:41,806] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:30:41,814] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:30:41,814] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:30:41,824] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:30:41,824] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:30:41,824] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:30:41,824] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:30:41,824] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:30:41,825] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:30:41,960] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:30:41,961] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:30:41,961] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:30:42,976] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:30:48,329] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:30:52,669] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:32:31,227] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:32:32,829] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:32:34,184] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:32:34,205] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 48064
+[2025-08-15 20:32:34,211] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:32:34,212] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:32:34,212] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:32:34,215] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:32:34,384] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:32:34,384] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:32:34,384] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:32:34,384] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:32:34,390] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:32:34,390] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:32:34,391] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:32:34,400] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:32:34,400] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:32:34,414] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:32:34,414] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:32:34,414] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:32:34,415] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:32:34,416] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:32:34,416] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:32:34,568] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:32:34,568] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:32:35,288] [INFO] django.server: - Broken pipe from ('127.0.0.1', 60872)
+[2025-08-15 20:32:36,627] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:32:37,405] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:32:41,909] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:33:41,301] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:33:43,103] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:33:45,739] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:33:46,520] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:33:48,722] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:33:48,747] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 48449
+[2025-08-15 20:33:48,749] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:33:48,750] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:33:48,762] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:33:48,769] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:33:48,911] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:33:48,912] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:33:48,912] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:33:48,912] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:33:48,922] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:33:48,922] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:33:48,922] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:33:48,930] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:33:48,930] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:33:48,938] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:33:48,938] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:33:48,939] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:33:48,939] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:33:48,939] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:33:48,939] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:33:49,059] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:33:49,129] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:33:49,129] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:33:50,618] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:34:55,876] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:34:57,730] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:35:00,398] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:35:04,223] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:35:08,367] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:35:10,006] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:35:10,029] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 48692
+[2025-08-15 20:35:10,031] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:35:10,034] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:35:10,037] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:35:10,038] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:35:10,227] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:35:10,227] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:35:10,227] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:35:10,228] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:35:10,240] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:35:10,240] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:35:10,241] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:35:10,246] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:35:10,246] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:35:10,256] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:35:10,256] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:35:10,256] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:35:10,256] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:35:10,257] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:35:10,258] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:35:10,376] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:35:10,417] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:35:10,417] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:35:11,689] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:35:20,490] [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+[2025-08-15 20:35:20,490] [WARNING] django.server: "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 5064
+[2025-08-15 20:36:34,116] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:36:35,893] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:38,392] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:38,404] [INFO] django.server: - Broken pipe from ('127.0.0.1', 61175)
+[2025-08-15 20:36:38,413] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:38,419] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:38,419] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:38,421] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:38,426] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:38,578] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:38,578] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:38,578] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:38,578] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:38,586] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:38,587] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:38,587] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:38,594] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:38,594] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:38,604] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:38,604] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:38,604] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:38,605] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:38,605] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:38,607] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:38,727] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:36:38,746] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:36:38,746] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:36:40,246] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:36:42,546] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:36:44,080] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:44,100] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:44,102] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:44,103] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:44,106] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:44,108] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:44,183] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:44,183] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:44,184] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:44,184] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:44,190] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:44,190] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:44,190] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:44,196] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:44,197] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:44,205] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:44,206] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:44,206] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:44,206] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:44,207] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:44,207] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:44,348] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:36:44,387] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:44,392] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:36:44,393] [INFO] django.server: - Broken pipe from ('127.0.0.1', 61208)
+[2025-08-15 20:36:44,406] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:44,412] [WARNING] django.request: Not Found: /static/images/favicon-16x16.png
+[2025-08-15 20:36:44,413] [WARNING] django.server: "GET /static/images/favicon-16x16.png HTTP/1.1" 404 5064
+[2025-08-15 20:36:44,413] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:44,414] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:44,414] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:44,416] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:44,501] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:44,502] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:44,502] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:44,502] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:44,510] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:44,510] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:44,510] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:44,522] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:44,522] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:44,546] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:44,547] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:44,548] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:44,548] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:44,549] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:44,549] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:44,644] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:44,662] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:44,669] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:44,670] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:44,671] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:44,671] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:44,823] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:44,824] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:44,824] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:44,824] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:44,830] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:44,831] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:44,831] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:44,836] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:44,836] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:44,852] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:44,852] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:44,853] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:44,854] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:44,855] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:44,855] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:44,874] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:44,894] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:44,898] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:44,899] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:44,902] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:44,905] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:45,029] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:45,032] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:45,032] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:45,032] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:45,049] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:45,051] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:45,051] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:45,051] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:45,072] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:45,077] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:45,080] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:45,080] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:45,081] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:45,203] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:45,203] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:45,204] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:45,204] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:45,211] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:45,235] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:45,238] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:45,242] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:45,244] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:45,244] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:45,348] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:45,348] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:45,348] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:45,349] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:45,354] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:45,354] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:45,354] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:45,367] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:45,367] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:45,376] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:45,376] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:45,377] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:45,377] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:45,378] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:45,379] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:45,493] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:36:45,518] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:36:45,518] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:36:47,119] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:36:55,492] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:55,514] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:55,517] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:55,520] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:55,520] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:55,521] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:55,596] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:55,596] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:55,596] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:55,597] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:55,603] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:55,604] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:55,604] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:55,608] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:55,609] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:55,631] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:55,631] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:55,631] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:55,631] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:55,631] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:55,632] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:55,754] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:36:55,755] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:36:55,759] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:36:56,581] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:56,599] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:56,601] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:56,602] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:56,606] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:56,610] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:56,799] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:56,799] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:56,799] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:56,800] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:56,806] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:56,806] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:56,806] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:56,811] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:56,811] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:56,820] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:56,820] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:56,821] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:56,821] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:56,821] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:56,821] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:56,877] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:56,903] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:56,907] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:56,908] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:56,910] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:56,910] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:57,047] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:57,047] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:57,048] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:57,049] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:57,059] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:57,059] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:57,059] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:57,067] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:57,067] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:57,075] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:57,075] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:57,075] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:57,076] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:57,076] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:57,076] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:57,198] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:36:57,198] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:36:57,205] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:36:57,332] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:36:57,350] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 49339
+[2025-08-15 20:36:57,353] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:36:57,353] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:36:57,357] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:36:57,360] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:36:57,432] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:36:57,432] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:36:57,433] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:36:57,433] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:36:57,442] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:36:57,443] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:36:57,443] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:36:57,467] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:36:57,467] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:36:57,516] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:36:57,516] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:36:57,516] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:36:57,517] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:36:57,518] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:36:57,518] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:36:57,632] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:36:57,633] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:36:57,636] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:36:59,084] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:37:03,167] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:37:06,394] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:37:09,182] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:38:01,271] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:38:07,007] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:38:08,971] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:38:11,522] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:38:12,672] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:38:16,639] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:39:00,618] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:39:02,246] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:39:03,561] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:39:03,584] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 48406
+[2025-08-15 20:39:03,591] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:39:03,591] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:39:03,592] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:39:03,592] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:39:03,751] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:39:03,751] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:39:03,751] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:39:03,751] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:39:03,757] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:39:03,757] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:39:03,757] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:39:03,765] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:39:03,765] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:39:03,774] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:39:03,774] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:39:03,774] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:39:03,775] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:39:03,777] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:39:03,777] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:39:03,962] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:39:03,962] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:39:04,687] [INFO] django.server: - Broken pipe from ('127.0.0.1', 61386)
+[2025-08-15 20:39:05,976] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:39:07,113] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:39:10,500] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:39:13,491] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:39:21,848] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:39:23,664] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:41:07,052] [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+[2025-08-15 20:41:09,169] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:41:11,896] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:41:12,836] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:41:15,309] [INFO] django.server: "GET / HTTP/1.1" 200 13591
+[2025-08-15 20:41:15,334] [INFO] django.server: "GET /static/css/styles.css HTTP/1.1" 200 48155
+[2025-08-15 20:41:15,340] [INFO] django.server: "GET /static/js/app-core.js HTTP/1.1" 200 15946
+[2025-08-15 20:41:15,341] [INFO] django.server: "GET /static/js/lib/marked.min.js HTTP/1.1" 200 49718
+[2025-08-15 20:41:15,344] [INFO] django.server: "GET /static/js/loader.js HTTP/1.1" 200 6540
+[2025-08-15 20:41:15,350] [INFO] django.server: "GET /static/images/bot.png HTTP/1.1" 200 31180
+[2025-08-15 20:41:15,525] [INFO] django.server: "GET /static/js/utils/error-handler.js HTTP/1.1" 200 8868
+[2025-08-15 20:41:15,526] [INFO] django.server: "GET /static/js/utils/performance-monitor.js HTTP/1.1" 200 10168
+[2025-08-15 20:41:15,526] [INFO] django.server: "GET /static/js/utils/api-manager.js HTTP/1.1" 200 8779
+[2025-08-15 20:41:15,526] [INFO] django.server: "GET /static/js/utils/security-config.js HTTP/1.1" 200 11294
+[2025-08-15 20:41:15,532] [INFO] django.server: "GET /static/js/utils/accessibility.js HTTP/1.1" 200 5804
+[2025-08-15 20:41:15,532] [INFO] django.server: "GET /static/js/utils/notifications.js HTTP/1.1" 200 7291
+[2025-08-15 20:41:15,533] [INFO] django.server: "GET /static/js/utils/speech.js HTTP/1.1" 200 10324
+[2025-08-15 20:41:15,541] [INFO] django.server: "GET /static/js/maps/maps-core.js HTTP/1.1" 200 23462
+[2025-08-15 20:41:15,541] [INFO] django.server: "GET /static/js/chat/chat-core.js HTTP/1.1" 200 16633
+[2025-08-15 20:41:15,553] [INFO] django.server: "GET /static/js/maps/maps-search.js HTTP/1.1" 200 11872
+[2025-08-15 20:41:15,553] [INFO] django.server: "GET /static/js/chat/chat-input.js HTTP/1.1" 200 12467
+[2025-08-15 20:41:15,553] [INFO] django.server: "GET /static/js/chat/chat-history.js HTTP/1.1" 200 19738
+[2025-08-15 20:41:15,553] [INFO] django.server: "GET /static/js/maps/maps-hospital.js HTTP/1.1" 200 15405
+[2025-08-15 20:41:15,553] [INFO] django.server: "GET /static/js/chat/chat-display.js HTTP/1.1" 200 19097
+[2025-08-15 20:41:15,554] [INFO] django.server: "GET /static/js/maps/maps-direction.js HTTP/1.1" 200 25369
+[2025-08-15 20:41:15,690] [WARNING] django.request: Not Found: /static/images/favicon-32x32.png
+[2025-08-15 20:41:15,690] [WARNING] django.server: "GET /static/images/favicon-32x32.png HTTP/1.1" 404 5064
+[2025-08-15 20:41:15,696] [INFO] django.server: "GET /chat/history/ HTTP/1.1" 200 2606
+[2025-08-15 20:41:17,687] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391
+[2025-08-15 20:41:20,333] [INFO] django.server: "GET /chat/history/1755258444581/ HTTP/1.1" 200 670
+[2025-08-15 20:41:20,984] [INFO] django.server: "GET /chat/history/1755257428919/ HTTP/1.1" 200 3711
+[2025-08-15 20:41:23,276] [INFO] django.server: "GET /chat/history/1755260128854/ HTTP/1.1" 200 3391

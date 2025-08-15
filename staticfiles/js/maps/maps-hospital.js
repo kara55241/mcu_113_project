@@ -77,7 +77,11 @@ if (!MedApp.maps.hospital) {
           coordinates: `${center.lat()},${center.lng()}`
         };
       } else {
-        alert("請先選擇一個位置");
+        if (MedApp.utils.notifications) {
+          MedApp.utils.notifications.warning("請先選擇一個位置");
+        } else {
+          MedApp.log("請先選擇一個位置", 'warn');
+        }
         return;
       }
     }
@@ -96,7 +100,11 @@ if (!MedApp.maps.hospital) {
     if (!MedApp.maps.core.services.placesService) {
       MedApp.log("Places 服務未初始化", 'error');
       document.querySelector('.map-loading')?.remove();
-      alert("無法使用地點搜尋服務，請稍後再試");
+      if (MedApp.utils.notifications) {
+        MedApp.utils.notifications.error("無法使用地點搜尋服務，請稍後再試");
+      } else {
+        MedApp.log("無法使用地點搜尋服務", 'error');
+      }
       return;
     }
     

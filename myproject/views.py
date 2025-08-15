@@ -585,7 +585,13 @@ class ChatHistoryDetailView(View):
 def home(request):
     """主頁視圖"""
     from django.shortcuts import render
-    return render(request, 'index.html')
+    from django.conf import settings
+    import os
+    
+    context = {
+        'GOOGLE_MAPS_API_KEY': os.getenv('GOOGLE_MAPS_API_KEY', ''),
+    }
+    return render(request, 'index.html', context)
 
 @csrf_exempt
 def health_check(request):

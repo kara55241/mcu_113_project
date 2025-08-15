@@ -86,7 +86,7 @@ class FeedbackGraph:
             # 檢查索引是否已存在
             check_result = session.run("""
             SHOW INDEXES 
-            WHERE name = 'keymemory_embedding_index'
+            WHERE name = 'key_memory_embeddings'
             """)
             
             existing_indexes = list(check_result)
@@ -96,7 +96,7 @@ class FeedbackGraph:
             
             # 修正的創建語法 - 使用正確的語法格式
             session.run("""
-            CREATE VECTOR INDEX keymemory_embedding_index IF NOT EXISTS
+            CREATE VECTOR INDEX key_memory_embeddings IF NOT EXISTS
             FOR (k:KeyMemory) ON k.embedding
             OPTIONS {
                 indexConfig: {
@@ -113,7 +113,7 @@ class FeedbackGraph:
             try:
                 session.run("""
                 CALL db.index.vector.createNodeIndex(
-                    'keymemory_embedding_index',
+                    'key_memory_embeddings',
                     'KeyMemory',
                     'embedding',
                     1536,
@@ -396,7 +396,7 @@ class FeedbackGraph:
             # 方法1: 檢查 VECTOR 類型索引
             result = session.run("""
             SHOW INDEXES 
-            WHERE name = 'keymemory_embedding_index' AND type = 'VECTOR'
+            WHERE name = 'key_memory_embeddings' AND type = 'VECTOR'
             """)
             indexes = list(result)
             if indexes:
@@ -406,7 +406,7 @@ class FeedbackGraph:
             # 方法2: 檢查所有包含該名稱的索引
             result = session.run("""
             SHOW INDEXES 
-            WHERE name = 'keymemory_embedding_index'
+            WHERE name = 'key_memory_embeddings'
             """)
             indexes = list(result)
             if indexes:
@@ -418,7 +418,7 @@ class FeedbackGraph:
             try:
                 test_embedding = [0.1] * 1536
                 session.run("""
-                CALL db.index.vector.queryNodes('keymemory_embedding_index', 1, $test_embedding)
+                CALL db.index.vector.queryNodes('key_memory_embeddings', 1, $test_embedding)
                 YIELD node, score
                 RETURN count(*) as count
                 """, {'test_embedding': test_embedding})
@@ -449,7 +449,7 @@ class FeedbackGraph:
             methods = [
                 # 方法1: 標準向量查詢
                 """
-                CALL db.index.vector.queryNodes('keymemory_embedding_index', $top_k, $query_embedding)
+                CALL db.index.vector.queryNodes('key_memory_embeddings', $top_k, $query_embedding)
                 YIELD node, score
                 RETURN node.content as content, 
                        node.feedback_type as feedback_type,

@@ -56,7 +56,7 @@ def search_feedback_memories(query: str) -> str:
     """Search for similar positively rated feedback memories"""
     try:
         from myproject.feedback_graph import search_similar_keymemories
-        memories = search_similar_keymemories(query, top_k=2)
+        memories = search_similar_keymemories(query, top_k=1)
         if not memories:
             return "No related feedback memory"
         positive_memories = [m for m in memories if m.get('feedback_type') in ['positive', 'like']]
@@ -80,8 +80,11 @@ class FeedbackEnhancedAgent:
 
     def invoke(self, state, config=None):
         try:
+            start_time = time.time()
             enhanced_state = self._enhance_with_feedback(state)
             result = self.agent.invoke(enhanced_state, config)
+            end_time = time.time()
+            print(f"⏱️ [{self.name}] Generation Time: {end_time - start_time:.2f} sec")
             return result
         except Exception as e:
             print(f"FeedbackEnhancedAgent invoke error: {e}")
@@ -93,25 +96,36 @@ class FeedbackEnhancedAgent:
             if not user_messages:
                 return state
             latest_query = user_messages[-1].content
+
+            # Step 1: 取得圖譜資料
+            rag_context = None
+            if self.name == "chronic_agent":
+                from .graph_rag import graphrag_chronic
+                rag_context = graphrag_chronic(latest_query)
+            elif self.name == "cardiovascular_agent":
+                from .graph_rag import graphrag_cardiovascular
+                rag_context = graphrag_cardiovascular(latest_query)
+
+            # Step 2: 搜尋回饋記憶（可選）
             from myproject.feedback_graph import search_similar_keymemories
             memories = search_similar_keymemories(latest_query, top_k=1)
             positive_memories = [m for m in memories if m.get('feedback_type') in ['positive', 'like']]
+            memory_hint = None
             if positive_memories:
-                memory = positive_memories[0]
-                memory_content = memory.get('content', '')[:300]
-                injected_hint = HumanMessage(
-                    content=f"\U0001F4A1 This is a highly rated suggestion from previous users. Please use its structure and logic to answer:\n{memory_content}"
-                )
-                new_messages = [injected_hint] + state["messages"]
-                print(f"\U0001F9E0 [Feedback Boost] Inserted prompt: {memory_content[:30]}...")
-                enhanced_state = state.copy()
-                enhanced_state["messages"] = new_messages
-                return enhanced_state
-            else:
-                print("⚠️ [Feedback Boost] No related positive memory found")
+                memory_content = positive_memories[0].get('content', '')[:300]
+                memory_hint = HumanMessage(content=f"💡 Highly rated past suggestion:\n{memory_content}")
+
+            # Step 3: 注入 RAG 結果與記憶提示
+            rag_hint = SystemMessage(content=f"📘 Based on graph knowledge:\n{rag_context}")
+            new_messages = [rag_hint] + ([memory_hint] if memory_hint else []) + state["messages"]
+            print(f"🧠 [GraphRAG] Injected knowledge: {rag_context[:40]}...")
+
+            enhanced_state = state.copy()
+            enhanced_state["messages"] = new_messages
+            return enhanced_state
         except Exception as e:
-            print(f"❌ Feedback boost error: {e}")
-        return state
+            print(f"❌ Feedback + RAG boost error: {e}")
+            return state
 
     def __getattr__(self, name):
         return getattr(self.agent, name)

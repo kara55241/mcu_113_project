@@ -4,6 +4,12 @@ from django.middleware.security import SecurityMiddleware
 class CustomSecurityMiddleware(SecurityMiddleware):
     """自定義安全中間件，添加必要的安全標頭"""
     
+    def process_request(self, request):
+        """處理HTTPS重定向"""
+        if request.headers.get('x-forwarded-proto') == 'https':
+            request.is_secure = lambda: True
+        return None
+    
     def process_response(self, request, response):
         # 先執行父類的處理
         response = super().process_response(request, response)

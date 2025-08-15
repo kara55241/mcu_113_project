@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>頁面未找到 - AI 聊天助手</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <style>
+        :root {
+            --background-dark: #2d2d3a;
+            --background-lighter: #3a3a4a;
+            --text-color: #e8e8e8;
+            --text-secondary: #b0b0b0;
+            --primary-color: #7c9eff;
+            --border-color: #454554;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .error-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+            background: var(--background-lighter);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .error-code {
+            font-size: 120px;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+        
+        .error-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+        
+        .error-message {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .error-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+        }
+        
+        .btn-primary:hover {
+            background-color: #6a8aff;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--background-dark);
+            color: var(--text-color);
+        }
+        
+        .home-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        
+        @media (max-width: 600px) {
+            .error-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .error-code {
+                font-size: 80px;
+            }
+            
+            .error-title {
+                font-size: 24px;
+            }
+            
+            .error-message {
+                font-size: 14px;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="home-icon">🏠</div>
+        <div class="error-code">404</div>
+        <h1 class="error-title">頁面未找到</h1>
+        <p class="error-message">
+            抱歉，您要找的頁面不存在。可能是網址輸入錯誤，或頁面已被移動或刪除。
+        </p>
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">
+                <span>🏠</span>
+                返回首頁
+            </a>
+            <button onclick="history.back()" class="btn btn-secondary">
+                <span>←</span>
+                返回上一頁
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // 自動回報 404 錯誤
+        if (window.MedApp && window.MedApp.utils && window.MedApp.utils.errorHandler) {
+            window.MedApp.utils.errorHandler.reportError(
+                `404 錯誤: ${window.location.pathname}`,
+                'warn',
+                'navigation'
+            );
+        }
+    </script>
+</body>
+</html>

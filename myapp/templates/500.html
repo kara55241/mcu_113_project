@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伺服器錯誤 - AI 聊天助手</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <style>
+        :root {
+            --background-dark: #2d2d3a;
+            --background-lighter: #3a3a4a;
+            --text-color: #e8e8e8;
+            --text-secondary: #b0b0b0;
+            --primary-color: #7c9eff;
+            --error-color: #ff6b6b;
+            --border-color: #454554;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .error-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+            background: var(--background-lighter);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .error-code {
+            font-size: 120px;
+            font-weight: 700;
+            color: var(--error-color);
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+        
+        .error-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+        
+        .error-message {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .error-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+        }
+        
+        .btn-primary:hover {
+            background-color: #6a8aff;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--background-dark);
+            color: var(--text-color);
+        }
+        
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--error-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        
+        .status-check {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--background-dark);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .status-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .status-ok {
+            background-color: var(--primary-color);
+        }
+        
+        .status-error {
+            background-color: var(--error-color);
+        }
+        
+        @media (max-width: 600px) {
+            .error-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .error-code {
+                font-size: 80px;
+            }
+            
+            .error-title {
+                font-size: 24px;
+            }
+            
+            .error-message {
+                font-size: 14px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">⚠️</div>
+        <div class="error-code">500</div>
+        <h1 class="error-title">伺服器錯誤</h1>
+        <p class="error-message">
+            抱歉，伺服器遇到了問題，無法完成您的請求。我們已經收到錯誤通知，正在努力修復。
+        </p>
+        
+        <div class="status-check">
+            <div class="status-item">
+                <span>網路連線</span>
+                <div class="status-indicator status-ok" id="networkStatus"></div>
+            </div>
+            <div class="status-item">
+                <span>伺服器狀態</span>
+                <div class="status-indicator status-error" id="serverStatus"></div>
+            </div>
+            <div class="status-item">
+                <span>服務恢復時間</span>
+                <span id="estimatedTime">預計 5-10 分鐘</span>
+            </div>
+        </div>
+        
+        <div class="error-actions">
+            <button onclick="location.reload()" class="btn btn-primary">
+                <span>🔄</span>
+                重新整理
+            </button>
+            <a href="/" class="btn btn-secondary">
+                <span>🏠</span>
+                返回首頁
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        // 檢查網路狀態
+        function updateNetworkStatus() {
+            const networkIndicator = document.getElementById('networkStatus');
+            if (navigator.onLine) {
+                networkIndicator.className = 'status-indicator status-ok';
+            } else {
+                networkIndicator.className = 'status-indicator status-error';
+            }
+        }
+        
+        // 初始檢查
+        updateNetworkStatus();
+        
+        // 監聽網路狀態變化
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+        
+        // 定期檢查伺服器狀態
+        let checkCount = 0;
+        const maxChecks = 10;
+        
+        function checkServerStatus() {
+            if (checkCount >= maxChecks) return;
+            
+            fetch('/api/health/', { 
+                method: 'HEAD',
+                cache: 'no-cache' 
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('serverStatus').className = 'status-indicator status-ok';
+                    document.getElementById('estimatedTime').textContent = '服務已恢復';
+                    
+                    // 自動重新整理
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }
+            })
+            .catch(() => {
+                checkCount++;
+                const remainingTime = Math.max(1, 10 - checkCount);
+                document.getElementById('estimatedTime').textContent = `預計 ${remainingTime} 分鐘`;
+            });
+        }
+        
+        // 每 30 秒檢查一次
+        setInterval(checkServerStatus, 30000);
+        
+        // 立即檢查一次
+        setTimeout(checkServerStatus, 5000);
+        
+        // 自動回報 500 錯誤
+        if (window.MedApp && window.MedApp.utils && window.MedApp.utils.errorHandler) {
+            window.MedApp.utils.errorHandler.reportError(
+                '500 伺服器錯誤',
+                'error',
+                'server'
+            );
+        }
+    </script>
+</body>
+</html>

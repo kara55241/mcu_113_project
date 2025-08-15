@@ -1,0 +1,71 @@
+{
+    "name": "AI 聊天助手 - 健康諮詢與醫療服務",
+    "short_name": "AI助手",
+    "description": "提供專業的健康諮詢與醫療設施查詢服務",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#2d2d3a",
+    "theme_color": "#2d2d3a",
+    "orientation": "portrait-primary",
+    "scope": "/",
+    "lang": "zh-TW",
+    "icons": [
+        {
+            "src": "/static/images/pwa-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/static/images/pwa-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "health",
+        "medical",
+        "productivity"
+    ],
+    "screenshots": [
+        {
+            "src": "/static/images/screenshot-desktop.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide"
+        },
+        {
+            "src": "/static/images/screenshot-mobile.png",
+            "sizes": "390x844",
+            "type": "image/png",
+            "form_factor": "narrow"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "新對話",
+            "short_name": "新對話",
+            "description": "開始新的對話",
+            "url": "/?action=new-chat",
+            "icons": [
+                {
+                    "src": "/static/images/shortcut-new-chat.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "查詢附近醫院",
+            "short_name": "醫院查詢",
+            "description": "查詢附近的醫療設施",
+            "url": "/?action=find-hospitals",
+            "icons": [
+                {
+                    "src": "/static/images/shortcut-hospital.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
+}

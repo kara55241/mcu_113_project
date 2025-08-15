@@ -84,11 +84,23 @@ MedApp.utils.accessibility = {
       MedApp.log('字體大小已調整為: ' + this.fontSize.current + '%', 'info');
     },
     
-    // 朗讀最後一條訊息
+    // 朗讀最後一條訊息（委託給語音模組）
     readLastMessage: function() {
+      if (MedApp.utils.speech && typeof MedApp.utils.speech.readLastBotMessage === 'function') {
+        MedApp.utils.speech.readLastBotMessage();
+      } else {
+        // 備用實現
+        this.fallbackReadMessage();
+      }
+    },
+    
+    // 備用朗讀實現
+    fallbackReadMessage: function() {
       // 檢查語音合成功能是否可用
       if (!MedApp.features.speechSynthesis) {
-        alert('您的瀏覽器不支持語音合成功能');
+        if (MedApp.utils.notifications) {
+          MedApp.utils.notifications.warning('您的瀏覽器不支持語音合成功能');
+        }
         return;
       }
       

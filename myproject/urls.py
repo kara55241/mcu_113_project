@@ -18,7 +18,20 @@ from myproject.views import (
     health_check
 )
 
+# 靜態文件路由（最優先）
+from django.views.static import serve
+from django.urls import re_path
+import os
+
+def debug_static_view(request, path):
+    """Debug static file serving"""
+    print(f"Static request: {path}")
+    return serve(request, path, document_root=settings.STATICFILES_DIRS[0])
+
 urlpatterns = [
+    # 靜態文件服務（最高優先級）
+    re_path(r'^static/(?P<path>.*)$', debug_static_view),
+    
     # Django管理界面
     path('admin/', admin.site.urls),
     
@@ -42,8 +55,6 @@ urlpatterns = [
     path('chat/history/<str:chat_id>/', ChatHistoryDetailView.as_view(), name='chat_history_detail'),
 ]
 
-# 靜態文件服務（僅在開發環境）
+# 添加媒體文件服務
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    if hasattr(settings, 'MEDIA_URL') and hasattr(settings, 'MEDIA_ROOT'):
-        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
