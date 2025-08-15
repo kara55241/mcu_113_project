@@ -28,7 +28,7 @@ summarization_node = SummarizationNode(
     model=llm_gemini,
     max_tokens=1500,
     max_summary_tokens=750,
-    output_messages_key="llm_input_messages",
+    output_messages_key="messages",
 )
 
 # Handoff tool set define
