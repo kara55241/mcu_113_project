@@ -255,7 +255,6 @@ supervisor= create_react_agent(
         - Your response should be in Traditional Chinese.
         - You can only use tools once per response.
         - Assign work to one agent at a time, do not call agents in parallel.
-        - Do not do any work yourself.
         """
 )
 
