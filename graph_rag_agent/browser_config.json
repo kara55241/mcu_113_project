@@ -1,0 +1,105 @@
+{
+  "browser_automation": {
+    "implementation": "direct_browser_use",
+    "description": "直接整合 browser-use 函式庫，不使用獨立 MCP 服務器",
+    "configuration": {
+      "headless_mode": {
+        "env_var": "BROWSER_USE_HEADLESS",
+        "default": false,
+        "description": "是否以無頭模式運行瀏覽器"
+      },
+      "executable_path": {
+        "env_var": "BROWSER_USE_EXECUTABLE_PATH",
+        "default": "",
+        "description": "瀏覽器執行檔路徑，空值使用系統預設"
+      },
+      "timeout": {
+        "env_var": "MCP_BROWSER_TIMEOUT",
+        "default": 30,
+        "description": "瀏覽器操作超時時間（秒）"
+      },
+      "retry_count": {
+        "env_var": "MCP_BROWSER_RETRY_COUNT",
+        "default": 3,
+        "description": "操作失敗時的重試次數"
+      },
+      "max_session_time": {
+        "env_var": "BROWSER_SESSION_MAX_TIME",
+        "default": 300,
+        "description": "瀏覽器會話最長持續時間（秒）"
+      }
+    },
+    "tools": {
+      "browser_navigate_and_extract": {
+        "description": "導航到指定 URL 並提取資訊",
+        "use_cases": [
+          "訪問醫院官網獲取資訊",
+          "從衛生部門網站提取政策資訊",
+          "查看特定醫療機構的服務內容"
+        ]
+      },
+      "browser_search_and_analyze": {
+        "description": "搜尋並分析多個來源的資訊",
+        "use_cases": [
+          "搜尋最新醫療研究資訊",
+          "分析多個醫療網站的內容",
+          "獲取當前醫療趨勢資訊"
+        ]
+      },
+      "browser_verify_medical_claim": {
+        "description": "驗證醫療聲明的真實性",
+        "use_cases": [
+          "查證健康相關謠言",
+          "驗證醫療廣告宣稱",
+          "確認治療方法的科學根據"
+        ]
+      },
+      "browser_extract_hospital_info": {
+        "description": "提取醫療機構的詳細資訊",
+        "use_cases": [
+          "獲取醫院聯絡資訊和科別",
+          "查詢診所營業時間",
+          "了解醫療設施的服務項目"
+        ]
+      }
+    },
+    "security": {
+      "allowed_domains": [
+        "*.gov.tw",
+        "*.edu.tw", 
+        "*.org.tw",
+        "*.com.tw",
+        "mohw.gov.tw",
+        "cdc.gov.tw",
+        "nhi.gov.tw",
+        "google.com",
+        "bing.com",
+        "yahoo.com"
+      ],
+      "blocked_domains": [
+        "*.ads.*",
+        "*.adult.*",
+        "*.gambling.*"
+      ],
+      "max_pages_per_session": 10,
+      "content_filtering": true
+    },
+    "performance": {
+      "page_load_timeout": 15,
+      "element_wait_timeout": 5,
+      "screenshot_quality": "medium",
+      "cache_enabled": true
+    },
+    "logging": {
+      "level": "INFO",
+      "detailed_browser_actions": true,
+      "performance_metrics": true
+    }
+  },
+  "integration_notes": {
+    "architecture": "無侵入式整合",
+    "compatibility": "完全相容現有 LangGraph 多代理系統",
+    "deployment": "隨主應用一起部署，無需額外服務",
+    "maintenance": "透過環境變數進行配置管理"
+  }
+}

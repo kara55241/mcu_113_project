@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python manage.py monitor_agents:*)",
+      "WebFetch(domain:python.langchain.com)",
+      "WebFetch(domain:langchain-ai.github.io)",
+      "Bash(python manage.py:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(pip show:*)",
+      "WebFetch(domain:stackoverflow.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(python:*)",
+      "WebSearch",
+      "Read(/C:\\Users\\karta\\Desktop/**)",
+      "Bash(timeout:*)",
+      "Read(/C:\\Users\\karta\\Desktop/**)",
+      "Read(/C:\\Users\\karta\\Desktop/**)",
+      "Bash(dir:*)",
+      "Read(//c/Users/karta/Desktop/**)",
+      "WebFetch(domain:github.langchain.ac.cn)",
+      "WebFetch(domain:docs.browser-use.com)",
+      "Bash(rename:*)",
+      "Bash(move:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
