@@ -28,9 +28,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **`research.py`**: 研究和事實查核功能
 - **`fact_check.py`** & **`cofacts_check.py`**: 台灣本地事實查核整合
 - **`SearchTool.py`**: Google Maps 和 Google Search 工具類
-- **`browser_automation.py`**: 瀏覽器自動化核心模組，基於原生 Playwright + LLM 智能引導
-- **`browser_tools.py`**: 瀏覽器工具函數，包裝為 LangGraph 工具
-- **`browser_config.json`**: 瀏覽器功能配置檔案
 
 ### 前端架構 (模組化 JavaScript)
 採用命名空間模式的模組化架構：
@@ -62,9 +59,6 @@ venv\Scripts\activate
 # 安裝依賴 - 使用最新 requirements.txt
 pip install -r requirements.txt
 
-# 安裝瀏覽器自動化相關依賴（原生 Playwright）
-pip install -r requirements_browser.txt
-playwright install chromium --with-deps
 ```
 
 ### Django 開發命令

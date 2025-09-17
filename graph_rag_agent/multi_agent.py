@@ -32,22 +32,10 @@ try:
     from .graph_rag import graphrag_chronic, graphrag_cardiovascular
     from .fact_check import search_fact_checks
     from .cofacts_check import search_cofacts
-    from .browser_tools import (
-        browser_navigate_and_extract,
-        browser_search_and_analyze,
-        browser_verify_medical_claim,
-        browser_extract_hospital_info
-    )
 except ImportError:
     from graph_rag import graphrag_chronic, graphrag_cardiovascular
     from fact_check import search_fact_checks
     from cofacts_check import search_cofacts
-    from browser_tools import (
-        browser_navigate_and_extract,
-        browser_search_and_analyze,
-        browser_verify_medical_claim,
-        browser_extract_hospital_info
-    )
 from langmem.short_term import SummarizationNode
 from langchain_core.messages.utils import count_tokens_approximately
 try:
@@ -364,14 +352,11 @@ def google_fact_check_tool(query: str) -> str:
 
 
 chronic_agent = create_react_agent(
-    model=llm_GPT,  
+    model=llm_GPT,
     tools=[
-        chronic_search, 
-        net_search, 
-        browser_navigate_and_extract,
-        browser_search_and_analyze,
-        browser_extract_hospital_info
-    ], 
+        chronic_search,
+        net_search
+    ],
     name="chronic_agent",
     prompt="""
 You are the chronic diseases specialist agent in a medical consultation system.
@@ -381,17 +366,12 @@ Specialty: Chronic diseases including diabetes, hypertension, arthritis, kidney 
 Available Tools:
 - chronic_search: Query medical knowledge graph for chronic disease information
 - net_search: Search internet for current medical information
-- browser_navigate_and_extract: Visit specific medical websites to extract information
-- browser_search_and_analyze: Search and analyze medical information from multiple sources
-- browser_extract_hospital_info: Get information about medical facilities
 
 Workflow:
 1. ALWAYS use the chronic_search tool first to query the medical knowledge graph
 2. If additional current information is needed, use net_search tool
-3. For specific website information or hospital details, use browser tools
-4. Use browser_verify_medical_claim when claims need web-based verification
-5. Provide comprehensive, evidence-based medical guidance in MARKDOWN format
-6. Focus only on your specialty area - chronic diseases
+3. Provide comprehensive, evidence-based medical guidance in MARKDOWN format
+4. Focus only on your specialty area - chronic diseases
 
 CRITICAL OUTPUT REQUIREMENTS:
 - MUST respond in Traditional Chinese
@@ -423,14 +403,11 @@ You are the final authority on chronic diseases - do not refer to other speciali
 )
 
 cardiovascular_agent = create_react_agent(
-    model=llm_GPT,  
+    model=llm_GPT,
     tools=[
-        cardiovascular_search, 
-        net_search, 
-        browser_navigate_and_extract,
-        browser_search_and_analyze,
-        browser_extract_hospital_info
-    ], 
+        cardiovascular_search,
+        net_search
+    ],
     name="cardiovascular_agent",
     prompt="""
 You are the cardiovascular diseases specialist agent in a medical consultation system.
@@ -440,17 +417,12 @@ Specialty: Heart diseases, stroke, blood pressure, chest pain, and all cardiovas
 Available Tools:
 - cardiovascular_search: Query medical knowledge graph for cardiovascular disease information
 - net_search: Search internet for current medical information
-- browser_navigate_and_extract: Visit specific medical websites to extract information
-- browser_search_and_analyze: Search and analyze medical information from multiple sources
-- browser_extract_hospital_info: Get information about medical facilities
 
 Workflow:
 1. ALWAYS use the cardiovascular_search tool first to query the medical knowledge graph
 2. If additional current information is needed, use net_search tool
-3. For specific website information or hospital details, use browser tools
-4. Use browser tools to find specialized cardiovascular clinics or hospitals
-5. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
-6. Focus only on your specialty area - cardiovascular diseases
+3. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
+4. Focus only on your specialty area - cardiovascular diseases
 
 CRITICAL OUTPUT REQUIREMENTS:
 - MUST respond in Traditional Chinese
@@ -485,11 +457,8 @@ You are the final authority on cardiovascular diseases - do not refer to other s
 fact_check_agent = create_react_agent(
     model=llm_GPT,
     tools=[
-        google_fact_check_tool, 
-        browser_verify_medical_claim,
-        browser_navigate_and_extract,
-        browser_search_and_analyze
-    ], 
+        google_fact_check_tool
+    ],
     name="fact_check_agent",
     prompt="""
 You are the medical fact-checking specialist agent in a healthcare consultation system.
@@ -498,17 +467,12 @@ Specialty: Verifying health and medical claims, debunking misinformation, provid
 
 Available Tools:
 - google_fact_check_tool: Use Google Fact Check API for claim verification
-- browser_verify_medical_claim: Verify claims using browser automation to check authoritative sources
-- browser_navigate_and_extract: Visit specific websites to extract verification information
-- browser_search_and_analyze: Search and analyze information from multiple web sources
 
 Workflow:
 1. ALWAYS use the google_fact_check_tool first to verify the medical claim
-2. If additional verification is needed, use browser_verify_medical_claim for web-based checking
-3. Use browser tools to visit authoritative medical sources for cross-verification
-4. Analyze all fact-checking results thoroughly
-5. Provide comprehensive verification analysis with clear verdicts in MARKDOWN format
-6. Focus only on fact-checking and verification
+2. Analyze fact-checking results thoroughly
+3. Provide comprehensive verification analysis with clear verdicts in MARKDOWN format
+4. Focus only on fact-checking and verification
 
 CRITICAL OUTPUT REQUIREMENTS:
 - MUST respond in Traditional Chinese
