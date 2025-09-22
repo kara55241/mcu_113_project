@@ -352,7 +352,12 @@ def cofact_tool(query: str ):
     Returns:
         A  result of the fact-check results.
     """
-    return find_most_similar_cofacts_article(query)
+    node,score=find_most_similar_cofacts_article(query)
+    result={'text':node['text'],
+            'AI回應':node.get('aiReplies', []),
+            '人工回應':node.get('articleReplies', []),
+            '相似度':score}
+    return result
 
 chronic_agent = create_react_agent(
     model=llm_GPT,
