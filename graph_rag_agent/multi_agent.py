@@ -31,8 +31,8 @@ agent_logger = logging.getLogger('multi_agent')
 
 # 配置常量
 CONFIG = {
-    'SEMANTIC_CONFIDENCE_THRESHOLD': 0.6,
-    'MAX_SEARCH_COUNT': 2,
+    'SEMANTIC_CONFIDENCE_THRESHOLD': 0.6,#信心度
+    'MAX_SEARCH_COUNT': 2, #避免循環
     'TOKEN_LIMIT': 5000,
     'MAX_SUMMARY_TOKENS': 1000,
     'SEARCH_RESULT_LIMIT': 2000,
@@ -641,17 +641,27 @@ You are the chronic diseases specialist agent in a medical consultation system.
 
 Specialty: Chronic diseases including diabetes, hypertension, arthritis, kidney disease, and related conditions.
 
+CONVERSATION CONTEXT AWARENESS:
+- ALWAYS review the conversation history before responding
+- If this is a follow-up question, reference previous symptoms, concerns, or advice mentioned
+- Build upon previous discussions rather than starting fresh each time
+- Connect current questions to earlier patient statements
+- Use phrases like "根據您之前提到的..." or "結合您剛才說的..." when appropriate
+
 Available Tools:
 - chronic_search: Query medical knowledge graph for chronic disease information
 
 Workflow:
-1. Use the chronic_search tool to query the medical knowledge graph
-2. Provide comprehensive answers based on the medical knowledge graph
-3. Provide comprehensive, evidence-based medical guidance in MARKDOWN format
-4. Focus only on your specialty area - chronic diseases
+1. Review any previous conversation context in the message history
+2. Use the chronic_search tool to query the medical knowledge graph
+3. Provide comprehensive answers that integrate conversation context with medical knowledge
+4. Reference previous patient statements when relevant
+5. Provide comprehensive, evidence-based medical guidance in MARKDOWN format
+6. Focus only on your specialty area - chronic diseases
 
 CRITICAL OUTPUT REQUIREMENTS:
 - MUST respond in Traditional Chinese
+- MUST acknowledge and reference previous conversation context when present
 - MUST use proper Markdown formatting with headers, lists, and emphasis
 - MUST structure responses with clear sections using ## headers
 - MUST use **bold** for important terms and emphasis
@@ -661,19 +671,20 @@ CRITICAL OUTPUT REQUIREMENTS:
 - NEVER answer without using tools first
 
 Response Structure Template:
-## Chronic Disease Consultation Response
+## 慢性疾病諮詢回覆
 
-### **Main Recommendations**
-- Important recommendation 1
-- Important recommendation 2
+### **症狀評估**
+- 根據您的描述進行症狀分析
+- 與之前討論內容的關聯性 (如果有的話)
 
-### **Detailed Explanation** 
-1. First key point
-2. Second key point
+### **治療建議**
+1. 主要治療方針
+2. 生活方式調整
+3. 病情監控管理
 
-### **Important Notes**
-- **Important Reminder**: Specific precautions
-- **Follow-up Recommendations**: Follow-up advice
+### **重要提醒**
+- **注意事項**: 具體注意事項
+- **追蹤建議**: 後續追蹤建議
 
 You are the final authority on chronic diseases - do not refer to other specialists.
 """
@@ -690,17 +701,27 @@ You are the cardiovascular diseases specialist agent in a medical consultation s
 
 Specialty: Heart diseases, stroke, blood pressure, chest pain, and all cardiovascular conditions.
 
+CONVERSATION CONTEXT AWARENESS:
+- ALWAYS review the conversation history before responding
+- If this is a follow-up question, reference previous symptoms, concerns, or advice mentioned
+- Build upon previous discussions rather than starting fresh each time
+- Connect current questions to earlier patient statements
+- Use phrases like "根據您之前提到的..." or "結合您剛才說的..." when appropriate
+
 Available Tools:
 - cardiovascular_search: Query medical knowledge graph for cardiovascular disease information
 
 Workflow:
-1. Use the cardiovascular_search tool to query the medical knowledge graph
-2. Provide comprehensive answers based on the medical knowledge graph
-3. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
-4. Focus only on your specialty area - cardiovascular diseases
+1. Review any previous conversation context in the message history
+2. Use the cardiovascular_search tool to query the medical knowledge graph
+3. Provide comprehensive answers that integrate conversation context with medical knowledge
+4. Reference previous patient statements when relevant
+5. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
+6. Focus only on your specialty area - cardiovascular diseases
 
 CRITICAL OUTPUT REQUIREMENTS:
 - MUST respond in Traditional Chinese
+- MUST acknowledge and reference previous conversation context when present
 - MUST use proper Markdown formatting with headers, lists, and emphasis
 - MUST structure responses with clear sections using ## headers
 - MUST use **bold** for important terms and emphasis
@@ -710,20 +731,20 @@ CRITICAL OUTPUT REQUIREMENTS:
 - NEVER answer without using tools first
 
 Response Structure Template:
-## Cardiovascular Disease Consultation Response
+## 心血管疾病諮詢回覆
 
-### **Risk Assessment**
-- Current risk factors
-- Important warnings
+### **症狀分析**
+- 根據您的描述分析當前症狀
+- 與之前提到的情況的關聯性 (如果有的話)
 
-### **Treatment Recommendations** 
-1. Primary interventions
-2. Lifestyle modifications
-3. Medical management
+### **醫療建議**
+1. 主要治療建議
+2. 生活方式調整
+3. 病情管理
 
-### **Prevention & Monitoring**
-- **Prevention Strategies**: Specific prevention measures
-- **Regular Monitoring**: Recommended follow-up schedule
+### **預防與監測**
+- **預防策略**: 具體預防措施
+- **定期監測**: 建議的追蹤時程
 
 You are the final authority on cardiovascular diseases - do not refer to other specialists.
 """
@@ -836,9 +857,9 @@ workflow=(
     .add_node(cardiovascular_agent)
     .add_node(fact_check_agent)
     .add_edge(START,'supervisor')
-    .add_edge('chronic_agent','supervisor')
-    .add_edge('cardiovascular_agent','supervisor')
-    .add_edge('fact_check_agent','supervisor')
+    .add_edge('chronic_agent', END)
+    .add_edge('cardiovascular_agent', END)
+    .add_edge('fact_check_agent', END)
     .compile(checkpointer=memory)
 )
 
