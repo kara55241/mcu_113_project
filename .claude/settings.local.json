@@ -18,9 +18,9 @@
       "Bash(dir:*)",
       "Read(//c/Users/karta/Desktop/**)",
       "WebFetch(domain:github.langchain.ac.cn)",
-      "WebFetch(domain:docs.browser-use.com)",
       "Bash(rename:*)",
-      "Bash(move:*)"
+      "Bash(move:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []

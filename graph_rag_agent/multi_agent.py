@@ -10,6 +10,7 @@ import sqlite3
 import warnings
 import logging
 import os
+import time
 
 # 設置詳細的日誌記錄
 logging.basicConfig(
@@ -24,10 +25,20 @@ logging.basicConfig(
 # 抑制 proto 警告
 warnings.filterwarnings("ignore", message=".*FinishReason enum value.*")
 from langchain_core.messages import HumanMessage
-from langchain_core.tools import tool
 
 # 創建專門的 logger
 agent_logger = logging.getLogger('multi_agent')
+
+# 配置常量
+CONFIG = {
+    'SEMANTIC_CONFIDENCE_THRESHOLD': 0.6,
+    'MAX_SEARCH_COUNT': 2,
+    'TOKEN_LIMIT': 5000,
+    'MAX_SUMMARY_TOKENS': 1000,
+    'SEARCH_RESULT_LIMIT': 2000,
+    'DOMAIN_DESCRIPTION_LIMIT': 300,
+    'CHECKPOINT_DB_PATH': "./agent_checkpoint_new.sqlite"
+}
 try:
     from .graph_rag import graphrag_chronic, graphrag_cardiovascular
     from .fact_check import search_fact_checks
@@ -49,54 +60,114 @@ from openai import OpenAI
 # OpenAI client for embeddings
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-conn = sqlite3.connect("./agent_checkpoint.sqlite", check_same_thread=False)
+# 簡單的嵌入緩存
+_embedding_cache = {}
+
+conn = sqlite3.connect(CONFIG['CHECKPOINT_DB_PATH'], check_same_thread=False)
 memory=SqliteSaver(conn)
 class State(MessagesState):
     context: dict[str,any]
     routing_done: bool = False
     selected_agent: str = ""
+    search_count: int = 0  # 追蹤搜尋次數
 
 
 summarization_node = SummarizationNode(
     token_counter=count_tokens_approximately,
     model=llm_gemini,
-    max_tokens=1500,
-    max_summary_tokens=750,
+    max_tokens=CONFIG['TOKEN_LIMIT'],
+    max_summary_tokens=CONFIG['MAX_SUMMARY_TOKENS'],
     output_messages_key="messages",
 )
 
-# Official LangGraph delegation pattern
-from langgraph.types import Send
+# Agent display names for logging
+AGENT_DISPLAY_NAMES = {
+    "chronic_agent": "慢性疾病專家",
+    "cardiovascular_agent": "心血管疾病專家",
+    "fact_check_agent": "資訊搜尋專家"
+}
 
-def create_task_description_handoff_tool(*, agent_name: str):
-    """Create handoff tool using official delegation pattern"""
-    @tool(f"transfer_to_{agent_name}", description=f"Transfer task to {agent_name} with specific task description")
+# 日誌工具函數
+def log_tool_start(tool_name: str, query: str = "", extra_info: str = ""):
+    """統一的工具啟動日誌"""
+    agent_logger.info(f"[TOOL] {tool_name.upper()} 啟動")
+    if query:
+        agent_logger.info(f"    查詢內容: {query[:100]}{'...' if len(query) > 100 else ''}")
+    if extra_info:
+        agent_logger.info(f"    {extra_info}")
+
+def log_tool_end(tool_name: str, start_time: float, result_length: int = 0, extra_info: str = ""):
+    """統一的工具完成日誌"""
+    end_time = time.time()
+    agent_logger.info(f"[TOOL] {tool_name.upper()} 完成 | 耗時: {end_time - start_time:.2f}秒")
+    if result_length > 0:
+        agent_logger.info(f"    回應長度: {result_length} 字符")
+    if extra_info:
+        agent_logger.info(f"    {extra_info}")
+    return end_time
+
+# Handoff tool set define
+def create_handoff_tool(*, agent_name: str, description: str | None = None):
+    name = f"transfer_to_{agent_name}"
+    description = description or f"Ask {agent_name} for the answer."
+
+    @tool(name, description=description)
     def handoff_tool(
-        task_description: Annotated[str, "Specific task description for the agent"],
-        state: Annotated[MessagesState, InjectedState]
+        state: Annotated[MessagesState, InjectedState],
+        tool_call_id: Annotated[str, InjectedToolCallId],
     ) -> Command:
-        """Transfer a specific task to the designated agent"""
-        agent_logger.info(f"[DELEGATION] Assigning task to {agent_name}: {task_description[:50]}...")
-        
-        # Create task description message
-        task_message = {"role": "user", "content": task_description}
-        agent_input = {**state, "messages": [task_message]}
-        
-        # Use direct goto without Command.PARENT to prevent recursion
+        # 詳細的轉交日誌記錄
+        display_name = AGENT_DISPLAY_NAMES.get(agent_name, agent_name)
+
+        # 從state中提取用戶問題
+        user_query = ""
+        if state.get("messages"):
+            for msg in reversed(state["messages"]):
+                if hasattr(msg, 'type') and msg.type == 'human':
+                    user_query = msg.content[:100] + "..." if len(msg.content) > 100 else msg.content
+                    break
+
+        agent_logger.info(f"[SUPERVISOR_ROUTING] 用戶問題: {user_query}")
+        agent_logger.info(f"[SUPERVISOR_ROUTING] 路由決策: 轉交至 {display_name} ({agent_name})")
+        agent_logger.info(f"[SUPERVISOR_ROUTING] 轉交工具: {name}")
+
+        tool_message = {
+            "role": "tool",
+            "content": f"Successfully transferred to {agent_name}",
+            "name": name,
+            "tool_call_id": tool_call_id,
+        }
         return Command(
-            goto=agent_name
+            goto=agent_name,
+            update={**state, "messages": state["messages"] + [tool_message]},
+            graph=Command.PARENT,
         )
+
     return handoff_tool
 
 # Semantic routing system using OpenAI Embeddings
 def get_embedding(text: str) -> list:
-    """Get embedding for text using OpenAI API"""
+    """Get embedding for text using OpenAI API with caching"""
+    # 簡單的緩存鍵（使用文本哈希）
+    cache_key = hash(text.strip().lower())
+
+    if cache_key in _embedding_cache:
+        return _embedding_cache[cache_key]
+
     try:
         response = openai_client.embeddings.create(
             input=text,
             model="text-embedding-ada-002"
         )
-        return response.data[0].embedding
+        embedding = response.data[0].embedding
+
+        # 限制緩存大小
+        if len(_embedding_cache) > 100:
+            # 移除最舊的條目
+            _embedding_cache.pop(next(iter(_embedding_cache)))
+
+        _embedding_cache[cache_key] = embedding
+        return embedding
     except Exception as e:
         agent_logger.warning(f"Failed to get embedding: {e}")
         return None
@@ -123,24 +194,19 @@ def semantic_route_query(user_query: str) -> dict:
     # Define domain descriptions with comprehensive medical terminology
     domain_descriptions = {
         "chronic_agent": """
-        慢性疾病醫療諮詢：糖尿病血糖控制胰島素注射、高血壓降血壓藥物、慢性腎臟病腎功能保護、
-        關節炎關節疼痛治療、慢性阻塞性肺病呼吸困難、甲狀腺功能異常、慢性肝病、骨質疏鬆症、
-        慢性病併發症預防、長期用藥管理、生活方式調整、飲食控制建議、運動處方、定期追蹤檢查、
-        醫院診所資訊查詢、醫療機構推薦、網路醫療資訊搜尋、最新治療方法研究、醫療設施查詢
+        慢性疾病醫療諮詢：糖尿病、高血壓、腎臟病、關節炎、慢性阻塞性肺病、甲狀腺疾病、
+        慢性肝病、骨質疏鬆、慢性病併發症預防、用藥管理、生活調整、飲食控制、運動處方。
         """,
-        
+
         "cardiovascular_agent": """
-        心血管疾病醫療諮詢：心臟病冠心病心肌梗塞、中風腦血管疾病、血壓高血壓低血壓、胸痛心絞痛、
-        心律不整心悸、動脈硬化血管疾病、心臟衰竭、靜脈曲張、周邊動脈疾病、心電圖異常、
-        心臟導管檢查、血管支架手術、心血管風險評估、膽固醇三酸甘油脂控制、心臟復健運動、
-        心血管專科醫院查詢、心臟科診所資訊、最新心血管治療技術、醫療機構心血管科介紹
+        心血管疾病諮詢：心臟病、冠心病、心肌梗塞、中風、血壓問題、胸痛、心絞痛、
+        心律不整、動脈硬化、心臟衰竭、血管疾病、心電圖、心導管、血管支架、心臟復健。
         """,
-        
+
         "fact_check_agent": """
-        醫療資訊查證與澄清：健康謠言查證、醫學聲明真偽驗證、偏方療法安全性、網路健康資訊可信度、
-        醫療廣告宣稱查核、保健食品功效驗證、治療方法科學根據、藥物副作用真實性、
-        醫療機構資格查證、健康飲食迷思澄清、疾病預防方法正確性、網路醫療資訊驗證、
-        醫療新聞真偽辨別、健康資訊事實查核、醫學研究報告驗證、網站醫療內容分析
+        醫療資訊查證：健康謠言查證、醫學聲明驗證、偏方安全性、網路資訊可信度、      
+        醫療廣告查核、保健食品驗證、治療方法科學根據、藥物副作用、醫療新聞真偽、    
+        食物療效查證、民間偏方驗證、健康迷思破解、營養補充品效果、是真的嗎類問題
         """
     }
     
@@ -207,7 +273,7 @@ def intelligent_agent_routing(user_query: str, state: State = None) -> str:
         semantic_result = semantic_route_query(user_query)
         
         # Use semantic result with confidence threshold
-        if semantic_result["confidence"] > 0.65:
+        if semantic_result["confidence"] > CONFIG['SEMANTIC_CONFIDENCE_THRESHOLD']:
             agent_logger.info(f"[INTELLIGENT_ROUTING] 語意分析結果: {semantic_result['agent']} (信心度: {semantic_result['confidence']:.3f})")
             selected = semantic_result["agent"]
         else:
@@ -223,33 +289,211 @@ def intelligent_agent_routing(user_query: str, state: State = None) -> str:
     
     return selected
 
-# Create delegation tools using official pattern
-transfer_to_chronic_agent = create_task_description_handoff_tool(agent_name="chronic_agent")
-transfer_to_cardiovascular_agent = create_task_description_handoff_tool(agent_name="cardiovascular_agent") 
-transfer_to_fact_check_agent = create_task_description_handoff_tool(agent_name="fact_check_agent")
+handoff_to_chronic_agent=create_handoff_tool(agent_name='chronic_agent',description='assign task to chronic agent')
+handoff_to_cardiovascular_agent=create_handoff_tool(agent_name='cardiovascular_agent',description='assign task to cardiovascular agent')
+handoff_to_fact_check_agent=create_handoff_tool(agent_name='fact_check_agent',description='assign task to fact check agent')
+
+def extract_transferred_agent_from_messages(messages):
+    """
+    從消息歷史中提取轉交的代理資訊，改進版本確保正確識別最終處理的代理
+    """
+    # 從最新的消息開始向前查找，找到最後一次轉交
+    for msg in reversed(messages):
+        if (hasattr(msg, 'type') and msg.type == 'tool' and
+            hasattr(msg, 'content') and 'Successfully transferred to' in msg.content):
+            # 提取代理名稱
+            content = msg.content
+            if 'chronic_agent' in content:
+                return 'chronic_agent'
+            elif 'cardiovascular_agent' in content:
+                return 'cardiovascular_agent'
+            elif 'fact_check_agent' in content:
+                return 'fact_check_agent'
+
+    # 如果沒有找到轉交消息，嘗試從工具調用推斷
+    for msg in reversed(messages):
+        if hasattr(msg, 'type') and msg.type == 'ai' and hasattr(msg, 'tool_calls'):
+            for tool_call in msg.tool_calls:
+                tool_name = tool_call.get('name', '')
+                if 'chronic_search' in tool_name:
+                    return 'chronic_agent'
+                elif 'cardiovascular_search' in tool_name:
+                    return 'cardiovascular_agent'
+                elif any(tool in tool_name for tool in ['cofacts_check_tool', 'google_fact_check_tool', 'net_search']):
+                    return 'fact_check_agent'
+
+    return None
 
 @tool(name_or_callable='net_search')
-def net_search(query: str):
+def net_search(query: str, state=None):
     """
     Use this tool when you need to search the internet for information or other tool don't return answer.
+    Returns search results with relevant website links and categorized information.
 
     Args:
         query: The medical question or statement to be answered.
+        state: Current workflow state (for tracking search count)
     """
-    import time
+    import urllib.parse
     start_time = time.time()
-    agent_logger.info(f"[TOOL] NET_SEARCH 啟動")
-    agent_logger.info(f"    搜尋查詢: {query[:100]}...")
-    
-    tavily=TavilySearch(country='taiwan',search_depth='advanced')
-    result=tavily.invoke(query)
-    
-    end_time = time.time()
-    agent_logger.info(f"[TOOL] NET_SEARCH 完成 | 耗時: {end_time - start_time:.2f}秒")
-    agent_logger.info(f"    搜尋結果長度: {len(str(result))} 字符")
-    agent_logger.info(f"    結果預覽: {str(result)[:150]}...")
-    
-    return result
+
+    # 檢查搜尋次數限制
+    if state and hasattr(state, 'search_count') and state.search_count >= CONFIG['MAX_SEARCH_COUNT']:
+        agent_logger.warning(f"[TOOL] NET_SEARCH 已達最大搜尋次數限制 ({state.search_count})")
+        return "搜尋次數已達上限，請使用現有資訊回答問題。"
+
+    # 增加搜尋計數並記錄日誌
+    search_info = ""
+    if state and hasattr(state, 'search_count'):
+        state.search_count += 1
+        search_info = f"第 {state.search_count} 次搜尋"
+
+    log_tool_start("net_search", query, search_info)
+
+    tavily = TavilySearch(country='taiwan', search_depth='advanced')
+    result = tavily.invoke(query)
+
+    # 解析 Tavily 結果並提取網址
+    enhanced_result = _enhance_search_result(query, result)
+
+    log_tool_end("net_search", start_time, len(str(enhanced_result)),
+                 f"結果預覽: {str(enhanced_result)[:150]}...")
+
+    return enhanced_result
+
+
+def _generate_maps_link(query: str) -> str:
+    """生成地圖連結"""
+    import urllib.parse
+    location_keywords = ["醫院", "診所", "藥局", "地點", "位置", "哪裡", "附近"]
+    if any(keyword in query for keyword in location_keywords):
+        maps_query = urllib.parse.quote(query)
+        return f"https://www.google.com/maps/search/{maps_query}"
+    return None
+
+def _extract_search_summary(tavily_result: dict) -> str:
+    """提取並限制搜尋摘要長度"""
+    if 'answer' in tavily_result and tavily_result['answer']:
+        summary = tavily_result['answer']
+        if len(summary) > CONFIG['DOMAIN_DESCRIPTION_LIMIT']:
+            summary = summary[:CONFIG['DOMAIN_DESCRIPTION_LIMIT']] + "..."
+        return summary
+    return ""
+
+def _extract_website_results(tavily_result: dict, query: str) -> list:
+    """提取並分類網站結果"""
+    websites = []
+    if 'results' in tavily_result:
+        for result_item in tavily_result['results'][:3]:  # 取前3個結果
+            # 支援多種可能的 URL 欄位名稱
+            url = None
+            for url_field in ['url', 'link', 'source']:
+                if url_field in result_item:
+                    url = result_item[url_field]
+                    break
+
+            if url:
+                # 限制標題長度
+                title = result_item.get('title', result_item.get('name', '無標題'))
+                if len(title) > 40:
+                    title = title[:40] + "..."
+
+                # 分類網站類型
+                site_type = _categorize_website(url, query)
+
+                websites.append({
+                    "標題": title,
+                    "網址": url,
+                    "類型": site_type
+                })
+    return websites
+
+def _enhance_search_result(query: str, tavily_result) -> str:
+    """
+    增強搜尋結果，添加相關網站連結和分類資訊
+    """
+    # 初始化結果結構
+    enhanced_info = {
+        "搜尋摘要": "",
+        "相關網站": [],
+        "地圖連結": None,
+        "原始資料": tavily_result
+    }
+
+    # 生成地圖連結
+    enhanced_info["地圖連結"] = _generate_maps_link(query)
+
+    # 解析 Tavily 結果
+    if isinstance(tavily_result, dict):
+        enhanced_info["搜尋摘要"] = _extract_search_summary(tavily_result)
+        enhanced_info["相關網站"] = _extract_website_results(tavily_result, query)
+
+    # 格式化輸出並限制總長度
+    formatted_result = _format_enhanced_result(enhanced_info)
+
+    # 如果結果太長，進一步截斷
+    if len(formatted_result) > CONFIG['SEARCH_RESULT_LIMIT']:
+        formatted_result = formatted_result[:CONFIG['SEARCH_RESULT_LIMIT']] + "\n...(結果已截斷)"
+
+    return formatted_result
+
+
+def _categorize_website(url: str, query: str) -> str:
+    """
+    根據網址和查詢內容分類網站類型
+    """
+    url_lower = url.lower()
+    query_lower = query.lower()
+
+    # 政府官方網站
+    if '.gov.tw' in url_lower or 'mohw.gov.tw' in url_lower:
+        return "政府官方"
+
+    # 醫療機構
+    elif any(keyword in url_lower for keyword in ['hospital', 'clinic', 'medical', '醫院', '診所']):
+        return "醫療機構"
+
+    # 健康資訊網站
+    elif any(keyword in url_lower for keyword in ['health', 'medicine', '健康', '醫療']):
+        return "健康資訊"
+
+    # 新聞媒體
+    elif any(keyword in url_lower for keyword in ['news', 'udn', 'chinatimes', 'cna', 'tvbs']):
+        return "新聞媒體"
+
+    # 教育機構
+    elif '.edu.tw' in url_lower:
+        return "教育機構"
+
+    else:
+        return "一般資訊"
+
+
+def _format_enhanced_result(enhanced_info: dict) -> str:
+    """
+    格式化增強的搜尋結果
+    """
+    result_text = ""
+
+    # 添加搜尋摘要
+    if enhanced_info["搜尋摘要"]:
+        result_text += f"{enhanced_info['搜尋摘要']}\n\n"
+
+    # 添加相關網站（優先顯示）
+    if enhanced_info["相關網站"]:
+        result_text += "參考資料：\n"
+        for i, site in enumerate(enhanced_info["相關網站"], 1):
+            result_text += f"{i}. {site['標題']}\n{site['網址']}\n"
+
+    # 添加地圖連結（如果有）
+    if enhanced_info["地圖連結"]:
+        result_text += f"\n地圖：{enhanced_info['地圖連結']}"
+
+    # 如果沒有摘要，回退到原始資料
+    if not enhanced_info["搜尋摘要"] and enhanced_info["原始資料"]:
+        result_text += f"原始搜尋結果：\n{enhanced_info['原始資料']}"
+
+    return result_text.strip()
 
 @tool(name_or_callable='cardiovascular_search')
 def cardiovascular_search(query: str) -> str:
@@ -264,18 +508,14 @@ def cardiovascular_search(query: str) -> str:
         A comprehensive answer based on the medical knowledge graph.
         if answer is not found, it will return a message indicating that no answer was found.
     """
-    import time
     start_time = time.time()
-    agent_logger.info(f"[TOOL] CARDIOVASCULAR_SEARCH 啟動")
-    agent_logger.info(f"    查詢內容: {query[:100]}...")
-    
+    log_tool_start("cardiovascular_search", query)
+
     result = graphrag_cardiovascular(input=query)
-    
-    end_time = time.time()
-    agent_logger.info(f"[TOOL] CARDIOVASCULAR_SEARCH 完成 | 耗時: {end_time - start_time:.2f}秒")
-    agent_logger.info(f"    回應長度: {len(result)} 字符")
-    agent_logger.info(f"    內容預覽: {result[:150]}...")
-    
+
+    log_tool_end("cardiovascular_search", start_time, len(result),
+                 f"內容預覽: {result[:150]}...")
+
     return result
 
 @tool(name_or_callable='chronic_search')
@@ -291,20 +531,64 @@ def chronic_search(query: str) -> str:
         A comprehensive answer based on the medical knowledge graph.
         if answer is not found, it will return a message indicating that no answer was found.
     """
-    import time
     start_time = time.time()
-    agent_logger.info(f"[TOOL] CHRONIC_SEARCH 啟動")
-    agent_logger.info(f"    查詢內容: {query[:100]}...")
-    
+    log_tool_start("chronic_search", query)
+
     result = graphrag_chronic(input=query)
-    
-    end_time = time.time()
-    agent_logger.info(f"[TOOL] CHRONIC_SEARCH 完成 | 耗時: {end_time - start_time:.2f}秒")
-    agent_logger.info(f"    回應長度: {len(result)} 字符")
-    agent_logger.info(f"    內容預覽: {result[:150]}...")
-    
+
+    log_tool_end("chronic_search", start_time, len(result),
+                 f"內容預覽: {result[:150]}...")
+
     return result
 
+
+@tool(name_or_callable='cofacts_check_tool', parse_docstring=True)
+def cofacts_check_tool(query: str) -> str:
+    """
+    台灣本地事實查核工具，使用 Cofacts API 查證台灣相關的健康謠言和資訊。
+
+    Args:
+        query: 待查核的聲明或問題
+
+    Returns:
+        台灣本地的事實查核結果
+    """
+    start_time = time.time()
+    log_tool_start("cofacts_check_tool", query)
+
+    try:
+        cofacts_result = search_cofacts(query)
+        result = ""
+        articles_found = 0
+
+        if cofacts_result and 'data' in cofacts_result and 'ListArticles' in cofacts_result['data']:
+            edges = cofacts_result['data']['ListArticles']['edges']
+            articles_found = len(edges)
+
+            if articles_found > 0:
+                result += f"找到 {articles_found} 筆台灣 Cofacts 查核結果:\n"
+                for edge in edges[:3]:  # 取前3筆結果
+                    article = edge['node']
+                    result += f"- 文章: {article.get('text', '無標題')[:100]}...\n"
+                    if 'articleReplies' in article and article['articleReplies']:
+                        for reply in article['articleReplies'][:2]:  # 取前2個回應
+                            reply_data = reply.get('reply', {})
+                            result += f"  查核結果: {reply_data.get('type', '未知')}\n"
+                            result += f"  說明: {reply_data.get('text', '無說明')[:150]}...\n"
+                    result += "-" * 20 + "\n"
+            else:
+                result += "台灣 Cofacts 查無相關查核結果\n"
+        else:
+            result += "台灣 Cofacts 查無相關查核結果\n"
+
+    except Exception as e:
+        result = f"台灣 Cofacts 查核服務暫時無法使用: {str(e)}"
+        agent_logger.error(f"[TOOL] COFACTS_CHECK_TOOL 錯誤: {e}")
+
+    log_tool_end("cofacts_check_tool", start_time, len(result),
+                 f"查核結果數量: {articles_found} 筆")
+
+    return result
 
 @tool(name_or_callable='google_fact_check_tool',parse_docstring=True)
 def google_fact_check_tool(query: str) -> str:
@@ -317,15 +601,13 @@ def google_fact_check_tool(query: str) -> str:
     Returns:
         A  result of the fact-check results.
     """
-    import time
     start_time = time.time()
-    agent_logger.info(f"[TOOL] FACT_CHECK_TOOL 啟動")
-    agent_logger.info(f"    待查核聲明: {query[:100]}...")
-    
+    log_tool_start("google_fact_check_tool", query)
+
     fact = search_fact_checks(query)
     result = ""
     claims_found = 0
-    
+
     if fact:
         if 'claims' in fact:
             claims_found = len(fact['claims'])
@@ -340,12 +622,9 @@ def google_fact_check_tool(query: str) -> str:
                 result += "-" * 20 + "\n"
         else:
             result += "查無相關審查結果\n"
-    
-    end_time = time.time()
-    agent_logger.info(f"[TOOL] FACT_CHECK_TOOL 完成 | 耗時: {end_time - start_time:.2f}秒")
-    agent_logger.info(f"    查核結果數量: {claims_found} 筆")
-    agent_logger.info(f"    回應長度: {len(result)} 字符")
-    agent_logger.info(f"    內容預覽: {result[:150]}...")
+
+    log_tool_end("google_fact_check_tool", start_time, len(result),
+                 f"查核結果數量: {claims_found} 筆，內容預覽: {result[:150]}...")
     
     return result
     
@@ -354,8 +633,7 @@ def google_fact_check_tool(query: str) -> str:
 chronic_agent = create_react_agent(
     model=llm_GPT,
     tools=[
-        chronic_search,
-        net_search
+        chronic_search
     ],
     name="chronic_agent",
     prompt="""
@@ -365,11 +643,10 @@ Specialty: Chronic diseases including diabetes, hypertension, arthritis, kidney 
 
 Available Tools:
 - chronic_search: Query medical knowledge graph for chronic disease information
-- net_search: Search internet for current medical information
 
 Workflow:
-1. ALWAYS use the chronic_search tool first to query the medical knowledge graph
-2. If additional current information is needed, use net_search tool
+1. Use the chronic_search tool to query the medical knowledge graph
+2. Provide comprehensive answers based on the medical knowledge graph
 3. Provide comprehensive, evidence-based medical guidance in MARKDOWN format
 4. Focus only on your specialty area - chronic diseases
 
@@ -405,8 +682,7 @@ You are the final authority on chronic diseases - do not refer to other speciali
 cardiovascular_agent = create_react_agent(
     model=llm_GPT,
     tools=[
-        cardiovascular_search,
-        net_search
+        cardiovascular_search
     ],
     name="cardiovascular_agent",
     prompt="""
@@ -416,11 +692,10 @@ Specialty: Heart diseases, stroke, blood pressure, chest pain, and all cardiovas
 
 Available Tools:
 - cardiovascular_search: Query medical knowledge graph for cardiovascular disease information
-- net_search: Search internet for current medical information
 
 Workflow:
-1. ALWAYS use the cardiovascular_search tool first to query the medical knowledge graph
-2. If additional current information is needed, use net_search tool
+1. Use the cardiovascular_search tool to query the medical knowledge graph
+2. Provide comprehensive answers based on the medical knowledge graph
 3. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
 4. Focus only on your specialty area - cardiovascular diseases
 
@@ -457,34 +732,42 @@ You are the final authority on cardiovascular diseases - do not refer to other s
 fact_check_agent = create_react_agent(
     model=llm_GPT,
     tools=[
-        google_fact_check_tool
+        cofacts_check_tool,
+        google_fact_check_tool,
+        net_search
     ],
     name="fact_check_agent",
     prompt="""
-You are the medical fact-checking specialist agent in a healthcare consultation system.
+You are the information specialist agent in a healthcare consultation system, responsible for fact-checking AND general information searches.
 
-Specialty: Verifying health and medical claims, debunking misinformation, providing evidence-based assessments.
+Dual Responsibilities:
+1. **Medical Fact-Checking**: Verifying health claims and debunking misinformation
+2. **Information Search**: Finding latest information, general queries, and current data
 
 Available Tools:
+- cofacts_check_tool: 台灣本地事實查核，使用 Cofacts API 查證台灣健康謠言
 - google_fact_check_tool: Use Google Fact Check API for claim verification
+- net_search: Search internet for current information, latest news, and general queries
 
-Workflow:
-1. ALWAYS use the google_fact_check_tool first to verify the medical claim
-2. Analyze fact-checking results thoroughly
-3. Provide comprehensive verification analysis with clear verdicts in MARKDOWN format
-4. Focus only on fact-checking and verification
+Workflow Decision:
+- **For fact-checking requests**: Use cofacts_check_tool FIRST for Taiwan-specific health claims, then google_fact_check_tool, then net_search if needed
+- **For information search requests**: Use net_search to find current information
+- **For general queries**: Use net_search to provide comprehensive answers
+
+Priority for fact-checking: Cofacts (台灣本地) → Google Fact Check → Net Search
 
 CRITICAL OUTPUT REQUIREMENTS:
 - MUST respond in Traditional Chinese
 - MUST use proper Markdown formatting with headers, lists, and emphasis
 - MUST structure responses with clear sections using ## headers
-- MUST use **bold** for important terms and verification status
+- MUST use **bold** for important terms and key information
 - MUST use bullet points (-) or numbered lists (1., 2., 3.) for clarity
-- MUST provide detailed analysis based on tool results
-- MUST give clear verdicts on claim accuracy with supporting evidence
-- NEVER answer without using google_fact_check_tool first
+- MUST provide detailed, up-to-date information based on tool results
+- NEVER answer without using appropriate tools first
 
-Response Structure Template:
+Response Structure Templates:
+
+**For Fact-Checking:**
 ## Medical Fact-Check Analysis
 
 ### **Claim Being Verified**
@@ -494,223 +777,154 @@ Response Structure Template:
 - **Status**: Verified / False / Partially True / Insufficient Evidence
 - **Confidence Level**: High/Medium/Low
 
-### **Evidence Analysis**
-1. Source 1 findings
-2. Source 2 findings
-3. Expert consensus
+**For Information Search:**
+## Information Search Results
 
-### **Final Verdict**
-- **Conclusion**: Clear statement of accuracy
-- **Recommendations**: What users should know/do
+### **Search Summary**
+- **Key Findings**: Main information points
+- **Current Status**: Latest situation
 
-You are the final authority on medical fact-checking - do not refer to other verification services.
+### **Detailed Information**
+1. Key point one
+2. Key point two
+3. Related considerations
+
+You are the final authority on information search and fact-checking - provide comprehensive, current information.
 """
     )
     
-@tool(name_or_callable='intelligent_routing_tool')
-def intelligent_routing_tool(
-    user_query: str,
-    state: Annotated[State, InjectedState]
-) -> str:
-    """
-    Intelligent routing tool that uses semantic analysis to determine the best agent for a medical query.
-    Includes loop prevention mechanism.
-    
-    Args:
-        user_query: The user's medical question or statement
-        state: Current conversation state
-        
-    Returns:
-        The name of the most appropriate agent (chronic_agent, cardiovascular_agent, or fact_check_agent)
-    """
-    return intelligent_agent_routing(user_query, state)
 
 supervisor = create_react_agent(
     model=llm_GPT,
-    tools=[transfer_to_chronic_agent, transfer_to_cardiovascular_agent, transfer_to_fact_check_agent, intelligent_routing_tool],
+    tools=[handoff_to_chronic_agent, handoff_to_cardiovascular_agent, handoff_to_fact_check_agent],
+    pre_model_hook=summarization_node,
     name="supervisor",
     checkpointer=memory,
     prompt="""
-You are a thoughtful supervisor managing specialized medical agents in a healthcare consultation system.
+        Role:
+        You are the Supervisor Agent for a medical health consultation system. Your job is to route questions to the appropriate specialist agent and then summarize their responses.
 
-THINKING PROCESS - Follow these steps for EVERY query:
+        Critical Routing Rules - You MUST transfer every query:
+        - Chronic diseases (diabetes, hypertension, arthritis, kidney disease, etc.): MUST use handoff_to_chronic_agent
+        - Cardiovascular/heart issues (heart disease, stroke, blood pressure, chest pain, etc.): MUST use handoff_to_cardiovascular_agent
+        - Information search, latest news, general queries, non-medical topics, fact-checking: MUST use handoff_to_fact_check_agent
+        - When query contains keywords like "search", "latest", "current", "news", "information": handoff_to_fact_check_agent
+        - When in doubt about medical topics: Default to chronic_agent
 
-STEP 1: ANALYZE the user's query carefully
-- What type of question is this? (medical consultation, general information, fact-checking)
-- What specific information does the user need?
-- Are there any keywords indicating this is non-medical information request?
+        Mandatory Workflow:
+        1. Read the user question
+        2. Immediately identify which specialist is needed
+        3. MUST use the appropriate transfer tool - never provide direct answers
+        4. Wait for the specialist agent to complete their work with tools
+        5. When specialist returns, provide a comprehensive summary in Traditional Chinese
 
-STEP 2: ROUTE intelligently  
-- Use intelligent_routing_tool to determine the best agent
-- Think: Does this routing make sense for this specific query?
-- Remember: The tool has loop prevention - it will return the same agent if already routed
-
-STEP 3: DELEGATE with precision
-- Transfer to the selected agent with a clear, specific task description
-- Include all relevant context from the user's original question
-- Be explicit about what type of response is needed
-
-STEP 4: COMPLETE the task
-- Once you delegate, your job is DONE
-- Do NOT attempt to route again or call additional tools
-- Trust the specialist agent to handle the complete response
-
-Available specialized agents:
-- chronic_agent: Chronic diseases, general medical info, hospital information, contact details
-- cardiovascular_agent: Heart diseases, stroke, blood pressure, cardiovascular conditions  
-- fact_check_agent: Medical claim verification, health misinformation checking
-
-CRITICAL RULES:
-- ALWAYS use intelligent_routing_tool FIRST before any delegation
-- ONLY delegate to ONE agent per conversation
-- NEVER attempt to answer questions yourself
-- Provide task descriptions in Traditional Chinese for consistency
-- After delegation, STOP - do not continue processing
-
-Example thought process:
-User asks: "台灣大學的聯絡電話"
-STEP 1: This is a general information request about contact details, not medical
-STEP 2: Use intelligent_routing_tool → returns "chronic_agent" (handles general info)  
-STEP 3: Transfer with task: "請協助查詢台灣大學的聯絡電話資訊"
-STEP 4: Task complete - specialist will handle the full response
-
-Think step-by-step and be decisive in your actions.
+        Absolute Rules:
+        - NEVER answer medical questions yourself initially
+        - ALWAYS transfer to a specialist agent first
+        - You must use exactly one transfer tool per user query
+        - After receiving specialist response, provide final summary
+        - Each specialist agent will use their required tools automatically
 """
 )
 
-# Simple router function to replace supervisor agent
-def route_to_agent(state: State) -> str:
-    """Simple routing function that directs to appropriate agent"""
-    messages = state.get('messages', [])
-    if not messages:
-        return 'chronic_agent'
-    
-    # Get the latest user message
-    user_message = None
-    for msg in reversed(messages):
-        if hasattr(msg, 'type') and msg.type == 'human':
-            user_message = msg.content
-            break
-    
-    if not user_message:
-        return 'chronic_agent'
-    
-    # Use intelligent routing with loop prevention
-    selected_agent = intelligent_agent_routing(user_message, state)
-    agent_logger.info(f"[ROUTER] 路由決策: {user_message[:50]}... -> {selected_agent}")
-    
-    return selected_agent
 
-# Rebuild workflow with simple conditional routing - no supervisor agent to cause loops
-workflow = (
+workflow=(
     StateGraph(State)
+    # destinations是為了方便視覺化用的
+    .add_node(supervisor,destinations=('chronic_agent','cardiovascular_agent','fact_check_agent',END))
     .add_node(chronic_agent)
     .add_node(cardiovascular_agent)
     .add_node(fact_check_agent)
-    .add_edge(START, 'chronic_agent')  # Default start with chronic_agent for simplicity
-    .add_conditional_edges(
-        START,
-        route_to_agent,
-        {
-            'chronic_agent': 'chronic_agent',
-            'cardiovascular_agent': 'cardiovascular_agent',
-            'fact_check_agent': 'fact_check_agent'
-        }
-    )
-    # All agents end directly
-    .add_edge('chronic_agent', END)
-    .add_edge('cardiovascular_agent', END)
-    .add_edge('fact_check_agent', END)
+    .add_edge(START,'supervisor')
+    .add_edge('chronic_agent','supervisor')
+    .add_edge('cardiovascular_agent','supervisor')
+    .add_edge('fact_check_agent','supervisor')
     .compile(checkpointer=memory)
 )
 
 def generate_response(message: str, session_id: str = "default", location_info: dict = None) -> dict:
     """
-    Simplified response generation using official LangGraph delegation pattern
-    
+    統一的回應生成函數，供 Django views 調用
+
     Args:
-        message: User input message
-        session_id: Session ID for conversation context  
-        location_info: Optional location information dictionary
-    
+        message: 使用者輸入的訊息
+        session_id: 會話 ID，用於維持對話上下文
+        location_info: 位置資訊字典（可選）
+
     Returns:
-        dict: Response dictionary containing output, location, and data fields
+        dict: 包含 output, location, data 等欄位的回應字典
     """
-    import logging
     import time
-    logger = logging.getLogger(__name__)
-    
     start_time = time.time()
-    logger.info(f"=== WORKFLOW START ===")
-    logger.info(f"User input: '{message}' | Session ID: {session_id}")
-    
-    # Build complete user message (including location info if provided)
+
+    # 工作流開始日誌
+    agent_logger.info(f"[WORKFLOW_START] 處理用戶問題: {message[:100]}{'...' if len(message) > 100 else ''}")
+    agent_logger.info(f"[WORKFLOW_START] 會話ID: {session_id}")
+    if location_info:
+        agent_logger.info(f"[WORKFLOW_START] 包含位置資訊: {location_info.get('name', '未知')}")
+
+    # 建立完整的使用者訊息（包含位置資訊如果有的話）
     user_message = message
     if location_info:
-        location_context = f"User location information:\n"
-        location_context += f"Name: {location_info.get('name', 'Unknown')}\n"
-        location_context += f"Address: {location_info.get('address', 'Unknown')}\n"
-        location_context += f"Coordinates: {location_info.get('coordinates', 'Unknown')}\n\n"
-        user_message = location_context + "User question: " + message
-        logger.info(f"Message with location info: {len(user_message)} characters")
-    
-    # Use session_id as thread_id to maintain conversation context
+        location_context = f"使用者位置資訊：\n"
+        location_context += f"名稱：{location_info.get('name', '未知')}\n"
+        location_context += f"地址：{location_info.get('address', '未知')}\n"
+        location_context += f"座標：{location_info.get('coordinates', '未知')}\n\n"
+        user_message = location_context + "使用者問題：" + message
+
+    # 使用 session_id 作為 thread_id 維持對話上下文
     config = {"configurable": {"thread_id": session_id}}
-    
-    logger.info(f"Starting LangGraph Workflow execution...")
+
+    # 執行工作流 - 使用正確的消息格式避免 Gemini API 錯誤
+    agent_logger.info(f"[WORKFLOW_EXECUTION] 開始執行多代理工作流")
     workflow_start = time.time()
-    
-    try:
-        # Execute workflow
-        result = workflow.invoke(
-            input={'messages': [HumanMessage(content=user_message.strip())]},
-            config=config
-        )
-        
-        workflow_end = time.time()
-        logger.info(f"=== WORKFLOW COMPLETE === Duration: {workflow_end - workflow_start:.2f}s")
-        logger.info(f"Workflow result: Generated {len(result.get('messages', []))} messages")
-        
-        # Simple message extraction: Get the last AI message
-        messages = result.get('messages', [])
-        final_response = ""
-        
-        # Find the last AI message that contains substantial content
-        for msg in reversed(messages):
-            if (hasattr(msg, 'type') and msg.type == 'ai' and 
-                hasattr(msg, 'content') and msg.content and 
-                msg.content.strip() and 
-                len(msg.content.strip()) > 20):  # Filter out short/empty responses
-                
-                final_response = msg.content.strip()
-                logger.info(f"Selected final AI response: {len(final_response)} characters")
-                logger.info(f"Response preview: {final_response[:100]}...")
-                break
-        
-        # Fallback if no valid response found
-        if not final_response:
-            final_response = "抱歉，系統無法處理您的請求。請稍後再試。"
-            logger.warning("No valid AI response found, using fallback message")
-    
-    except Exception as e:
-        logger.error(f"Workflow execution error: {str(e)}")
-        final_response = "抱歉，系統處理您的請求時發生錯誤。請稍後再試。"
-    
+
+    result = workflow.invoke(
+        input={'messages': [HumanMessage(content=user_message)]},
+        config=config
+    )
+
+    workflow_end = time.time()
+    agent_logger.info(f"[WORKFLOW_EXECUTION] 工作流執行完成，耗時: {workflow_end - workflow_start:.2f}秒")
+
+    # 提取最終的 AI 回應（supervisor的最終總結）
+    messages = result.get('messages', [])
+
+    # 提取並記錄轉交資訊
+    transferred_agent = extract_transferred_agent_from_messages(messages)
+    if transferred_agent:
+        display_name = AGENT_DISPLAY_NAMES.get(transferred_agent, transferred_agent)
+        agent_logger.info(f"[WORKFLOW_ROUTING] 最終處理代理: {display_name} ({transferred_agent})")
+    else:
+        agent_logger.warning(f"[WORKFLOW_ROUTING] 未能識別轉交的代理")
+
+    # 獲取最後一條AI消息（工作流的最終輸出）
+    final_response = ""
+    for msg in reversed(messages):
+        if (hasattr(msg, 'type') and msg.type == 'ai' and
+            hasattr(msg, 'content') and msg.content.strip()):
+            final_response = msg.content.strip()
+            break
+
+    # 工作流完成日誌
     total_time = time.time() - start_time
-    logger.info(f"=== PROCESSING COMPLETE === Total time: {total_time:.2f}s")
-    logger.info(f"Final response: {len(final_response)} characters")
-    
-    # Build unified response format
+    agent_logger.info(f"[WORKFLOW_COMPLETE] 總處理時間: {total_time:.2f}秒")
+    agent_logger.info(f"[WORKFLOW_COMPLETE] 回應長度: {len(final_response)} 字符")
+    agent_logger.info(f"[WORKFLOW_COMPLETE] 消息總數: {len(messages)}")
+
+    # 建構統一回應格式
     response_data = {
         'output': final_response,
         'location': location_info,
         'data': {
             'session_id': session_id,
             'message_processed': True,
-            'response_length': len(final_response)
+            'response_length': len(final_response),
+            'transferred_agent': transferred_agent,
+            'processing_time': round(total_time, 2)
         }
     }
-    
+
     return response_data
 
 

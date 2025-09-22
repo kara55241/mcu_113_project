@@ -41,13 +41,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **SQLite**: Django 主數據庫 (`db.sqlite3`)，會話管理
 - **SQLite Checkpoint**: AI 代理狀態存儲 (`agent_checkpoint.sqlite`)
 - **Neo4j**: 醫療知識圖譜，支援慢性病和心血管疾病查詢
-- **外部 APIs**: 
+- **外部 APIs**:
   - OpenAI GPT-4.1 & Embeddings
   - Google Gemini 2.5-flash
   - Google Maps API (地圖和地點搜索)
   - Tavily Search (網頁搜索)
   - Cofacts API (台灣事實查核)
-  - Playwright (瀏覽器自動化)
 
 ## 常用開發命令
 

@@ -71,7 +71,7 @@ class SearchTools:
         使用 Google Search 查詢網頁資訊，回傳摘要結果。
         """
         try:
-            G_serper = GoogleSerperAPIWrapper(gl='tw', hl='zh-tw', type='search', k=10)
+            G_serper = GoogleSerperAPIWrapper(gl='tw', hl='zh-tw', type='search', k=5)
             result = G_serper.run(input)
             return f"🔍 Google 搜尋結果如下：\n\n{result}"
         except Exception as e:
