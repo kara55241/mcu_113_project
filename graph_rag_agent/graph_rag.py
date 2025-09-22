@@ -65,7 +65,7 @@ WITH collect(DISTINCT chunk) AS chunks,
 RETURN '=== text ===n' + apoc.text.join([c in chunks | c.text], 'n---n') + 'nn=== kg_rels ===n' +
  apoc.text.join([r in rels | startNode(r).name + ' - ' + type(r) + '(' + coalesce(r.details, '') + ')' +  ' -> ' + endNode(r).name ], 'n---n') AS info
 """,
-neo4j_database=chronic)
+neo4j_database=cardiovascular)
 
 rag_template = RagTemplate(template=
 '''
