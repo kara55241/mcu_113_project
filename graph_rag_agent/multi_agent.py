@@ -31,11 +31,11 @@ agent_logger = logging.getLogger('multi_agent')
 try:
     from .graph_rag import graphrag_chronic, graphrag_cardiovascular
     from .fact_check import search_fact_checks
-    from .cofacts_check import search_cofacts
+    from .word_similarity import find_most_similar_cofacts_article
 except ImportError:
     from graph_rag import graphrag_chronic, graphrag_cardiovascular
     from fact_check import search_fact_checks
-    from cofacts_check import search_cofacts
+    from word_similarity import find_most_similar_cofacts_article
 from langmem.short_term import SummarizationNode
 from langchain_core.messages.utils import count_tokens_approximately
 try:
@@ -122,13 +122,6 @@ def semantic_route_query(user_query: str) -> dict:
     
     # Define domain descriptions with comprehensive medical terminology
     domain_descriptions = {
-        "chronic_agent": """
-        慢性疾病醫療諮詢：糖尿病血糖控制胰島素注射、高血壓降血壓藥物、慢性腎臟病腎功能保護、
-        關節炎關節疼痛治療、慢性阻塞性肺病呼吸困難、甲狀腺功能異常、慢性肝病、骨質疏鬆症、
-        慢性病併發症預防、長期用藥管理、生活方式調整、飲食控制建議、運動處方、定期追蹤檢查、
-        醫院診所資訊查詢、醫療機構推薦、網路醫療資訊搜尋、最新治療方法研究、醫療設施查詢
-        """,
-        
         "cardiovascular_agent": """
         心血管疾病醫療諮詢：心臟病冠心病心肌梗塞、中風腦血管疾病、血壓高血壓低血壓、胸痛心絞痛、
         心律不整心悸、動脈硬化血管疾病、心臟衰竭、靜脈曲張、周邊動脈疾病、心電圖異常、
@@ -148,7 +141,7 @@ def semantic_route_query(user_query: str) -> dict:
         # Get query embedding
         query_embedding = get_embedding(user_query)
         if not query_embedding:
-            return {"agent": "chronic_agent", "confidence": 0.5, "method": "fallback"}
+            return {"agent": "cardiovascular_agent", "confidence": 0.5, "method": "fallback"}
         
         # Calculate similarities
         similarities = {}
@@ -160,7 +153,7 @@ def semantic_route_query(user_query: str) -> dict:
                 agent_logger.info(f"[SEMANTIC_ROUTING] {agent_name}: {similarity:.3f}")
         
         if not similarities:
-            return {"agent": "chronic_agent", "confidence": 0.5, "method": "fallback"}
+            return {"agent": "cardiovascular_agent", "confidence": 0.5, "method": "fallback"}
         
         # Find best match
         best_agent = max(similarities, key=similarities.get)
@@ -177,7 +170,7 @@ def semantic_route_query(user_query: str) -> dict:
         
     except Exception as e:
         agent_logger.error(f"[SEMANTIC_ROUTING] 錯誤: {e}")
-        return {"agent": "chronic_agent", "confidence": 0.5, "method": "error_fallback"}
+        return {"agent": "cardiovascular_agent", "confidence": 0.5, "method": "error_fallback"}
 
 def intelligent_agent_routing(user_query: str, state: State = None) -> str:
     """
@@ -185,7 +178,7 @@ def intelligent_agent_routing(user_query: str, state: State = None) -> str:
     """
     # Check if routing was already done to prevent loops
     if state and hasattr(state, 'routing_done') and state.routing_done:
-        selected = getattr(state, 'selected_agent', 'chronic_agent')
+        selected = getattr(state, 'selected_agent', 'cardiovascular_agent')
         agent_logger.info(f"[INTELLIGENT_ROUTING] 路由已完成，避免重複: {selected}")
         return selected
     
@@ -200,8 +193,8 @@ def intelligent_agent_routing(user_query: str, state: State = None) -> str:
     is_general_info = any(keyword in user_query.lower() for keyword in general_info_keywords)
     
     if is_general_info:
-        agent_logger.info(f"[INTELLIGENT_ROUTING] 識別為一般資訊查詢，導向 chronic_agent 處理")
-        selected = "chronic_agent"
+        agent_logger.info(f"[INTELLIGENT_ROUTING] 識別為一般資訊查詢，導向 cardiovascular_agent 處理")
+        selected = "cardiovascular_agent"
     else:
         # Use semantic analysis for medical routing
         semantic_result = semantic_route_query(user_query)
@@ -212,8 +205,8 @@ def intelligent_agent_routing(user_query: str, state: State = None) -> str:
             selected = semantic_result["agent"]
         else:
             # Default to chronic_agent for general health queries when confidence is low
-            agent_logger.info(f"[INTELLIGENT_ROUTING] 信心度不足，使用預設路由: chronic_agent (語意信心度: {semantic_result['confidence']:.3f})")
-            selected = "chronic_agent"
+            agent_logger.info(f"[INTELLIGENT_ROUTING] 信心度不足，使用預設路由: cardiovascular_agent (語意信心度: {semantic_result['confidence']:.3f})")
+            selected = "cardiovascular_agent"
     
     # Mark routing as done in state (only if state exists and has these attributes)
     if state and hasattr(state, 'routing_done'):
@@ -348,8 +341,18 @@ def google_fact_check_tool(query: str) -> str:
     agent_logger.info(f"    內容預覽: {result[:150]}...")
     
     return result
-    
+@tool(name_or_callable='cofact_tool')
+def cofact_tool(query: str ):
+    """
+    You must use this tool when supervisor asks you to fact-check a claim.
 
+    Args:
+        query: The claim or statement to be fact-checked.
+
+    Returns:
+        A  result of the fact-check results.
+    """
+    return find_most_similar_cofacts_article(query)
 
 chronic_agent = create_react_agent(
     model=llm_GPT,
@@ -404,10 +407,7 @@ You are the final authority on chronic diseases - do not refer to other speciali
 
 cardiovascular_agent = create_react_agent(
     model=llm_GPT,
-    tools=[
-        cardiovascular_search,
-        net_search
-    ],
+    tools=[cardiovascular_search],
     name="cardiovascular_agent",
     prompt="""
 You are the cardiovascular diseases specialist agent in a medical consultation system.
@@ -416,48 +416,21 @@ Specialty: Heart diseases, stroke, blood pressure, chest pain, and all cardiovas
 
 Available Tools:
 - cardiovascular_search: Query medical knowledge graph for cardiovascular disease information
-- net_search: Search internet for current medical information
 
-Workflow:
-1. ALWAYS use the cardiovascular_search tool first to query the medical knowledge graph
-2. If additional current information is needed, use net_search tool
-3. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
-4. Focus only on your specialty area - cardiovascular diseases
-
-CRITICAL OUTPUT REQUIREMENTS:
-- MUST respond in Traditional Chinese
-- MUST use proper Markdown formatting with headers, lists, and emphasis
-- MUST structure responses with clear sections using ## headers
-- MUST use **bold** for important terms and emphasis
-- MUST use bullet points (-) or numbered lists (1., 2., 3.) for clarity
-- MUST provide detailed, practical cardiovascular medical advice
-- MUST base all responses on tool results
-- NEVER answer without using tools first
-
-Response Structure Template:
-## Cardiovascular Disease Consultation Response
-
-### **Risk Assessment**
-- Current risk factors
-- Important warnings
-
-### **Treatment Recommendations** 
-1. Primary interventions
-2. Lifestyle modifications
-3. Medical management
-
-### **Prevention & Monitoring**
-- **Prevention Strategies**: Specific prevention measures
-- **Regular Monitoring**: Recommended follow-up schedule
-
-You are the final authority on cardiovascular diseases - do not refer to other specialists.
+guidelines:
+1. Use Traditional Chinese for all responses
+2. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
+3. Focus only on your specialty area - cardiovascular diseases
+4. Use Progressive Q&A to dignose possible conditions, so you should ask step by step, but you should use tool in every 5 questions
+5. To avoid confusing users, you should ask one question at a time and wait for the user's answer before asking the next question
 """
 )
 
 fact_check_agent = create_react_agent(
     model=llm_GPT,
     tools=[
-        google_fact_check_tool
+        google_fact_check_tool,
+        cofact_tool
     ],
     name="fact_check_agent",
     prompt="""
@@ -583,7 +556,7 @@ def route_to_agent(state: State) -> str:
     """Simple routing function that directs to appropriate agent"""
     messages = state.get('messages', [])
     if not messages:
-        return 'chronic_agent'
+        return 'cardiovascular_agent'
     
     # Get the latest user message
     user_message = None
@@ -593,7 +566,7 @@ def route_to_agent(state: State) -> str:
             break
     
     if not user_message:
-        return 'chronic_agent'
+        return 'cardiovascular_agent'
     
     # Use intelligent routing with loop prevention
     selected_agent = intelligent_agent_routing(user_message, state)
@@ -604,21 +577,21 @@ def route_to_agent(state: State) -> str:
 # Rebuild workflow with simple conditional routing - no supervisor agent to cause loops
 workflow = (
     StateGraph(State)
-    .add_node(chronic_agent)
+
     .add_node(cardiovascular_agent)
     .add_node(fact_check_agent)
-    .add_edge(START, 'chronic_agent')  # Default start with chronic_agent for simplicity
+    .add_edge(START, 'cardiovascular_agent')  
     .add_conditional_edges(
         START,
         route_to_agent,
         {
-            'chronic_agent': 'chronic_agent',
+
             'cardiovascular_agent': 'cardiovascular_agent',
             'fact_check_agent': 'fact_check_agent'
         }
     )
     # All agents end directly
-    .add_edge('chronic_agent', END)
+
     .add_edge('cardiovascular_agent', END)
     .add_edge('fact_check_agent', END)
     .compile(checkpointer=memory)
