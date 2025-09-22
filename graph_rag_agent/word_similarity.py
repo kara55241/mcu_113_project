@@ -1,7 +1,7 @@
 from sentence_transformers import SentenceTransformer, util
 from cofacts_check import search_cofacts
 
-model = SentenceTransformer("multi-qa-mpnet-base-dot-v1",device='cuda')
+model = SentenceTransformer("multi-qa-mpnet-base-dot-v1")
 def find_most_similar_cofacts_article(query_text):
     cofacts_result = search_cofacts(query_text)
     articles = []
