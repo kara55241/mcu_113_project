@@ -6,6 +6,7 @@ from neo4j_graphrag.generation import RagTemplate
 from neo4j_graphrag.generation.graphrag import GraphRAG
 from neo4j_graphrag.llm import OpenAILLM
 import os
+import re
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -111,13 +112,38 @@ def graphrag_chronic(input:str):
    return answer_with_source
 
 def graphrag_cardiovascular(input: str):
-    return cardiovascular_rag.search(input, retriever_config={'top_k':5}).answer
+   vc_res = cardiovascular_retriever.get_search_results(query_text=input, top_k=3)
+   kg_rel_pos = vc_res.records[0]['info'].find('nn=== kg_rels ===n')
+   kg_rels = vc_res.records[0]['info'][kg_rel_pos:] 
+   
+   
+   names = set()
+   for line in kg_rels.split('n---n'):
+      match = re.match(r'(.*?) - (.*?)\((.*?)\) -> (.*)', line.strip())
+      if match:
+         start,_ , _, end = match.groups()
+         names.add(start)
+         names.add(end)
+   names_list = ', '.join([f'"{n}"' for n in names])
+   cypher_query = f'''
+      MATCH (a:__Entity__)-[r]->(b:__Entity__)
+      WHERE a.name IN [{names_list}] OR b.name IN [{names_list}]
+      RETURN a, r, b
+   '''
+   
+   with open('kg_search.cypher', 'w', encoding='utf-8') as f:
+    f.write(cypher_query)
+
+   print("查詢語法已存成 kg_search.cypher")
+   
+   result = cardiovascular_rag.search(input, retriever_config={'top_k':3},return_context=False)
+   return result.answer
 
 
 if __name__ == "__main__":
       # 測試輸入
       test_input = "糖尿病可以吃甜食嗎?"
-      answer = graphrag_chronic(test_input)
+      answer =graphrag_cardiovascular(test_input)
       print("RAG Answer:", answer)
       
     
