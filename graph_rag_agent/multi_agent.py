@@ -33,9 +33,9 @@ try:
     from .fact_check import search_fact_checks
     from .word_similarity import find_most_similar_cofacts_article
 except ImportError:
-    from graph_rag import graphrag_chronic, graphrag_cardiovascular
-    from fact_check import search_fact_checks
-    from word_similarity import find_most_similar_cofacts_article
+    from .graph_rag import graphrag_chronic, graphrag_cardiovascular
+    from .fact_check import search_fact_checks
+    from .word_similarity import find_most_similar_cofacts_article
 from langmem.short_term import SummarizationNode
 from langchain_core.messages.utils import count_tokens_approximately
 try:
@@ -424,10 +424,11 @@ Available Tools:
 
 guidelines:
 1. Use Traditional Chinese for all responses
-2. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
-3. Focus only on your specialty area - cardiovascular diseases
-4. Use Progressive Q&A to dignose possible conditions, so you should ask step by step, but you should use tool in every 5 questions
-5. To avoid confusing users, you should ask one question at a time and wait for the user's answer before asking the next question
+2.You MUST ONLY answer using the cardiovascular_search tool. DO NOT use your own knowledge or make assumptions.
+3. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
+4. Focus only on your specialty area - cardiovascular diseases
+5. Use Progressive Q&A to dignose possible conditions, so you should ask step by step, but you should use tool in every 5 questions
+6. To avoid confusing users, you should ask one question at a time and wait for the user's answer before asking the next question
 """
 )
 
