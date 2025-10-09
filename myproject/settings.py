@@ -34,7 +34,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", 'django-insecure-gg$m&a^%v4@k5p2ea8or9fec1&1bez1o=vsh)zyi+$cxg^!9-)')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1", "yes", "on")
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
@@ -48,12 +48,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',  # 確保這一行存在
+    'rest_framework',  # Django REST Framework
+    'corsheaders',  # CORS 支援
     'myapp',
+    'monitoring_api',  # 監控 API
 ]
 
 MIDDLEWARE = [
     # 替換原有的 SecurityMiddleware 為自定義版本
     'myproject.middleware.CustomSecurityMiddleware',  # 自定義安全中間件
+    'corsheaders.middleware.CorsMiddleware',  # CORS 中間件（必須在 CommonMiddleware 之前）
     'django.contrib.sessions.middleware.SessionMiddleware',
     # 確保添加正確的 Content-Type
     'django.middleware.common.CommonMiddleware',
@@ -212,11 +216,41 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# 如果在生產環境，啟用 HTTPS 相關安全設置
-if not DEBUG:
+# 開發環境明確禁用 HTTPS 重定向
+if DEBUG:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_HSTS_SECONDS = 0  # 明確禁用 HSTS
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+else:
+    # 如果在生產環境，啟用 HTTPS 相關安全設置
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 31536000  # 1 年
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+# CORS 配置（允許監控前端訪問）
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Nuxt 開發服務器
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",  # Vite 開發服務器
+    "http://127.0.0.1:5173",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Django REST Framework 配置
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # 開發環境，生產環境需改為 IsAuthenticated
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 50,
+}

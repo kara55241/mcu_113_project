@@ -77,10 +77,10 @@ class ChatHistory:
             return True
         return False
 
-# 導入多代理 RAG 系統
+# 延遲導入多代理 RAG 系統 (避免啟動時載入)
 from neo4j import GraphDatabase
-from graph_rag_agent.multi_agent import generate_response
-logger.info("成功導入多代理 RAG 系統")
+# from graph_rag_agent.multi_agent import generate_response  # 延遲導入
+logger.info("準備延遲導入多代理 RAG 系統")
 
 class ChatView(View):
     """處理聊天請求的視圖類"""
@@ -156,6 +156,8 @@ class ChatView(View):
                                 f"地址：{location_info.get('address', '')}\n" \
                                 f"座標：{location_info.get('coordinates', '')}\n\n"
 
+            # 延遲導入 (只在實際使用時才載入)
+            from graph_rag_agent.multi_agent import generate_response
             response_data = generate_response(context_prefix + user_message, session_id, location_info)
 
             # 處理回應數據

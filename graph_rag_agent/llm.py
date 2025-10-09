@@ -26,6 +26,17 @@ llm_GPT = ChatOpenAI(
     temperature=0
 )
 
+# 建立強制工具調用的 LLM 實例（用於醫療專家 agent）
+llm_GPT_tool_required = ChatOpenAI(
+    openai_api_key=os.getenv("OPENAI_API_KEY"),
+    model="gpt-4o-mini",
+    max_retries=2,
+    temperature=0,
+    model_kwargs={
+        "tool_choice": "required"  # 強制必須調用工具
+    }
+)
+
 # 建立 Google 的 LLM 模型實例
 llm_gemini = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",

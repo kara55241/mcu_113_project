@@ -14,6 +14,9 @@ urlpatterns = [
     path("chat/history/", ChatHistoryView.as_view(), name="chat_history_all"),
     path("chat/history/<str:chat_id>/", ChatHistoryView.as_view(), name="chat_history_detail"),
     path("", ChatView.as_view(), name="home"),
+
+    # 監控 API 端點
+    path("api/monitoring/", include('monitoring_api.urls')),
 ]
 
 # 始終添加靜態文件服務，無論 DEBUG 模式如何
