@@ -157,5 +157,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Nuxt 監控儀表板前端
+monitoring-dashboard/node_modules/
+monitoring-dashboard/.nuxt/
+monitoring-dashboard/.output/
+monitoring-dashboard/dist/
+monitoring-dashboard/.env
+
 # Project specific logs
 graph_rag_agent/mcp_log/browserlog.log

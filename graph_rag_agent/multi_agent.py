@@ -6,11 +6,13 @@ from langchain_core.tools import tool, InjectedToolCallId
 from langgraph.prebuilt import InjectedState
 from langgraph.graph import StateGraph, START, MessagesState,END
 from langgraph.types import Command
+from langchain_core.runnables import RunnableConfig
 import sqlite3
 import warnings
 import logging
 import os
 import time
+from contextvars import ContextVar
 
 # 設置詳細的日誌記錄
 logging.basicConfig(
@@ -29,6 +31,9 @@ from langchain_core.messages import HumanMessage
 # 創建專門的 logger
 agent_logger = logging.getLogger('multi_agent')
 
+# 🔹 全局上下文變量：用於在整個執行過程中追蹤 thread_id
+current_thread_id: ContextVar[str] = ContextVar('current_thread_id', default='unknown')
+
 # 配置常量
 CONFIG = {
     'SEMANTIC_CONFIDENCE_THRESHOLD': 0.6,#信心度
@@ -43,16 +48,18 @@ try:
     from .graph_rag import graphrag_chronic, graphrag_cardiovascular
     from .fact_check import search_fact_checks
     from .cofacts_check import search_cofacts
+    from .agent_tracker import tracker, get_thread_id, get_user_query
 except ImportError:
     from graph_rag import graphrag_chronic, graphrag_cardiovascular
     from fact_check import search_fact_checks
     from cofacts_check import search_cofacts
+    from agent_tracker import tracker, get_thread_id, get_user_query
 from langmem.short_term import SummarizationNode
 from langchain_core.messages.utils import count_tokens_approximately
 try:
-    from .llm import llm_gemini, llm_GPT
+    from .llm import llm_gemini, llm_GPT, llm_GPT_tool_required
 except ImportError:
-    from llm import llm_gemini, llm_GPT
+    from llm import llm_gemini, llm_GPT, llm_GPT_tool_required
 from langchain_tavily import TavilySearch
 import numpy as np
 from openai import OpenAI
@@ -115,6 +122,7 @@ def create_handoff_tool(*, agent_name: str, description: str | None = None):
     def handoff_tool(
         state: Annotated[MessagesState, InjectedState],
         tool_call_id: Annotated[str, InjectedToolCallId],
+        config: RunnableConfig = None,
     ) -> Command:
         # 詳細的轉交日誌記錄
         display_name = AGENT_DISPLAY_NAMES.get(agent_name, agent_name)
@@ -130,6 +138,27 @@ def create_handoff_tool(*, agent_name: str, description: str | None = None):
         agent_logger.info(f"[SUPERVISOR_ROUTING] 用戶問題: {user_query}")
         agent_logger.info(f"[SUPERVISOR_ROUTING] 路由決策: 轉交至 {display_name} ({agent_name})")
         agent_logger.info(f"[SUPERVISOR_ROUTING] 轉交工具: {name}")
+
+        # 🔹 追蹤器：從多個來源嘗試提取 thread_id
+        try:
+            thread_id = "unknown"
+
+            # 方法 1: 從全局上下文變量獲取（最可靠）
+            thread_id = current_thread_id.get()
+
+            # 方法 2: 從 config 提取（備用）
+            if thread_id == "unknown" and config and "configurable" in config:
+                thread_id = config["configurable"].get("thread_id", "unknown")
+
+            # 方法 3: 從 state 的 configurable 提取（備用）
+            if thread_id == "unknown" and isinstance(state, dict):
+                if "configurable" in state:
+                    thread_id = state["configurable"].get("thread_id", "unknown")
+
+            agent_logger.info(f"[TRACKER] 提取到 thread_id: {thread_id}")
+            tracker.start_agent(thread_id, agent_name, user_query)
+        except Exception as e:
+            agent_logger.warning(f"[TRACKER] 追蹤器記錄失敗: {e}")
 
         tool_message = {
             "role": "tool",
@@ -325,7 +354,10 @@ def extract_transferred_agent_from_messages(messages):
     return None
 
 @tool(name_or_callable='net_search')
-def net_search(query: str, state=None):
+def net_search(
+    query: str,
+    state: Annotated[MessagesState, InjectedState] = None
+):
     """
     Use this tool when you need to search the internet for information or other tool don't return answer.
     Returns search results with relevant website links and categorized information.
@@ -355,6 +387,23 @@ def net_search(query: str, state=None):
 
     # 解析 Tavily 結果並提取網址
     enhanced_result = _enhance_search_result(query, result)
+
+    # 🔹 追蹤器：記錄工具結果
+    try:
+        # 從上下文變量或 state 提取 thread_id
+        thread_id = current_thread_id.get()
+        if thread_id == "unknown" and state:
+            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+
+        tracker.log_tool_call(
+            thread_id=thread_id,
+            agent_name="fact_check_agent",
+            tool_name="net_search",
+            args={"query": query[:100]},
+            result=str(enhanced_result)[:200] if enhanced_result else None
+        )
+    except Exception as e:
+        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
 
     log_tool_end("net_search", start_time, len(str(enhanced_result)),
                  f"結果預覽: {str(enhanced_result)[:150]}...")
@@ -496,7 +545,10 @@ def _format_enhanced_result(enhanced_info: dict) -> str:
     return result_text.strip()
 
 @tool(name_or_callable='cardiovascular_search')
-def cardiovascular_search(query: str) -> str:
+def cardiovascular_search(
+    query: str,
+    state: Annotated[MessagesState, InjectedState] = None
+) -> str:
     """
     You must use this tool when supervisor asks a medical question about cardiovascular diseases.
     This tool queries a medical knowledge graph to retrieve and generate answers.
@@ -511,15 +563,47 @@ def cardiovascular_search(query: str) -> str:
     start_time = time.time()
     log_tool_start("cardiovascular_search", query)
 
-    result = graphrag_cardiovascular(input=query)
+    # 調用 graphrag_cardiovascular，獲取包含圖譜數據的完整結果
+    full_result = graphrag_cardiovascular(input=query, return_graph_data=True)
 
-    log_tool_end("cardiovascular_search", start_time, len(result),
-                 f"內容預覽: {result[:150]}...")
+    # 提取答案文本（給 LLM 使用）
+    if isinstance(full_result, dict):
+        answer = full_result.get('answer', '')
+        graph_data = full_result.get('graph_data', {})
+    else:
+        # 向後兼容：如果返回的是字符串
+        answer = full_result
+        graph_data = {}
 
-    return result
+    # 🔹 追蹤器：記錄完整的工具結果（包含圖譜數據）
+    try:
+        # 從上下文變量或 state 提取 thread_id
+        thread_id = current_thread_id.get()
+        if thread_id == "unknown" and state:
+            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+
+        tracker.log_tool_call(
+            thread_id=thread_id,
+            agent_name="cardiovascular_agent",
+            tool_name="cardiovascular_search",
+            args={"query": query[:100]},
+            result=full_result  # 傳遞完整結果（包含 graph_data）
+        )
+    except Exception as e:
+        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+
+    # 記錄日誌
+    graph_info = f"節點數: {len(graph_data.get('nodes', []))}, 關係數: {len(graph_data.get('relationships', []))}"
+    log_tool_end("cardiovascular_search", start_time, len(answer),
+                 f"內容預覽: {answer[:150]}... | {graph_info}")
+
+    return answer
 
 @tool(name_or_callable='chronic_search')
-def chronic_search(query: str) -> str:
+def chronic_search(
+    query: str,
+    state: Annotated[MessagesState, InjectedState] = None
+) -> str:
     """
     You must use this tool when supervisor asks a medical question about chronic diseases.
     This tool queries a medical knowledge graph to retrieve and generate answers.
@@ -534,16 +618,48 @@ def chronic_search(query: str) -> str:
     start_time = time.time()
     log_tool_start("chronic_search", query)
 
-    result = graphrag_chronic(input=query)
+    # 調用 graphrag_chronic，獲取包含圖譜數據的完整結果
+    full_result = graphrag_chronic(input=query, return_graph_data=True)
 
-    log_tool_end("chronic_search", start_time, len(result),
-                 f"內容預覽: {result[:150]}...")
+    # 提取答案文本（給 LLM 使用）
+    if isinstance(full_result, dict):
+        answer = full_result.get('answer', '')
+        graph_data = full_result.get('graph_data', {})
+    else:
+        # 向後兼容：如果返回的是字符串
+        answer = full_result
+        graph_data = {}
 
-    return result
+    # 🔹 追蹤器：記錄完整的工具結果（包含圖譜數據）
+    try:
+        # 從上下文變量或 state 提取 thread_id
+        thread_id = current_thread_id.get()
+        if thread_id == "unknown" and state:
+            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+
+        tracker.log_tool_call(
+            thread_id=thread_id,
+            agent_name="chronic_agent",
+            tool_name="chronic_search",
+            args={"query": query[:100]},
+            result=full_result  # 傳遞完整結果（包含 graph_data）
+        )
+    except Exception as e:
+        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+
+    # 記錄日誌
+    graph_info = f"節點數: {len(graph_data.get('nodes', []))}, 關係數: {len(graph_data.get('relationships', []))}"
+    log_tool_end("chronic_search", start_time, len(answer),
+                 f"內容預覽: {answer[:150]}... | {graph_info}")
+
+    return answer
 
 
 @tool(name_or_callable='cofacts_check_tool', parse_docstring=True)
-def cofacts_check_tool(query: str) -> str:
+def cofacts_check_tool(
+    query: str,
+    state: Annotated[MessagesState, InjectedState] = None
+) -> str:
     """
     台灣本地事實查核工具，使用 Cofacts API 查證台灣相關的健康謠言和資訊。
 
@@ -585,13 +701,33 @@ def cofacts_check_tool(query: str) -> str:
         result = f"台灣 Cofacts 查核服務暫時無法使用: {str(e)}"
         agent_logger.error(f"[TOOL] COFACTS_CHECK_TOOL 錯誤: {e}")
 
+    # 🔹 追蹤器：記錄工具結果
+    try:
+        # 從上下文變量或 state 提取 thread_id
+        thread_id = current_thread_id.get()
+        if thread_id == "unknown" and state:
+            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+
+        tracker.log_tool_call(
+            thread_id=thread_id,
+            agent_name="fact_check_agent",
+            tool_name="cofacts_check_tool",
+            args={"query": query[:100]},
+            result=result[:200] if result else None
+        )
+    except Exception as e:
+        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+
     log_tool_end("cofacts_check_tool", start_time, len(result),
                  f"查核結果數量: {articles_found} 筆")
 
     return result
 
 @tool(name_or_callable='google_fact_check_tool',parse_docstring=True)
-def google_fact_check_tool(query: str) -> str:
+def google_fact_check_tool(
+    query: str,
+    state: Annotated[MessagesState, InjectedState] = None
+) -> str:
     """
     You must use this tool when supervisor asks you to fact-check a claim.
 
@@ -623,15 +759,32 @@ def google_fact_check_tool(query: str) -> str:
         else:
             result += "查無相關審查結果\n"
 
+    # 🔹 追蹤器：記錄工具結果
+    try:
+        # 從上下文變量或 state 提取 thread_id
+        thread_id = current_thread_id.get()
+        if thread_id == "unknown" and state:
+            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+
+        tracker.log_tool_call(
+            thread_id=thread_id,
+            agent_name="fact_check_agent",
+            tool_name="google_fact_check_tool",
+            args={"query": query[:100]},
+            result=result[:200] if result else None
+        )
+    except Exception as e:
+        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+
     log_tool_end("google_fact_check_tool", start_time, len(result),
                  f"查核結果數量: {claims_found} 筆，內容預覽: {result[:150]}...")
-    
+
     return result
     
 
 
 chronic_agent = create_react_agent(
-    model=llm_GPT,
+    model=llm_GPT,  # 恢復使用標準版本
     tools=[
         chronic_search
     ],
@@ -653,11 +806,20 @@ Available Tools:
 
 Workflow:
 1. Review any previous conversation context in the message history
-2. Use the chronic_search tool to query the medical knowledge graph
-3. Provide comprehensive answers that integrate conversation context with medical knowledge
+2. **MANDATORY FIRST STEP**: Call chronic_search tool to query the medical knowledge graph
+   - You MUST call the tool before providing any answer
+   - Even if you think you know the answer, ALWAYS query the knowledge graph first
+   - This ensures all information is accurate and tracked
+3. After receiving tool results, synthesize a comprehensive answer
 4. Reference previous patient statements when relevant
-5. Provide comprehensive, evidence-based medical guidance in MARKDOWN format
+5. Provide evidence-based medical guidance in MARKDOWN format
 6. Focus only on your specialty area - chronic diseases
+
+CRITICAL TOOL USAGE RULES:
+- **ABSOLUTE REQUIREMENT**: MUST call chronic_search tool as your first action for EVERY new user question
+- **NO EXCEPTIONS**: Do not provide any medical advice without first querying the knowledge graph
+- **ONE TOOL CALL PER QUESTION**: After calling the tool once and receiving results, provide your final answer
+- **DO NOT LOOP**: After providing your answer, stop - do not call tools again unless user asks a new question
 
 CRITICAL OUTPUT REQUIREMENTS:
 - MUST respond in Traditional Chinese
@@ -666,9 +828,7 @@ CRITICAL OUTPUT REQUIREMENTS:
 - MUST structure responses with clear sections using ## headers
 - MUST use **bold** for important terms and emphasis
 - MUST use bullet points (-) or numbered lists (1., 2., 3.) for clarity
-- MUST provide detailed, practical medical advice
-- MUST base all responses on tool results
-- NEVER answer without using tools first
+- MUST provide detailed, practical medical advice based on tool results
 
 Response Structure Template:
 ## 慢性疾病諮詢回覆
@@ -691,7 +851,7 @@ You are the final authority on chronic diseases - do not refer to other speciali
 )
 
 cardiovascular_agent = create_react_agent(
-    model=llm_GPT,
+    model=llm_GPT,  # 恢復使用標準版本
     tools=[
         cardiovascular_search
     ],
@@ -713,11 +873,20 @@ Available Tools:
 
 Workflow:
 1. Review any previous conversation context in the message history
-2. Use the cardiovascular_search tool to query the medical knowledge graph
-3. Provide comprehensive answers that integrate conversation context with medical knowledge
+2. **MANDATORY FIRST STEP**: Call cardiovascular_search tool to query the medical knowledge graph
+   - You MUST call the tool before providing any answer
+   - Even if you think you know the answer, ALWAYS query the knowledge graph first
+   - This ensures all information is accurate and tracked
+3. After receiving tool results, synthesize a comprehensive answer
 4. Reference previous patient statements when relevant
-5. Provide comprehensive, evidence-based cardiovascular guidance in MARKDOWN format
+5. Provide evidence-based cardiovascular guidance in MARKDOWN format
 6. Focus only on your specialty area - cardiovascular diseases
+
+CRITICAL TOOL USAGE RULES:
+- **ABSOLUTE REQUIREMENT**: MUST call cardiovascular_search tool as your first action for EVERY new user question
+- **NO EXCEPTIONS**: Do not provide any cardiovascular advice without first querying the knowledge graph
+- **ONE TOOL CALL PER QUESTION**: After calling the tool once and receiving results, provide your final answer
+- **DO NOT LOOP**: After providing your answer, stop - do not call tools again unless user asks a new question
 
 CRITICAL OUTPUT REQUIREMENTS:
 - MUST respond in Traditional Chinese
@@ -726,9 +895,7 @@ CRITICAL OUTPUT REQUIREMENTS:
 - MUST structure responses with clear sections using ## headers
 - MUST use **bold** for important terms and emphasis
 - MUST use bullet points (-) or numbered lists (1., 2., 3.) for clarity
-- MUST provide detailed, practical cardiovascular medical advice
-- MUST base all responses on tool results
-- NEVER answer without using tools first
+- MUST provide detailed, practical cardiovascular medical advice based on tool results
 
 Response Structure Template:
 ## 心血管疾病諮詢回覆
@@ -878,6 +1045,10 @@ def generate_response(message: str, session_id: str = "default", location_info: 
     import time
     start_time = time.time()
 
+    # 🔹 關鍵：在執行流程開始時設置全局上下文變量
+    current_thread_id.set(session_id)
+    agent_logger.info(f"[WORKFLOW_START] 設置上下文 thread_id: {session_id}")
+
     # 工作流開始日誌
     agent_logger.info(f"[WORKFLOW_START] 處理用戶問題: {message[:100]}{'...' if len(message) > 100 else ''}")
     agent_logger.info(f"[WORKFLOW_START] 會話ID: {session_id}")
@@ -896,6 +1067,9 @@ def generate_response(message: str, session_id: str = "default", location_info: 
     # 使用 session_id 作為 thread_id 維持對話上下文
     config = {"configurable": {"thread_id": session_id}}
 
+    # 🔹 追蹤器：記錄 Thread 開始
+    tracker.start_agent(session_id, "supervisor", message[:200])
+
     # 執行工作流 - 使用正確的消息格式避免 Gemini API 錯誤
     agent_logger.info(f"[WORKFLOW_EXECUTION] 開始執行多代理工作流")
     workflow_start = time.time()
@@ -907,6 +1081,9 @@ def generate_response(message: str, session_id: str = "default", location_info: 
 
     workflow_end = time.time()
     agent_logger.info(f"[WORKFLOW_EXECUTION] 工作流執行完成，耗時: {workflow_end - workflow_start:.2f}秒")
+
+    # 🔹 追蹤器：記錄 Supervisor 完成
+    tracker.complete_agent(session_id, "supervisor")
 
     # 提取最終的 AI 回應（supervisor的最終總結）
     messages = result.get('messages', [])
@@ -932,6 +1109,11 @@ def generate_response(message: str, session_id: str = "default", location_info: 
     agent_logger.info(f"[WORKFLOW_COMPLETE] 總處理時間: {total_time:.2f}秒")
     agent_logger.info(f"[WORKFLOW_COMPLETE] 回應長度: {len(final_response)} 字符")
     agent_logger.info(f"[WORKFLOW_COMPLETE] 消息總數: {len(messages)}")
+
+    # 🔹 追蹤器：完成轉交的 Agent 並標記 Thread 完成
+    if transferred_agent:
+        tracker.complete_agent(session_id, transferred_agent, handoff_message=final_response[:100])
+    tracker.complete_thread(session_id)
 
     # 建構統一回應格式
     response_data = {

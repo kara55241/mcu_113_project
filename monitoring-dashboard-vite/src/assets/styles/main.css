@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+/* 自定義樣式 */
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-indigo-600 text-white hover:bg-indigo-700;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+  }
+
+  .card {
+    @apply bg-white rounded-lg shadow p-6;
+  }
+}
+
+/* Vue Flow 樣式覆蓋 */
+.vue-flow__node {
+  cursor: pointer;
+}
+
+.vue-flow__edge-path {
+  stroke-width: 2;
+}
+
+/* 動畫 */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
