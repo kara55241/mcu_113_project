@@ -45,7 +45,16 @@
       "Bash(venv\\Scripts\\python.exe -c:*)",
       "Bash(venv/Scripts/pip install:*)",
       "Bash(git checkout:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(git pull:*)",
+      "Bash(venv\\Scripts\\python.exe -m pip list:*)",
+      "Bash(venvScriptspython.exe:*)",
+      "Bash(../venv/Scripts/python.exe graph_rag.py:*)",
+      "Bash(copy graph_rag_agentgraph_rag.py graph_rag_agentgraph_rag.py.backup)",
+      "Bash(cp:*)"
     ],
     "deny": [],
     "ask": []

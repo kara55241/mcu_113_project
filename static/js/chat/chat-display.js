@@ -443,7 +443,65 @@ MedApp.chat.display = {
       }
       MedApp.chat.history.saveMessageToStorage(MedApp.state.currentChatId, `我在 ${location.name} 附近搜尋了醫療設施`, 'user');
     },
-    
+
+    // 顯示位置選擇訊息（當使用者在地圖選擇位置時）
+    appendLocationMessage: function(location) {
+      if (!location || !this.elements.chatContainer) {
+        MedApp.log('無效的位置資訊或聊天容器不存在', 'warn');
+        return;
+      }
+
+      // 創建訊息容器
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add('message', 'user', 'location-message');
+
+      // 創建頭像
+      const avatarDiv = document.createElement('div');
+      avatarDiv.className = 'message-avatar';
+      avatarDiv.textContent = '我';
+
+      // 創建內容容器
+      const contentWrapper = document.createElement('div');
+      contentWrapper.className = 'message-content';
+
+      // 創建訊息泡泡
+      const messageBubble = document.createElement('div');
+      messageBubble.className = 'message-bubble';
+
+      // 建立位置訊息內容（使用 emoji 和格式化）
+      const locationName = location.name || '未知位置';
+      const locationAddress = location.address || '';
+      const locationCoords = location.coordinates || '';
+
+      let content = `📍 已選擇位置：<strong>${locationName}</strong>`;
+      if (locationAddress) {
+        content += `<br><small style="color: #aaa;">${locationAddress}</small>`;
+      }
+
+      messageBubble.innerHTML = content;
+
+      // 添加時間戳
+      const timeSpan = document.createElement('span');
+      timeSpan.classList.add('message-time');
+      const now = new Date();
+      timeSpan.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+      // 組裝結構
+      contentWrapper.appendChild(messageBubble);
+      contentWrapper.appendChild(timeSpan);
+      messageDiv.appendChild(avatarDiv);
+      messageDiv.appendChild(contentWrapper);
+
+      // 添加到聊天容器
+      this.elements.chatContainer.appendChild(messageDiv);
+
+      // 滾動到底部
+      this.scrollToBottom();
+
+      // 記錄日誌
+      MedApp.log(`已顯示位置選擇訊息: ${locationName}`, 'info');
+    },
+
     // 滾動聊天窗口到底部
     scrollToBottom: function() {
       if (this.elements.chatContainer) {

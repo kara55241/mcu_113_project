@@ -49,11 +49,13 @@ try:
     from .fact_check import search_fact_checks
     from .cofacts_check import search_cofacts
     from .agent_tracker import tracker, get_thread_id, get_user_query
+    from .SearchTool import SearchTools
 except ImportError:
     from graph_rag import graphrag_chronic, graphrag_cardiovascular
     from fact_check import search_fact_checks
     from cofacts_check import search_cofacts
     from agent_tracker import tracker, get_thread_id, get_user_query
+    from SearchTool import SearchTools
 from langmem.short_term import SummarizationNode
 from langchain_core.messages.utils import count_tokens_approximately
 try:
@@ -233,9 +235,11 @@ def semantic_route_query(user_query: str) -> dict:
         """,
 
         "fact_check_agent": """
-        醫療資訊查證：健康謠言查證、醫學聲明驗證、偏方安全性、網路資訊可信度、      
-        醫療廣告查核、保健食品驗證、治療方法科學根據、藥物副作用、醫療新聞真偽、    
-        食物療效查證、民間偏方驗證、健康迷思破解、營養補充品效果、是真的嗎類問題
+        醫療資訊查證與地點查詢：健康謠言查證、醫學聲明驗證、偏方安全性、網路資訊可信度、
+        醫療廣告查核、保健食品驗證、治療方法科學根據、藥物副作用、醫療新聞真偽、
+        食物療效查證、民間偏方驗證、健康迷思破解、營養補充品效果、是真的嗎類問題、
+        醫療設施地點查詢、醫院位置、診所地址、藥局地點、附近醫療機構、哪裡有醫院、
+        地點搜尋、位置查詢、醫療設施導航、附近診所、附近藥局
         """
     }
     
@@ -348,10 +352,78 @@ def extract_transferred_agent_from_messages(messages):
                     return 'chronic_agent'
                 elif 'cardiovascular_search' in tool_name:
                     return 'cardiovascular_agent'
+                elif 'google_map_search' in tool_name:
+                    # google_map_search 可能被 supervisor 直接調用（fast-path）
+                    # 或被 fact_check_agent 調用（complex query）
+                    # 這裡標記為 fact_check_agent 以保持一致性
+                    return 'fact_check_agent'
                 elif any(tool in tool_name for tool in ['cofacts_check_tool', 'google_fact_check_tool', 'net_search']):
                     return 'fact_check_agent'
 
     return None
+
+@tool(name_or_callable='google_map_search')
+def google_map_search(
+    query: str,
+    state: Annotated[MessagesState, InjectedState] = None
+):
+    """
+    搜尋附近的醫院、診所、藥局等醫療設施。使用 Google Maps API 提供精確的地點資訊。
+
+    適用場景：
+    - 使用者詢問特定地點附近的醫療設施（例如：「台北醫院」、「新竹診所」）
+    - 使用者詢問「哪裡有」、「附近有」等地點相關問題
+    - 需要提供醫療設施的地址、評分、地圖連結
+
+    Args:
+        query: 包含地點和醫療設施類型的查詢字串
+        state: 工作流狀態（可選，用於獲取 location_info）
+
+    Returns:
+        混合格式：Markdown 格式的醫療設施列表 + JSON 結構化數據
+    """
+    start_time = time.time()
+
+    log_tool_start("google_map_search", query)
+
+    try:
+        # 嘗試從 state 中提取 location_info（如果使用者在前端地圖點選了位置）
+        location_info = None
+        if state and hasattr(state, 'context') and isinstance(state.context, dict):
+            location_info = state.context.get('location_info')
+
+        # 呼叫 SearchTools.Google_Map 工具
+        result = SearchTools.Google_Map(query, location_info)
+
+        # 🔹 追蹤器：記錄工具結果
+        try:
+            thread_id = current_thread_id.get()
+            if thread_id == "unknown" and state:
+                thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+
+            # 提取簡短結果預覽（不包含完整 JSON）
+            result_preview = result.split('[HOSPITAL_DATA]')[0][:200] if '[HOSPITAL_DATA]' in result else result[:200]
+
+            tracker.log_tool_call(
+                thread_id=thread_id,
+                agent_name="fact_check_agent",
+                tool_name="google_map_search",
+                args={"query": query[:100], "has_location_info": location_info is not None},
+                result=result_preview
+            )
+        except Exception as e:
+            agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+
+        log_tool_end("google_map_search", start_time, len(result),
+                     f"找到醫療設施數量: {result.count('**')}")
+
+        return result
+
+    except Exception as e:
+        error_msg = f"❌ Google Maps 搜尋失敗：{str(e)}"
+        agent_logger.error(f"[TOOL] GOOGLE_MAP_SEARCH 錯誤: {e}")
+        log_tool_end("google_map_search", start_time, 0, f"錯誤: {str(e)}")
+        return error_msg
 
 @tool(name_or_callable='net_search')
 def net_search(
@@ -920,28 +992,36 @@ You are the final authority on cardiovascular diseases - do not refer to other s
 fact_check_agent = create_react_agent(
     model=llm_GPT,
     tools=[
+        google_map_search,      # 新增：地點查詢工具（優先使用）
         cofacts_check_tool,
         google_fact_check_tool,
         net_search
     ],
     name="fact_check_agent",
     prompt="""
-You are the information specialist agent in a healthcare consultation system, responsible for fact-checking AND general information searches.
+You are the information specialist agent in a healthcare consultation system, responsible for fact-checking, information searches, AND location-based queries.
 
-Dual Responsibilities:
-1. **Medical Fact-Checking**: Verifying health claims and debunking misinformation
-2. **Information Search**: Finding latest information, general queries, and current data
+Triple Responsibilities:
+1. **Location-Based Queries**: Finding nearby hospitals, clinics, and pharmacies
+2. **Medical Fact-Checking**: Verifying health claims and debunking misinformation
+3. **Information Search**: Finding latest information, general queries, and current data
 
 Available Tools:
+- google_map_search: 搜尋附近的醫院、診所、藥局等醫療設施（使用 Google Maps API）
 - cofacts_check_tool: 台灣本地事實查核，使用 Cofacts API 查證台灣健康謠言
 - google_fact_check_tool: Use Google Fact Check API for claim verification
 - net_search: Search internet for current information, latest news, and general queries
 
 Workflow Decision:
+- **For location queries** (包含：醫院、診所、藥局、附近、哪裡、地點): **MUST use google_map_search FIRST**
+  - Examples: "台北哪裡有醫院？", "新竹附近的診所", "台中藥局"
+  - This tool provides precise location data, addresses, ratings, and map links
+  - DO NOT use net_search for location queries - it provides less accurate results
 - **For fact-checking requests**: Use cofacts_check_tool FIRST for Taiwan-specific health claims, then google_fact_check_tool, then net_search if needed
 - **For information search requests**: Use net_search to find current information
 - **For general queries**: Use net_search to provide comprehensive answers
 
+Priority for location queries: google_map_search (ALWAYS FIRST)
 Priority for fact-checking: Cofacts (台灣本地) → Google Fact Check → Net Search
 
 CRITICAL OUTPUT REQUIREMENTS:
@@ -954,6 +1034,17 @@ CRITICAL OUTPUT REQUIREMENTS:
 - NEVER answer without using appropriate tools first
 
 Response Structure Templates:
+
+**For Location Queries (MOST IMPORTANT - Use google_map_search):**
+When user asks about hospital/clinic/pharmacy locations:
+1. ALWAYS use google_map_search tool first
+2. The tool will return results with [HOSPITAL_DATA] JSON - keep this intact in your response
+3. Present the tool results naturally in Traditional Chinese
+4. Mention that users can click the Google Maps links for directions
+Example response pattern:
+"根據您的查詢，我為您找到以下醫療設施：
+[Tool results will appear here with hospital listings]
+您可以點擊上方的 Google Maps 連結查看詳細位置和路線規劃。"
 
 **For Fact-Checking:**
 ## Medical Fact-Check Analysis
@@ -977,6 +1068,7 @@ Response Structure Templates:
 2. Key point two
 3. Related considerations
 
+IMPORTANT: For location-based queries, ALWAYS use google_map_search and preserve the [HOSPITAL_DATA] JSON in your response.
 You are the final authority on information search and fact-checking - provide comprehensive, current information.
 """
     )
@@ -984,34 +1076,50 @@ You are the final authority on information search and fact-checking - provide co
 
 supervisor = create_react_agent(
     model=llm_GPT,
-    tools=[handoff_to_chronic_agent, handoff_to_cardiovascular_agent, handoff_to_fact_check_agent],
+    tools=[
+        google_map_search,              # 🚀 Fast-path: 直接處理簡單地點查詢
+        handoff_to_chronic_agent,
+        handoff_to_cardiovascular_agent,
+        handoff_to_fact_check_agent
+    ],
     pre_model_hook=summarization_node,
     name="supervisor",
     checkpointer=memory,
     prompt="""
         Role:
-        You are the Supervisor Agent for a medical health consultation system. Your job is to route questions to the appropriate specialist agent and then summarize their responses.
+        You are the Supervisor Agent for a medical health consultation system with fast-path capability for simple queries.
 
-        Critical Routing Rules - You MUST transfer every query:
-        - Chronic diseases (diabetes, hypertension, arthritis, kidney disease, etc.): MUST use handoff_to_chronic_agent
-        - Cardiovascular/heart issues (heart disease, stroke, blood pressure, chest pain, etc.): MUST use handoff_to_cardiovascular_agent
-        - Information search, latest news, general queries, non-medical topics, fact-checking: MUST use handoff_to_fact_check_agent
-        - When query contains keywords like "search", "latest", "current", "news", "information": handoff_to_fact_check_agent
+        🚀 FAST PATH - Direct Tool Usage (Highest Priority):
+        For SIMPLE location queries, DIRECTLY use google_map_search WITHOUT transferring:
+        - Pattern: [地名] + [醫院/診所/藥局/附近/哪裡]
+        - Examples:
+          ✓ "台北哪裡有醫院？" → DIRECTLY use google_map_search
+          ✓ "新竹診所" → DIRECTLY use google_map_search
+          ✓ "台中附近的藥局" → DIRECTLY use google_map_search
+        - This is the FASTEST way - skip agent transfer for simple location queries
+        - After getting results, provide summary in Traditional Chinese
+
+        🔀 AGENT ROUTING - Transfer to Specialists (When needed):
+        - Chronic diseases (diabetes, hypertension, arthritis, etc.): MUST use handoff_to_chronic_agent
+        - Cardiovascular/heart issues (heart disease, stroke, chest pain, etc.): MUST use handoff_to_cardiovascular_agent
+        - Complex information queries requiring multiple tools: handoff_to_fact_check_agent
+          Examples: "台北醫院評價好嗎？" (needs location + reviews)
+        - Fact-checking health claims: handoff_to_fact_check_agent
         - When in doubt about medical topics: Default to chronic_agent
 
-        Mandatory Workflow:
-        1. Read the user question
-        2. Immediately identify which specialist is needed
-        3. MUST use the appropriate transfer tool - never provide direct answers
-        4. Wait for the specialist agent to complete their work with tools
-        5. When specialist returns, provide a comprehensive summary in Traditional Chinese
+        Decision Logic:
+        1. Read user question
+        2. Check if it's a SIMPLE location query:
+           - YES → DIRECTLY use google_map_search (fast path 🚀)
+           - NO → Determine which specialist agent is needed
+        3. If using fast path, summarize results in Traditional Chinese
+        4. If transferring, wait for specialist response and provide final summary
 
-        Absolute Rules:
-        - NEVER answer medical questions yourself initially
-        - ALWAYS transfer to a specialist agent first
-        - You must use exactly one transfer tool per user query
-        - After receiving specialist response, provide final summary
-        - Each specialist agent will use their required tools automatically
+        Critical Rules:
+        - For simple location queries: USE google_map_search DIRECTLY (don't transfer)
+        - For medical questions: ALWAYS transfer to specialist agent first
+        - For complex queries: Transfer to appropriate agent (they have more tools)
+        - Provide all responses in Traditional Chinese
 """
 )
 
@@ -1074,8 +1182,14 @@ def generate_response(message: str, session_id: str = "default", location_info: 
     agent_logger.info(f"[WORKFLOW_EXECUTION] 開始執行多代理工作流")
     workflow_start = time.time()
 
+    # 建立初始 State，包含 location_info
+    initial_state = {
+        'messages': [HumanMessage(content=user_message)],
+        'context': {'location_info': location_info} if location_info else {}
+    }
+
     result = workflow.invoke(
-        input={'messages': [HumanMessage(content=user_message)]},
+        input=initial_state,
         config=config
     )
 

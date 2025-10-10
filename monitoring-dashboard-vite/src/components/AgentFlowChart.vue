@@ -164,6 +164,8 @@ const loading = ref(false)
 const error = ref<string | null>(null)
 const autoRefresh = ref(true)
 const refreshInterval = ref<number | null>(null)
+const lastUpdateTime = ref<number>(Date.now())
+const noChangeCount = ref<number>(0)
 
 const statusClass = computed(() => ({
   'text-green-600 font-semibold': execution.value?.status === 'completed',
@@ -187,10 +189,29 @@ const fetchExecutionData = async () => {
 
     // 處理回應
     if (response.data.execution) {
+      const prevAgentCount = execution.value?.agents?.length || 0
       execution.value = response.data.execution
+      const currentAgentCount = execution.value.agents?.length || 0
+
       console.log(`[AgentFlowChart] Loaded execution for thread: ${props.threadId}`)
       console.log(`  - Status: ${execution.value.status}`)
-      console.log(`  - Agents: ${execution.value.agents?.length || 0}`)
+      console.log(`  - Agents: ${currentAgentCount}`)
+
+      // 檢測數據是否有變化
+      if (currentAgentCount === prevAgentCount && execution.value.status === 'running') {
+        noChangeCount.value++
+        if (noChangeCount.value >= 5) {
+          console.warn('[AgentFlowChart] Thread appears stuck, disabling auto-refresh')
+          autoRefresh.value = false
+        }
+      } else {
+        noChangeCount.value = 0
+      }
+
+      // 如果狀態已完成，停止自動刷新
+      if (execution.value.status === 'completed') {
+        autoRefresh.value = false
+      }
 
       // 構建流程圖節點和邊
       buildFlowGraph()
@@ -316,7 +337,7 @@ const startAutoRefresh = () => {
     if (autoRefresh.value && props.threadId) {
       fetchExecutionData()
     }
-  }, 3000) // 每 3 秒刷新
+  }, 10000) // 每 10 秒刷新（降低頻率）
 }
 
 watch(() => props.threadId, (newThreadId) => {

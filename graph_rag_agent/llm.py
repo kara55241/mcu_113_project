@@ -21,7 +21,7 @@ if not os.getenv("OPENAI_EMBEDDING_MODEL"):
 # 建立 LLM 模型實例
 llm_GPT = ChatOpenAI(
     openai_api_key=os.getenv("OPENAI_API_KEY"),
-    model="gpt-4o-mini",  # 使用穩定的模型版本
+    model="gpt-4.1-mini",  # 使用穩定的模型版本
     max_retries=2,
     temperature=0
 )
@@ -29,7 +29,7 @@ llm_GPT = ChatOpenAI(
 # 建立強制工具調用的 LLM 實例（用於醫療專家 agent）
 llm_GPT_tool_required = ChatOpenAI(
     openai_api_key=os.getenv("OPENAI_API_KEY"),
-    model="gpt-4o-mini",
+    model="gpt-4.1-mini",
     max_retries=2,
     temperature=0,
     model_kwargs={

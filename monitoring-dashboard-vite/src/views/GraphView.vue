@@ -314,9 +314,15 @@ const renderGraph = () => {
     // Store mapping from original ID to simple ID
     nodeIdMap.set(node.id, simpleId)
 
+    // 優先使用 name 屬性，如果沒有則使用第一個標籤作為顯示名稱
+    const nodeName = node.properties?.name ||
+                     node.properties?.title ||
+                     (node.labels && node.labels.length > 0 ? node.labels[0] : null) ||
+                     `未命名節點`
+
     return {
       id: simpleId,
-      label: node.properties?.name || node.properties?.title || `Node ${simpleId}`,
+      label: nodeName,
       title: JSON.stringify(node.properties || {}, null, 2),
       color: getNodeColor(node.labels),
       shape: 'dot' as const,

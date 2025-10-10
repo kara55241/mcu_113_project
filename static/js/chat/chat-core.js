@@ -141,9 +141,15 @@ MedApp.chat.core = {
         MedApp.maps.core.handleLocationResponse(data.location);
       }
       
-      // 處理醫院資訊
-      if (data.data && Array.isArray(data.data.results) && data.data.results.length > 0) {
-        MedApp.maps.hospital.displayHospitals(data.data.results, location);
+      // 處理醫院資訊（檢查結構化數據）
+      if (data.data && data.data.type === 'hospital_search' && Array.isArray(data.data.results) && data.data.results.length > 0) {
+        // 使用 data.data 中的 location 資訊（更精確）
+        const hospitalLocation = {
+          name: data.data.location,
+          coordinates: data.data.coordinates
+        };
+        MedApp.maps.hospital.displayHospitals(data.data.results, hospitalLocation);
+        MedApp.log(`接收到 ${data.data.results.length} 筆醫院資訊，準備顯示地圖`, 'info');
       }
       
     } catch (error) {

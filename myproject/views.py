@@ -120,50 +120,49 @@ class ChatView(View):
                 request.session.create()
                 session_id = request.session.session_key
             
-            # 處理位置信息 - 確保座標格式正確
-            if location_info and isinstance(location_info, dict):
-                # 提取並標準化座標
-                coords = location_info.get('coordinates')
-                if coords and isinstance(coords, str):
-                    # 如果座標是字符串，確保格式正確
-                    coords_parts = coords.replace(' ', '').split(',')
-                    if len(coords_parts) == 2:
-                        try:
-                            latitude = float(coords_parts[0])
-                            longitude = float(coords_parts[1])
-                            # 更新位置信息中的座標
-                            location_info['coordinates'] = f"{latitude},{longitude}"
-                            # 確保有經緯度屬性用於 AI 模型
-                            location_info['latitude'] = latitude
-                            location_info['longitude'] = longitude
-                            logger.info(f"位置座標已格式化: {latitude}, {longitude}")
-                        except (ValueError, TypeError):
-                            logger.warning(f"無法解析座標: {coords}")
-            
+            # 簡化位置信息處理 - 基本驗證即可
+            # multi_agent.py 會在 State 中處理 location_info
+
             # 將用戶消息添加到歷史記錄，包含位置元數據
             metadata = {"location": location_info} if location_info else None
             ChatHistory.add_message(session_id, user_message, 'user', metadata)
-            
-            # 呼叫 RAG Agent 模型，傳入會話 ID 和位置信息
-            # 若是位置相關問題，可將提示一併傳入
-            is_location_query = any(k in user_message.lower() for k in ['位置', '附近', '醫院', '診所', '地點', '地圖'])
-
-            # 建立 prompt context
-            context_prefix = ""
-            if is_location_query and location_info:
-                context_prefix += f"使用者正在詢問與地點有關的問題，其目前的位置資訊如下：\n" \
-                                f"名稱：{location_info.get('name', '')}\n" \
-                                f"地址：{location_info.get('address', '')}\n" \
-                                f"座標：{location_info.get('coordinates', '')}\n\n"
 
             # 延遲導入 (只在實際使用時才載入)
             from graph_rag_agent.multi_agent import generate_response
-            response_data = generate_response(context_prefix + user_message, session_id, location_info)
+
+            # 直接傳遞原始 user_message 和 location_info
+            # multi_agent.py 的 generate_response 會處理 location_info
+            response_data = generate_response(user_message, session_id, location_info)
 
             # 處理回應數據
             output_text = response_data.get('output', '')
             response_location = response_data.get('location', location_info)
-            response_data_field = response_data.get('data', {})
+
+            # 嘗試從 output_text 中解析 HOSPITAL_DATA JSON
+            hospital_data = None
+            try:
+                import re
+                # 使用正則表達式提取 [HOSPITAL_DATA]...[/HOSPITAL_DATA] 之間的 JSON
+                json_match = re.search(
+                    r'\[HOSPITAL_DATA\](.*?)\[/HOSPITAL_DATA\]',
+                    output_text,
+                    re.DOTALL
+                )
+                if json_match:
+                    json_str = json_match.group(1).strip()
+                    hospital_data = json.loads(json_str)
+                    logger.info(f"成功解析醫院數據: {len(hospital_data.get('results', []))} 筆結果")
+
+                    # 從 output_text 中移除 JSON 標記（只保留人類可讀部分）
+                    output_text = re.sub(
+                        r'\n?\[HOSPITAL_DATA\].*?\[/HOSPITAL_DATA\]',
+                        '',
+                        output_text,
+                        flags=re.DOTALL
+                    ).strip()
+            except Exception as e:
+                logger.warning(f"解析醫院數據失敗: {e}")
+                hospital_data = None
 
             # 將 AI 回應添加到聊天歷史
             ChatHistory.add_message(session_id, output_text, 'bot')
@@ -172,7 +171,7 @@ class ChatView(View):
                 "output": output_text,
                 "is_markdown": True,  # 標記這是 Markdown 格式
                 "location": response_location,
-                "data": response_data_field
+                "data": hospital_data  # 傳遞解析後的結構化醫院數據
             })
 
             
