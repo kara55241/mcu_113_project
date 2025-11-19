@@ -55,6 +55,30 @@ CONFIG = {
     # 數據庫路徑
     'CHECKPOINT_DB_PATH': "./agent_checkpoint_new.sqlite"
 }
+
+# ============================================================================
+# 工具函式抽象層
+# ============================================================================
+
+def _get_thread_id(state: State = None) -> str:
+    """
+    統一提取 thread_id，替代 23 處重複邏輯
+
+    Args:
+        state: State 對象（可選）
+
+    Returns:
+        thread_id 字串
+    """
+    thread_id = current_thread_id.get()
+    if thread_id == "unknown" and state:
+        thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+    return thread_id
+
+# ============================================================================
+# 外部模組導入
+# ============================================================================
+
 try:
     from .graph_rag import graphrag_chronic, graphrag_cardiovascular
     from .fact_check import search_fact_checks
