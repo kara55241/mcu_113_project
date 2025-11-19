@@ -57,25 +57,6 @@ CONFIG = {
 }
 
 # ============================================================================
-# 工具函式抽象層
-# ============================================================================
-
-def _get_thread_id(state: State = None) -> str:
-    """
-    統一提取 thread_id，替代 23 處重複邏輯
-
-    Args:
-        state: State 對象（可選）
-
-    Returns:
-        thread_id 字串
-    """
-    thread_id = current_thread_id.get()
-    if thread_id == "unknown" and state:
-        thread_id = state.get("configurable", {}).get("thread_id", "unknown")
-    return thread_id
-
-# ============================================================================
 # 外部模組導入
 # ============================================================================
 
@@ -144,6 +125,26 @@ class State(MessagesState):
 
     fast_path_handled: bool  # Fast-Path 處理標記
     needs_integration: bool  # 是否需要整合多個 agent 結果
+
+
+# ============================================================================
+# 工具函式抽象層
+# ============================================================================
+
+def _get_thread_id(state: State = None) -> str:
+    """
+    統一提取 thread_id，替代 23 處重複邏輯
+
+    Args:
+        state: State 對象（可選）
+
+    Returns:
+        thread_id 字串
+    """
+    thread_id = current_thread_id.get()
+    if thread_id == "unknown" and state:
+        thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+    return thread_id
 
 
 summarization_node = SummarizationNode(
