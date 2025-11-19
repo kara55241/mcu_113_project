@@ -208,67 +208,6 @@ def extract_json_from_llm_response(response_text: str, context: str = "JSON") ->
         agent_logger.error(f"[{context}] 問題 JSON: {json_text[:200]}")
         return None
 
-# Handoff tool set define
-def create_handoff_tool(*, agent_name: str, description: str | None = None):
-    name = f"transfer_to_{agent_name}"
-    description = description or f"Ask {agent_name} for the answer."
-
-    @tool(name, description=description)
-    def handoff_tool(
-        state: Annotated[MessagesState, InjectedState],
-        tool_call_id: Annotated[str, InjectedToolCallId],
-        config: RunnableConfig = None,
-    ) -> Command:
-        # 詳細的轉交日誌記錄
-        display_name = AGENT_DISPLAY_NAMES.get(agent_name, agent_name)
-
-        # 從state中提取用戶問題
-        user_query = ""
-        if state.get("messages"):
-            for msg in reversed(state["messages"]):
-                if hasattr(msg, 'type') and msg.type == 'human':
-                    user_query = msg.content[:100] + "..." if len(msg.content) > 100 else msg.content
-                    break
-
-        agent_logger.info(f"[SUPERVISOR_ROUTING] 用戶問題: {user_query}")
-        agent_logger.info(f"[SUPERVISOR_ROUTING] 路由決策: 轉交至 {display_name} ({agent_name})")
-        agent_logger.info(f"[SUPERVISOR_ROUTING] 轉交工具: {name}")
-
-        # 🔹 追蹤器：從多個來源嘗試提取 thread_id
-        try:
-            thread_id = "unknown"
-
-            # 方法 1: 從全局上下文變量獲取（最可靠）
-            thread_id = current_thread_id.get()
-
-            # 方法 2: 從 config 提取（備用）
-            if thread_id == "unknown" and config and "configurable" in config:
-                thread_id = config["configurable"].get("thread_id", "unknown")
-
-            # 方法 3: 從 state 的 configurable 提取（備用）
-            if thread_id == "unknown" and isinstance(state, dict):
-                if "configurable" in state:
-                    thread_id = state["configurable"].get("thread_id", "unknown")
-
-            agent_logger.info(f"[TRACKER] 提取到 thread_id: {thread_id}")
-            tracker.start_agent(thread_id, agent_name, user_query)
-        except Exception as e:
-            agent_logger.warning(f"[TRACKER] 追蹤器記錄失敗: {e}")
-
-        tool_message = {
-            "role": "tool",
-            "content": f"Successfully transferred to {agent_name}",
-            "name": name,
-            "tool_call_id": tool_call_id,
-        }
-        return Command(
-            goto=agent_name,
-            update={**state, "messages": state["messages"] + [tool_message]},
-            graph=Command.PARENT,
-        )
-
-    return handoff_tool
-
 # Semantic routing system using OpenAI Embeddings
 def get_embedding(text: str) -> list:
     """Get embedding for text using OpenAI API with caching"""
@@ -308,114 +247,6 @@ def cosine_similarity(vec1: list, vec2: list) -> float:
     norms = np.linalg.norm(vec1) * np.linalg.norm(vec2)
     
     return dot_product / norms if norms != 0 else 0.0
-
-def semantic_route_query(user_query: str) -> dict:
-    """
-    Use semantic analysis to determine the most appropriate agent for the query
-    """
-    agent_logger.info(f"[SEMANTIC_ROUTING] 分析查詢: {user_query[:50]}...")
-    
-    # Define domain descriptions with comprehensive medical terminology
-    domain_descriptions = {
-        "chronic_agent": """
-        慢性疾病醫療諮詢：糖尿病、高血壓、腎臟病、關節炎、慢性阻塞性肺病、甲狀腺疾病、
-        慢性肝病、骨質疏鬆、慢性病併發症預防、用藥管理、生活調整、飲食控制、運動處方。
-        """,
-
-        "cardiovascular_agent": """
-        心血管疾病諮詢：心臟病、冠心病、心肌梗塞、中風、血壓問題、胸痛、心絞痛、
-        心律不整、動脈硬化、心臟衰竭、血管疾病、心電圖、心導管、血管支架、心臟復健。
-        """,
-
-        "fact_check_agent": """
-        醫療資訊查證：健康謠言查證、醫學聲明驗證、偏方安全性、網路資訊可信度、      
-        醫療廣告查核、保健食品驗證、治療方法科學根據、藥物副作用、醫療新聞真偽、    
-        食物療效查證、民間偏方驗證、健康迷思破解、營養補充品效果、是真的嗎類問題
-        """
-    }
-    
-    try:
-        # Get query embedding
-        query_embedding = get_embedding(user_query)
-        if not query_embedding:
-            return {"agent": "chronic_agent", "confidence": 0.5, "method": "fallback"}
-        
-        # Calculate similarities
-        similarities = {}
-        for agent_name, description in domain_descriptions.items():
-            domain_embedding = get_embedding(description)
-            if domain_embedding:
-                similarity = cosine_similarity(query_embedding, domain_embedding)
-                similarities[agent_name] = similarity
-                agent_logger.info(f"[SEMANTIC_ROUTING] {agent_name}: {similarity:.3f}")
-        
-        if not similarities:
-            return {"agent": "chronic_agent", "confidence": 0.5, "method": "fallback"}
-        
-        # Find best match
-        best_agent = max(similarities, key=similarities.get)
-        best_confidence = similarities[best_agent]
-        
-        agent_logger.info(f"[SEMANTIC_ROUTING] 最佳匹配: {best_agent} (信心度: {best_confidence:.3f})")
-        
-        return {
-            "agent": best_agent,
-            "confidence": best_confidence,
-            "method": "semantic",
-            "all_scores": similarities
-        }
-        
-    except Exception as e:
-        agent_logger.error(f"[SEMANTIC_ROUTING] 錯誤: {e}")
-        return {"agent": "chronic_agent", "confidence": 0.5, "method": "error_fallback"}
-
-def intelligent_agent_routing(user_query: str, state: State = None) -> str:
-    """
-    Semantic-based intelligent routing system with loop prevention
-    """
-    # Check if routing was already done to prevent loops
-    if state and hasattr(state, 'routing_done') and state.routing_done:
-        selected = getattr(state, 'selected_agent', 'chronic_agent')
-        agent_logger.info(f"[INTELLIGENT_ROUTING] 路由已完成，避免重複: {selected}")
-        return selected
-    
-    agent_logger.info(f"[INTELLIGENT_ROUTING] 開始語意路由分析")
-    
-    # Check if this is a general information query (non-medical)
-    general_info_keywords = [
-        '聯絡電話', '電話號碼', '聯繫方式', '地址', '營業時間', '開放時間',
-        '怎麼去', '交通', '位置', '網址', '網站', '官網', '電子郵件', 'email'
-    ]
-    
-    is_general_info = any(keyword in user_query.lower() for keyword in general_info_keywords)
-    
-    if is_general_info:
-        agent_logger.info(f"[INTELLIGENT_ROUTING] 識別為一般資訊查詢，導向 chronic_agent 處理")
-        selected = "chronic_agent"
-    else:
-        # Use semantic analysis for medical routing
-        semantic_result = semantic_route_query(user_query)
-        
-        # Use semantic result with confidence threshold
-        if semantic_result["confidence"] > CONFIG['SEMANTIC_CONFIDENCE_THRESHOLD']:
-            agent_logger.info(f"[INTELLIGENT_ROUTING] 語意分析結果: {semantic_result['agent']} (信心度: {semantic_result['confidence']:.3f})")
-            selected = semantic_result["agent"]
-        else:
-            # Default to chronic_agent for general health queries when confidence is low
-            agent_logger.info(f"[INTELLIGENT_ROUTING] 信心度不足，使用預設路由: chronic_agent (語意信心度: {semantic_result['confidence']:.3f})")
-            selected = "chronic_agent"
-    
-    # Mark routing as done in state (only if state exists and has these attributes)
-    if state and hasattr(state, 'routing_done'):
-        state.routing_done = True
-        if hasattr(state, 'selected_agent'):
-            state.selected_agent = selected
-    
-    return selected
-
-handoff_to_chronic_agent=create_handoff_tool(agent_name='chronic_agent',description='assign task to chronic agent')
-handoff_to_cardiovascular_agent=create_handoff_tool(agent_name='cardiovascular_agent',description='assign task to cardiovascular agent')
-handoff_to_fact_check_agent=create_handoff_tool(agent_name='fact_check_agent',description='assign task to fact check agent')
 
 def extract_transferred_agent_from_messages(result_or_messages):
     """
@@ -2008,42 +1839,8 @@ cardiovascular_agent_task_node = create_agent_task_node('cardiovascular_agent', 
 fact_check_agent_task_node = create_agent_task_node('fact_check_agent', fact_check_agent)
 
 
-supervisor = create_react_agent(
-    model=llm_GPT,
-    tools=[handoff_to_chronic_agent, handoff_to_cardiovascular_agent, handoff_to_fact_check_agent],
-    pre_model_hook=summarization_node,
-    name="supervisor",
-    checkpointer=memory,
-    prompt="""
-        Role:
-        You are the Supervisor Agent for a medical health consultation system. Your job is to route questions to the appropriate specialist agent and then summarize their responses.
-
-        Critical Routing Rules - You MUST transfer every query:
-        - Chronic diseases (diabetes, hypertension, arthritis, kidney disease, etc.): MUST use handoff_to_chronic_agent
-        - Cardiovascular/heart issues (heart disease, stroke, blood pressure, chest pain, etc.): MUST use handoff_to_cardiovascular_agent
-        - Information search, latest news, general queries, non-medical topics, fact-checking: MUST use handoff_to_fact_check_agent
-        - When query contains keywords like "search", "latest", "current", "news", "information": handoff_to_fact_check_agent
-        - When in doubt about medical topics: Default to chronic_agent
-
-        Mandatory Workflow:
-        1. Read the user question
-        2. Immediately identify which specialist is needed
-        3. MUST use the appropriate transfer tool - never provide direct answers
-        4. Wait for the specialist agent to complete their work with tools
-        5. When specialist returns, provide a comprehensive summary in Traditional Chinese
-
-        Absolute Rules:
-        - NEVER answer medical questions yourself initially
-        - ALWAYS transfer to a specialist agent first
-        - You must use exactly one transfer tool per user query
-        - After receiving specialist response, provide final summary
-        - Each specialist agent will use their required tools automatically
-"""
-)
-
-
 # ============================================================================
-# 任務指派型 Workflow (新架構) - Task-Assigning Supervisor
+# 任務指派型 Workflow (Task-Assigning Supervisor)
 # ============================================================================
 
 # 路由函數 1: 根據任務分析結果決定下一步
@@ -2227,26 +2024,7 @@ new_workflow = (
 
 agent_logger.info("[WORKFLOW] 任務指派型 Workflow 構建完成")
 
-
-# ============================================================================
-# 舊的對話型 Workflow (保留作為備用)
-# ============================================================================
-
-workflow_legacy=(
-    StateGraph(State)
-    # destinations是為了方便視覺化用的
-    .add_node(supervisor,destinations=('chronic_agent','cardiovascular_agent','fact_check_agent',END))
-    .add_node(chronic_agent)
-    .add_node(cardiovascular_agent)
-    .add_node(fact_check_agent)
-    .add_edge(START,'supervisor')
-    .add_edge('chronic_agent', END)
-    .add_edge('cardiovascular_agent', END)
-    .add_edge('fact_check_agent', END)
-    .compile(checkpointer=memory)
-)
-
-# 預設使用新的任務指派型 workflow
+# 使用任務指派型 workflow
 workflow = new_workflow
 
 def generate_response(message: str, session_id: str = "default", location_info: dict = None) -> dict:
