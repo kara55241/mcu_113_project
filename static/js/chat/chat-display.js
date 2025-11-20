@@ -387,55 +387,77 @@ MedApp.chat.display = {
       // 添加查看地圖按鈕
       const footerDiv = document.createElement('div');
       footerDiv.className = 'hospital-footer';
-      
+
       const viewMapBtn = document.createElement('button');
-      viewMapBtn.id = 'viewOnMapBtn';
-      viewMapBtn.className = 'primary-button';
-      
+      // 使用 data 屬性代替 ID，避免 ID 衝突
+      viewMapBtn.className = 'primary-button view-hospitals-map-btn';
+      viewMapBtn.setAttribute('data-action', 'view-hospitals-map');
+
       const mapIcon = document.createElement('i');
       mapIcon.className = 'fas fa-map-marked-alt';
       viewMapBtn.appendChild(mapIcon);
-      
+
       const btnText = document.createTextNode(' 在地圖上查看');
       viewMapBtn.appendChild(btnText);
+
+      // 直接綁定事件，不依賴延遲
+      viewMapBtn.addEventListener('click', () => {
+        MedApp.log('在地圖上查看按鈕被點擊', 'info');
+
+        // 檢查必要的模組是否存在
+        if (!MedApp.maps || !MedApp.maps.core) {
+          MedApp.log('地圖模組未載入', 'error');
+          alert('地圖功能尚未就緒，請稍後再試');
+          return;
+        }
+
+        if (!MedApp.maps.hospital) {
+          MedApp.log('醫院標記模組未載入', 'error');
+          alert('地圖功能尚未就緒，請稍後再試');
+          return;
+        }
+
+        // 顯示地圖模態框
+        if (typeof MedApp.maps.core.showMapModal === 'function') {
+          MedApp.maps.core.showMapModal();
+
+          // 確保在地圖初始化後添加醫院標記
+          setTimeout(() => {
+            if (typeof MedApp.maps.hospital.createHospitalMarkers === 'function') {
+              MedApp.maps.hospital.createHospitalMarkers(hospitals);
+            } else {
+              MedApp.log('createHospitalMarkers 函數不存在', 'error');
+            }
+          }, 500);
+        } else {
+          MedApp.log('showMapModal 函數不存在', 'error');
+          alert('無法開啟地圖，請重新整理頁面');
+        }
+      });
+
       footerDiv.appendChild(viewMapBtn);
       resultsDiv.appendChild(footerDiv);
-      
+
       // 將結果添加到訊息泡泡中
       messageBubble.appendChild(resultsDiv);
       contentWrapper.appendChild(messageBubble);
-      
+
       // 添加時間戳到內容容器
       const timeSpan = document.createElement('span');
       timeSpan.classList.add('message-time');
-      
+
       const now = new Date();
       timeSpan.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-      
+
       contentWrapper.appendChild(timeSpan);
-      
+
       // 組裝完整結構
       messageDiv.appendChild(avatarDiv);
       messageDiv.appendChild(contentWrapper);
       this.elements.chatContainer.appendChild(messageDiv);
-      
+
       // 滾動到底部
       this.scrollToBottom();
-      
-      // 添加地圖顯示按鈕事件
-      setTimeout(() => {
-        const viewMapBtn = document.getElementById('viewOnMapBtn');
-        if (viewMapBtn) {
-          viewMapBtn.addEventListener('click', () => {
-            MedApp.maps.core.showMapModal();
-            
-            // 確保在地圖初始化後添加醫院標記
-            setTimeout(() => {
-              MedApp.maps.hospital.createHospitalMarkers(hospitals);
-            }, 500);
-          });
-        }
-      }, 100);
       
       // 儲存對話
       if (!MedApp.state.currentChatId) {
@@ -458,7 +480,7 @@ MedApp.chat.display = {
       // 創建頭像
       const avatarDiv = document.createElement('div');
       avatarDiv.className = 'message-avatar';
-      avatarDiv.textContent = '我';
+      avatarDiv.textContent = 'U';
 
       // 創建內容容器
       const contentWrapper = document.createElement('div');

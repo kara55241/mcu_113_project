@@ -100,8 +100,18 @@ class ChatView(View):
     def post(self, request, *args, **kwargs):
         """處理 POST 請求 - 處理用戶訊息並返回回應"""
         try:
-            # 解析 JSON 請求
-            data = json.loads(request.body)
+            # 解析 JSON 請求（明確指定 UTF-8 編碼並處理錯誤）
+            try:
+                body_unicode = request.body.decode('utf-8')
+            except UnicodeDecodeError:
+                # 嘗試其他編碼
+                try:
+                    body_unicode = request.body.decode('big5')
+                except UnicodeDecodeError:
+                    body_unicode = request.body.decode('utf-8', errors='ignore')
+                    logger.warning("請求 body 包含無效編碼字符，已忽略")
+
+            data = json.loads(body_unicode)
             user_message = data.get("message")
             chat_id = data.get("chat_id")
             location_info = data.get("location_info")  # 獲取位置信息

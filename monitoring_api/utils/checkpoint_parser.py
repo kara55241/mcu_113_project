@@ -26,12 +26,27 @@ class CheckpointParser:
         'transfer_to_fact_check_agent': 'supervisor',
     }
 
-    # Agent 顯示名稱
+    # Agent 顯示名稱（適配新並行架構）
     AGENT_DISPLAY_NAMES = {
-        'supervisor': 'Supervisor (路由協調)',
-        'chronic_agent': '慢性疾病專家',
-        'cardiovascular_agent': '心血管疾病專家',
-        'fact_check_agent': '資訊搜尋專家'
+        # 新架構節點
+        'supervisor_task_analysis': '任務分析節點',
+        'supervisor_analysis': '任務分析節點',  # 備用別名
+        'supervisor_routing': '快速路由節點',
+        'supervisor_fast_path': '快速回應節點',  # 舊名稱備用
+        # Agent 節點
+        'chronic_agent': 'CHRONIC AGENT',
+        'cardiovascular_agent': 'CARDIOVASCULAR AGENT',
+        'fact_check_agent': 'FACT-CHECK AGENT',
+        # 整合節點（新並行架構）
+        'integration': '多專家整合節點',
+        'integration_node': '多專家整合節點',  # 備用別名
+        # 舊架構節點（保留兼容）
+        'supervisor': 'SUPERVISOR',
+        'supervisor_decomposition': '任務拆解節點',
+        'chronic_agent_task': 'CHRONIC AGENT (Task)',
+        'cardiovascular_agent_task': 'CARDIOVASCULAR AGENT (Task)',
+        'fact_check_agent_task': 'FACT-CHECK AGENT (Task)',
+        'parallel_join': '並行收斂節點'
     }
 
     @staticmethod

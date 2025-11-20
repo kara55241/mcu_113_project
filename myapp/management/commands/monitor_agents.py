@@ -10,7 +10,7 @@ from myproject.views import ChatHistory
 class DatabaseMonitor:
     """Monitor SQLite checkpoint database changes"""
     
-    def __init__(self, db_path="./agent_checkpoint.sqlite"):
+    def __init__(self, db_path="./agent_checkpoint_new.sqlite"):
         self.db_path = db_path
         
     def connect(self):
@@ -66,13 +66,25 @@ class DatabaseMonitor:
 
 class AgentStateAnalyzer:
     """Analyze agent state and tool calls"""
-    
+
     def __init__(self):
+        # 新並行架構的節點/工具模式
         self.agent_patterns = {
-            'supervisor': 'transfer_to_',
+            # 新架構 supervisor 節點
+            'supervisor_task_analysis': 'task_analysis',
+            'supervisor_analysis': 'task_analysis',  # 備用別名
+            'supervisor_routing': 'fast_path',
+            'supervisor_fast_path': 'fast_path',  # 舊名稱備用
+            # Agent 節點
             'chronic_agent': 'chronic_search',
-            'cardiovascular_agent': 'cardiovascular_search', 
-            'fact_check_agent': 'google_fact_check_tool'
+            'cardiovascular_agent': 'cardiovascular_search',
+            'fact_check_agent': ['google_fact_check_tool', 'cofacts_check_tool', 'net_search'],
+            # 整合節點（新並行架構）
+            'integration': 'agent_responses',
+            'integration_node': 'agent_responses',  # 備用別名
+            # 舊架構（保留兼容）
+            'supervisor': 'transfer_to_',
+            'supervisor_decomposition': 'subtasks'
         }
         
     def analyze_checkpoint(self, checkpoint_blob):
@@ -325,8 +337,9 @@ class Command(BaseCommand):
         
         # Check multi-agent module
         try:
-            from graph_rag_agent.multi_agent import workflow
+            from graph_rag_agent.multi_agent import workflow, new_workflow
             self.stdout.write(f"  Multi-agent module: OK")
+            self.stdout.write(f"  Current workflow: new_workflow (任務指派型)")
         except ImportError as e:
             self.stdout.write(f"  Multi-agent module: FAILED - {str(e)}")
     

@@ -23,7 +23,12 @@ MedApp.utils.speech = {
     init: function() {
       this.initElements();
       this.setupSpeechRecognition();
-      
+
+      // 確保初始化時停止任何現有的語音合成
+      if (this.synthesis && this.synthesis.speaking) {
+        this.synthesis.cancel();
+      }
+
       MedApp.log('語音模組初始化完成', 'info');
     },
     
@@ -55,58 +60,73 @@ MedApp.utils.speech = {
       this.recognition.interimResults = false;  // 不顯示中間結果
       this.recognition.lang = 'zh-TW';  // 設定語言為繁體中文
       
+      // 設定語音辨識開始處理
+      this.recognition.onstart = () => {
+        MedApp.log("語音辨識已開始", 'debug');
+        this.isRecognizing = true;
+        this.updateMicButtonState(true);
+      };
+
       // 設定語音辨識結果處理
       this.recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         const confidence = event.results[0][0].confidence;
-        
+
         MedApp.log(`語音辨識結果：${transcript}，信心度：${confidence}`, 'debug');
-        
+
         // 更新輸入欄位
         if (this.elements.inputField) {
           this.elements.inputField.value = transcript;
+          // 觸發輸入框的 input 事件，以便其他模組可以響應
+          this.elements.inputField.dispatchEvent(new Event('input', { bubbles: true }));
         }
-        
-        // 更新麥克風按鈕狀態
+
+        // 更新狀態並更新麥克風按鈕
+        this.isRecognizing = false;
         this.updateMicButtonState(false);
       };
-      
+
       // 設定語音辨識結束處理
       this.recognition.onend = () => {
         MedApp.log("語音辨識結束", 'debug');
-        
-        // 更新麥克風按鈕狀態
+
+        // 確保狀態正確更新
+        this.isRecognizing = false;
         this.updateMicButtonState(false);
       };
       
       // 設定語音辨識錯誤處理
       this.recognition.onerror = (event) => {
         MedApp.log(`語音辨識錯誤：${event.error}`, 'error');
-        
+
+        // 重置狀態
+        this.isRecognizing = false;
+
         // 顯示錯誤訊息
         switch (event.error) {
           case 'no-speech':
-            this.showErrorMessage("未檢測到語音");
+            this.showErrorMessage("未檢測到語音，請再試一次");
             break;
           case 'aborted':
             // 不顯示訊息，因為是用戶主動取消
+            MedApp.log("語音辨識被中止", 'debug');
             break;
           case 'audio-capture':
-            this.showErrorMessage("無法存取麥克風");
+            this.showErrorMessage("無法存取麥克風，請檢查設備連接");
             break;
           case 'not-allowed':
-            this.showErrorMessage("未獲得麥克風使用權限");
+            this.showErrorMessage("未獲得麥克風使用權限，請在瀏覽器設定中允許麥克風存取");
             break;
           case 'network':
-            this.showErrorMessage("網路連線錯誤");
+            this.showErrorMessage("網路連線錯誤，請檢查網路連接");
             break;
           case 'service-not-allowed':
             this.showErrorMessage("瀏覽器不允許語音辨識服務");
             break;
           default:
-            this.showErrorMessage("語音辨識錯誤");
+            this.showErrorMessage(`語音辨識發生錯誤：${event.error}`);
         }
-        
+
         // 更新麥克風按鈕狀態
         this.updateMicButtonState(false);
       };
@@ -133,22 +153,37 @@ MedApp.utils.speech = {
     
     // 開始語音辨識
     startSpeechRecognition: function() {
-      if (!this.recognition) return;
-      
+      if (!this.recognition) {
+        MedApp.log("語音辨識物件不存在", 'error');
+        return;
+      }
+
+      // 如果已經在辨識中，不要重複啟動
+      if (this.isRecognizing) {
+        MedApp.log("語音辨識已在進行中", 'debug');
+        return;
+      }
+
       try {
         // 開始辨識
         this.recognition.start();
-        
-        // 更新狀態
-        this.isRecognizing = true;
-        
-        // 更新麥克風按鈕狀態
-        this.updateMicButtonState(true);
-        
-        MedApp.log("開始語音辨識", 'info');
+
+        MedApp.log("啟動語音辨識", 'info');
+
+        // 注意：狀態會在 onstart 事件中更新
       } catch (error) {
         MedApp.log(`啟動語音辨識失敗：${error.message}`, 'error');
-        this.showErrorMessage("無法啟動語音辨識");
+
+        // 重置狀態
+        this.isRecognizing = false;
+        this.updateMicButtonState(false);
+
+        // 顯示錯誤訊息
+        if (error.name === 'InvalidStateError') {
+          this.showErrorMessage("語音辨識正在進行中，請稍後再試");
+        } else {
+          this.showErrorMessage("無法啟動語音辨識");
+        }
       }
     },
     
@@ -257,6 +292,16 @@ MedApp.utils.speech = {
       if (this.synthesis && this.synthesis.speaking) {
         this.synthesis.cancel();
         MedApp.log('語音合成已取消', 'info');
+
+        // 重置朗讀按鈕圖標
+        const voiceBtn = document.getElementById('voiceReadBtn');
+        if (voiceBtn) {
+          voiceBtn.classList.remove('active');
+          const icon = voiceBtn.querySelector('i');
+          if (icon) {
+            icon.className = 'fas fa-volume-up';
+          }
+        }
       }
     },
     
@@ -277,41 +322,79 @@ MedApp.utils.speech = {
     
     // 朗讀最後一條機器人訊息
     readLastBotMessage: function() {
+      // 如果正在朗讀，則停止朗讀
+      if (this.synthesis && this.synthesis.speaking) {
+        MedApp.log('停止當前朗讀', 'info');
+        this.stopSpeaking();
+        return;
+      }
+
       // 獲取最後一條機器人訊息
       const botMessages = document.querySelectorAll('.message.bot');
       if (botMessages.length === 0) {
         MedApp.log('沒有找到機器人訊息', 'warn');
+        this.showErrorMessage('沒有可朗讀的訊息');
         return;
       }
-      
+
       const lastBotMessage = botMessages[botMessages.length - 1];
-      
+
+      // 優先獲取 message-bubble 的內容，避免包含時間戳和頭像
+      let textElement = lastBotMessage.querySelector('.message-bubble');
+      if (!textElement) {
+        // 如果找不到 message-bubble，嘗試 message-content
+        textElement = lastBotMessage.querySelector('.message-content');
+      }
+      if (!textElement) {
+        // 最後備選：使用整個訊息
+        textElement = lastBotMessage;
+      }
+
       // 清理文本
-      const text = this.cleanTextForSpeech(lastBotMessage.textContent);
-      
-      if (!text) {
+      const text = this.cleanTextForSpeech(textElement.textContent);
+
+      if (!text || text.length < 2) {
         MedApp.log('沒有可朗讀的內容', 'warn');
+        this.showErrorMessage('沒有可朗讀的內容');
         return;
       }
-      
+
       // 朗讀文字
       return this.speak(text, {
         onStart: () => {
           // 添加視覺提示
-          if (document.getElementById('voiceReadBtn')) {
-            document.getElementById('voiceReadBtn').classList.add('active');
+          const voiceBtn = document.getElementById('voiceReadBtn');
+          if (voiceBtn) {
+            voiceBtn.classList.add('active');
+            // 改變圖標為停止圖標
+            const icon = voiceBtn.querySelector('i');
+            if (icon) {
+              icon.className = 'fas fa-stop';
+            }
           }
         },
         onEnd: () => {
           // 移除視覺提示
-          if (document.getElementById('voiceReadBtn')) {
-            document.getElementById('voiceReadBtn').classList.remove('active');
+          const voiceBtn = document.getElementById('voiceReadBtn');
+          if (voiceBtn) {
+            voiceBtn.classList.remove('active');
+            // 恢復圖標
+            const icon = voiceBtn.querySelector('i');
+            if (icon) {
+              icon.className = 'fas fa-volume-up';
+            }
           }
         },
         onError: () => {
           // 移除視覺提示
-          if (document.getElementById('voiceReadBtn')) {
-            document.getElementById('voiceReadBtn').classList.remove('active');
+          const voiceBtn = document.getElementById('voiceReadBtn');
+          if (voiceBtn) {
+            voiceBtn.classList.remove('active');
+            // 恢復圖標
+            const icon = voiceBtn.querySelector('i');
+            if (icon) {
+              icon.className = 'fas fa-volume-up';
+            }
           }
         }
       });
@@ -320,19 +403,36 @@ MedApp.utils.speech = {
     // 清理文本用於朗讀
     cleanTextForSpeech: function(text) {
       if (!text) return '';
-      
-      // 移除時間戳記 (通常在訊息末尾，格式如 "12:34")
-      let cleanText = text.replace(/\d{1,2}:\d{2}$/, '').trim();
-      
-      // 移除 HTML 標籤
+
+      let cleanText = text;
+
+      // 移除時間戳記 (格式如 "12:34" 在結尾)
+      cleanText = cleanText.replace(/\d{1,2}:\d{2}\s*$/g, '').trim();
+
+      // 移除 HTML 標籤，但保留換行
+      cleanText = cleanText.replace(/<br\s*\/?>/gi, '\n');
+      cleanText = cleanText.replace(/<\/p>/gi, '\n\n');
+      cleanText = cleanText.replace(/<li>/gi, '\n• ');
       cleanText = cleanText.replace(/<[^>]*>/g, ' ');
-      
-      // 移除多餘空格
-      cleanText = cleanText.replace(/\s+/g, ' ');
-      
-      // 移除特殊字符
-      cleanText = cleanText.replace(/[*_~`]/g, '');
-      
+
+      // 解碼常見的 HTML 實體
+      cleanText = cleanText.replace(/&nbsp;/g, ' ');
+      cleanText = cleanText.replace(/&quot;/g, '"');
+      cleanText = cleanText.replace(/&apos;/g, "'");
+      cleanText = cleanText.replace(/&amp;/g, '&');
+      cleanText = cleanText.replace(/&lt;/g, '<');
+      cleanText = cleanText.replace(/&gt;/g, '>');
+
+      // 移除 Markdown 格式字符
+      cleanText = cleanText.replace(/[*_~`#]/g, '');
+
+      // 移除多餘的連續空格和換行
+      cleanText = cleanText.replace(/\n{3,}/g, '\n\n');
+      cleanText = cleanText.replace(/[ \t]+/g, ' ');
+
+      // 移除開頭和結尾的空白
+      cleanText = cleanText.trim();
+
       return cleanText;
     }
   };

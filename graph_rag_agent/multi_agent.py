@@ -55,11 +55,6 @@ CONFIG = {
     # 數據庫路徑
     'CHECKPOINT_DB_PATH': "./agent_checkpoint_new.sqlite"
 }
-
-# ============================================================================
-# 外部模組導入
-# ============================================================================
-
 try:
     from .graph_rag import graphrag_chronic, graphrag_cardiovascular
     from .fact_check import search_fact_checks
@@ -125,26 +120,6 @@ class State(MessagesState):
 
     fast_path_handled: bool  # Fast-Path 處理標記
     needs_integration: bool  # 是否需要整合多個 agent 結果
-
-
-# ============================================================================
-# 工具函式抽象層
-# ============================================================================
-
-def _get_thread_id(state: State = None) -> str:
-    """
-    統一提取 thread_id，替代 23 處重複邏輯
-
-    Args:
-        state: State 對象（可選）
-
-    Returns:
-        thread_id 字串
-    """
-    thread_id = current_thread_id.get()
-    if thread_id == "unknown" and state:
-        thread_id = state.get("configurable", {}).get("thread_id", "unknown")
-    return thread_id
 
 
 summarization_node = SummarizationNode(
@@ -233,6 +208,11 @@ def extract_json_from_llm_response(response_text: str, context: str = "JSON") ->
         agent_logger.error(f"[{context}] 問題 JSON: {json_text[:200]}")
         return None
 
+# ============================================================================
+# 舊架構已刪除：create_handoff_tool
+# 新架構使用條件路由函數 (route_to_agents) 直接派發，不需要 handoff tools
+# ============================================================================
+
 # Semantic routing system using OpenAI Embeddings
 def get_embedding(text: str) -> list:
     """Get embedding for text using OpenAI API with caching"""
@@ -273,61 +253,174 @@ def cosine_similarity(vec1: list, vec2: list) -> float:
     
     return dot_product / norms if norms != 0 else 0.0
 
+# ============================================================================
+# 統一的輔助函數 - 減少重複代碼
+# ============================================================================
+
+def _get_thread_id(state=None) -> str:
+    """
+    統一提取 thread_id 的輔助函數
+
+    Args:
+        state: 可選的 state 對象
+
+    Returns:
+        thread_id 字符串
+    """
+    thread_id = current_thread_id.get()
+    if thread_id == "unknown" and state:
+        thread_id = state.get("configurable", {}).get("thread_id", "unknown")
+    return thread_id
+
+def _log_tool_tracker(agent_name: str, tool_name: str, args: dict, result: any, state=None):
+    """
+    統一的工具追蹤記錄函數
+
+    Args:
+        agent_name: 代理名稱
+        tool_name: 工具名稱
+        args: 工具參數字典
+        result: 工具結果
+        state: 可選的 state 對象
+    """
+    try:
+        thread_id = _get_thread_id(state)
+        # 截斷參數和結果以避免日誌過長
+        truncated_args = {k: str(v)[:100] for k, v in args.items()}
+        truncated_result = str(result)[:200] if result else None
+
+        tracker.log_tool_call(
+            thread_id=thread_id,
+            agent_name=agent_name,
+            tool_name=tool_name,
+            args=truncated_args,
+            result=truncated_result
+        )
+    except Exception as e:
+        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+
+def semantic_route_query(user_query: str) -> dict:
+    """
+    Use semantic analysis to determine the most appropriate agent for the query
+    """
+    agent_logger.info(f"[SEMANTIC_ROUTING] 分析查詢: {user_query[:50]}...")
+    
+    # Define domain descriptions with comprehensive medical terminology
+    domain_descriptions = {
+        "chronic_agent": """
+        慢性疾病醫療諮詢：糖尿病、高血壓、腎臟病、關節炎、慢性阻塞性肺病、甲狀腺疾病、
+        慢性肝病、骨質疏鬆、慢性病併發症預防、用藥管理、生活調整、飲食控制、運動處方。
+        """,
+
+        "cardiovascular_agent": """
+        心血管疾病諮詢：心臟病、冠心病、心肌梗塞、中風、血壓問題、胸痛、心絞痛、
+        心律不整、動脈硬化、心臟衰竭、血管疾病、心電圖、心導管、血管支架、心臟復健。
+        """,
+
+        "fact_check_agent": """
+        醫療資訊查證：健康謠言查證、醫學聲明驗證、偏方安全性、網路資訊可信度、      
+        醫療廣告查核、保健食品驗證、治療方法科學根據、藥物副作用、醫療新聞真偽、    
+        食物療效查證、民間偏方驗證、健康迷思破解、營養補充品效果、是真的嗎類問題
+        """
+    }
+    
+    try:
+        # Get query embedding
+        query_embedding = get_embedding(user_query)
+        if not query_embedding:
+            return {"agent": "chronic_agent", "confidence": 0.5, "method": "fallback"}
+        
+        # Calculate similarities
+        similarities = {}
+        for agent_name, description in domain_descriptions.items():
+            domain_embedding = get_embedding(description)
+            if domain_embedding:
+                similarity = cosine_similarity(query_embedding, domain_embedding)
+                similarities[agent_name] = similarity
+                agent_logger.info(f"[SEMANTIC_ROUTING] {agent_name}: {similarity:.3f}")
+        
+        if not similarities:
+            return {"agent": "chronic_agent", "confidence": 0.5, "method": "fallback"}
+        
+        # Find best match
+        best_agent = max(similarities, key=similarities.get)
+        best_confidence = similarities[best_agent]
+        
+        agent_logger.info(f"[SEMANTIC_ROUTING] 最佳匹配: {best_agent} (信心度: {best_confidence:.3f})")
+        
+        return {
+            "agent": best_agent,
+            "confidence": best_confidence,
+            "method": "semantic",
+            "all_scores": similarities
+        }
+        
+    except Exception as e:
+        agent_logger.error(f"[SEMANTIC_ROUTING] 錯誤: {e}")
+        return {"agent": "chronic_agent", "confidence": 0.5, "method": "error_fallback"}
+
+# ============================================================================
+# 舊架構已刪除：intelligent_agent_routing
+# 新架構使用 supervisor_task_analysis_node 中的邏輯進行路由判斷
+# ============================================================================
+
 def extract_transferred_agent_from_messages(result_or_messages):
     """
-    從工作流結果中提取轉交的代理資訊
-    兼容新任務指派型 workflow 和舊轉交型 workflow
+    從工作流結果中提取執行的代理資訊（適配新架構）
 
     Args:
         result_or_messages: 工作流 result dict 或 messages list
 
     Returns:
-        str or None: 代理名稱 (如 'chronic_agent') 或 None
+        str or list or None:
+            - str: 單一 agent 名稱 (如 'chronic_agent')
+            - list: 多個 agents（多專家協作，如 ['chronic_agent', 'cardiovascular_agent']）
+            - None: 未找到
     """
-    # 🔹 新 workflow 邏輯：優先從 agent_responses 識別
+    # 從 result dict 中提取必要資訊
     if isinstance(result_or_messages, dict):
-        agent_responses = result_or_messages.get('agent_responses', {})
-        if agent_responses:
-            # 返回有回應的 agent（優先順序：慢性病 > 心血管 > 事實查核）
-            if 'chronic_agent' in agent_responses and agent_responses['chronic_agent']:
-                return 'chronic_agent'
-            elif 'cardiovascular_agent' in agent_responses and agent_responses['cardiovascular_agent']:
-                return 'cardiovascular_agent'
-            elif 'fact_check_agent' in agent_responses and agent_responses['fact_check_agent']:
-                return 'fact_check_agent'
+        task_analysis = result_or_messages.get('task_analysis', {})
+        needs_agents = task_analysis.get('needs_agents', [])
 
-        # 從 result dict 中提取 messages
+        # 如果 task_analysis 有明確記錄需要的 agents
+        if needs_agents:
+            # 多專家協作
+            if len(needs_agents) > 1:
+                agent_logger.info(f"[EXTRACT_AGENT] 多專家協作: {needs_agents}")
+                return needs_agents
+            # 單一專家
+            elif len(needs_agents) == 1:
+                agent_logger.info(f"[EXTRACT_AGENT] 單一專家: {needs_agents[0]}")
+                return needs_agents[0]
+
+        # 從 messages 提取
         messages = result_or_messages.get('messages', [])
     else:
         # 直接是 messages list
         messages = result_or_messages
 
-    # 🔹 舊 workflow 邏輯：從消息歷史查找轉交訊息
-    # 從最新的消息開始向前查找，找到最後一次轉交
-    for msg in reversed(messages):
-        if (hasattr(msg, 'type') and msg.type == 'tool' and
-            hasattr(msg, 'content') and 'Successfully transferred to' in msg.content):
-            # 提取代理名稱
-            content = msg.content
-            if 'chronic_agent' in content:
-                return 'chronic_agent'
-            elif 'cardiovascular_agent' in content:
-                return 'cardiovascular_agent'
-            elif 'fact_check_agent' in content:
-                return 'fact_check_agent'
+    # 🔹 從工具調用推斷執行的 agents
+    executed_agents = set()
+    for msg in messages:
+        if hasattr(msg, 'type') and msg.type == 'tool':
+            tool_name = getattr(msg, 'name', '')
+            if 'chronic_search' in tool_name:
+                executed_agents.add('chronic_agent')
+            elif 'cardiovascular_search' in tool_name:
+                executed_agents.add('cardiovascular_agent')
+            elif tool_name in ['cofacts_check_tool', 'google_fact_check_tool', 'net_search']:
+                executed_agents.add('fact_check_agent')
 
-    # 🔹 備援邏輯：從工具調用推斷
-    for msg in reversed(messages):
-        if hasattr(msg, 'type') and msg.type == 'ai' and hasattr(msg, 'tool_calls'):
-            for tool_call in msg.tool_calls:
-                tool_name = tool_call.get('name', '')
-                if 'chronic_search' in tool_name:
-                    return 'chronic_agent'
-                elif 'cardiovascular_search' in tool_name:
-                    return 'cardiovascular_agent'
-                elif any(tool in tool_name for tool in ['cofacts_check_tool', 'google_fact_check_tool', 'net_search']):
-                    return 'fact_check_agent'
+    if executed_agents:
+        agents_list = list(executed_agents)
+        if len(agents_list) > 1:
+            agent_logger.info(f"[EXTRACT_AGENT] 從工具調用推斷多專家: {agents_list}")
+            return agents_list
+        else:
+            agent_logger.info(f"[EXTRACT_AGENT] 從工具調用推斷單一專家: {agents_list[0]}")
+            return agents_list[0]
 
+    agent_logger.warning("[EXTRACT_AGENT] 未能識別執行的代理")
     return None
 
 @tool(name_or_callable='net_search')
@@ -365,22 +458,8 @@ def net_search(
     # 解析 Tavily 結果並提取網址
     enhanced_result = _enhance_search_result(query, result)
 
-    # 🔹 追蹤器：記錄工具結果
-    try:
-        # 從上下文變量或 state 提取 thread_id
-        thread_id = current_thread_id.get()
-        if thread_id == "unknown" and state:
-            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
-
-        tracker.log_tool_call(
-            thread_id=thread_id,
-            agent_name="fact_check_agent",
-            tool_name="net_search",
-            args={"query": query[:100]},
-            result=str(enhanced_result)[:200] if enhanced_result else None
-        )
-    except Exception as e:
-        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+    # 🔹 追蹤器：記錄工具結果（使用統一函數）
+    _log_tool_tracker("fact_check_agent", "net_search", {"query": query}, enhanced_result, state)
 
     log_tool_end("net_search", start_time, len(str(enhanced_result)),
                  f"結果預覽: {str(enhanced_result)[:150]}...")
@@ -476,21 +555,8 @@ def _execute_graphrag_search(agent_name: str, tool_name: str, graphrag_func, que
         answer = full_result
         graph_data = {}
 
-    # 追蹤器記錄
-    try:
-        thread_id = current_thread_id.get()
-        if thread_id == "unknown" and state:
-            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
-
-        tracker.log_tool_call(
-            thread_id=thread_id,
-            agent_name=agent_name,
-            tool_name=tool_name,
-            args={"query": query[:100]},
-            result=full_result
-        )
-    except Exception as e:
-        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+    # 追蹤器記錄（使用統一函數）
+    _log_tool_tracker(agent_name, tool_name, {"query": query}, full_result, state)
 
     # 記錄日誌
     graph_info = f"節點數: {len(graph_data.get('nodes', []))}, 關係數: {len(graph_data.get('relationships', []))}"
@@ -594,22 +660,8 @@ def cofacts_check_tool(
         result = f"台灣 Cofacts 查核服務暫時無法使用: {str(e)}"
         agent_logger.error(f"[TOOL] COFACTS_CHECK_TOOL 錯誤: {e}")
 
-    # 🔹 追蹤器：記錄工具結果
-    try:
-        # 從上下文變量或 state 提取 thread_id
-        thread_id = current_thread_id.get()
-        if thread_id == "unknown" and state:
-            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
-
-        tracker.log_tool_call(
-            thread_id=thread_id,
-            agent_name="fact_check_agent",
-            tool_name="cofacts_check_tool",
-            args={"query": query[:100]},
-            result=result[:200] if result else None
-        )
-    except Exception as e:
-        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+    # 🔹 追蹤器：記錄工具結果（使用統一函數）
+    _log_tool_tracker("fact_check_agent", "cofacts_check_tool", {"query": query}, result, state)
 
     log_tool_end("cofacts_check_tool", start_time, len(result),
                  f"查核結果數量: {articles_found} 筆")
@@ -652,22 +704,8 @@ def google_fact_check_tool(
         else:
             result += "查無相關審查結果\n"
 
-    # 🔹 追蹤器：記錄工具結果
-    try:
-        # 從上下文變量或 state 提取 thread_id
-        thread_id = current_thread_id.get()
-        if thread_id == "unknown" and state:
-            thread_id = state.get("configurable", {}).get("thread_id", "unknown")
-
-        tracker.log_tool_call(
-            thread_id=thread_id,
-            agent_name="fact_check_agent",
-            tool_name="google_fact_check_tool",
-            args={"query": query[:100]},
-            result=result[:200] if result else None
-        )
-    except Exception as e:
-        agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+    # 🔹 追蹤器：記錄工具結果（使用統一函數）
+    _log_tool_tracker("fact_check_agent", "google_fact_check_tool", {"query": query}, result, state)
 
     log_tool_end("google_fact_check_tool", start_time, len(result),
                  f"查核結果數量: {claims_found} 筆,內容預覽: {result[:150]}...")
@@ -698,24 +736,9 @@ def google_map_search(
         # 調用 SearchTools 的 Google_Map 方法
         result = SearchTools.Google_Map(input=query, location_info=location_info)
 
-        # 追蹤器記錄
-        try:
-            thread_id = current_thread_id.get()
-            if thread_id == "unknown" and state:
-                thread_id = state.get("configurable", {}).get("thread_id", "unknown")
-
-            # 判斷是哪個 agent 調用的
-            agent_name = "supervisor"  # 預設是 supervisor 的 fast-path
-
-            tracker.log_tool_call(
-                thread_id=thread_id,
-                agent_name=agent_name,
-                tool_name="google_map_search",
-                args={"query": query[:100]},
-                result=str(result)[:200] if result else None
-            )
-        except Exception as e:
-            agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")
+        # 追蹤器記錄（使用統一函數）
+        agent_name = "supervisor"  # 預設是 supervisor 的 fast-path
+        _log_tool_tracker(agent_name, "google_map_search", {"query": query}, result, state)
 
         log_tool_end("google_map_search", start_time, len(str(result)),
                      f"搜尋結果預覽: {str(result)[:150]}...")
@@ -1119,16 +1142,43 @@ def _determine_task_type_and_agents(similarities: dict, query: str, user_query: 
 
         # 多專家協作判斷
         if len(medical_agents) >= 2:
-            multi_disease_keywords = ['和', '與', '還有', '以及', '加上', '兩個', '多個', '又', '跟', '及']
+            # 擴展多疾病關鍵詞（包含常見複合疾病場景）
+            multi_disease_keywords = [
+                # 連接詞
+                '和', '與', '還有', '以及', '加上', '兩個', '多個', '又', '跟', '及',
+                # 影響關係詞
+                '影響', '導致', '引起', '造成', '會不會', '有沒有關係',
+                # 併發症詞
+                '併發', '合併', '同時', '一起', '都有'
+            ]
             has_multiple_diseases = any(kw in user_query for kw in multi_disease_keywords)
-            both_high_scores = medical_agents[0][1] > 0.75 and medical_agents[1][1] > 0.75
 
+            # 🔹 降低閾值：從 0.75 → 0.65，更容易觸發多專家協作
+            both_high_scores = medical_agents[0][1] > 0.65 and medical_agents[1][1] > 0.65
+
+            # 🔹 新增特殊場景：即使分數稍低，但明確提到多個疾病名稱也觸發
+            disease_mentions = 0
+            common_diseases = ['糖尿病', '高血壓', '心臟', '腎臟', '中風', '血管', '關節']
+            for disease in common_diseases:
+                if disease in user_query:
+                    disease_mentions += 1
+
+            # 判斷條件：
+            # 1. 有多疾病關鍵詞 + 兩個分數都高
+            # 2. 或：明確提到 2 個以上疾病名稱 + 分數都超過 0.6
+            trigger_reason = ""
             if has_multiple_diseases and both_high_scores:
+                trigger_reason = f"多疾病關鍵詞 + 高分數 (分數: {medical_agents[0][1]:.3f}, {medical_agents[1][1]:.3f})"
+            elif disease_mentions >= 2 and medical_agents[0][1] > 0.6 and medical_agents[1][1] > 0.6:
+                trigger_reason = f"提到 {disease_mentions} 個疾病名稱 (分數: {medical_agents[0][1]:.3f}, {medical_agents[1][1]:.3f})"
+
+            if trigger_reason:
                 needs_agents = [agent for agent, score in medical_agents]
                 if include_fact_check:
                     needs_agents.append('fact_check_agent')
                 confidence = sum([score for agent, score in medical_agents]) / len(medical_agents)
                 agent_logger.info(f"[TASK_ANALYSIS] 識別為多醫療專家協作: {needs_agents}")
+                agent_logger.info(f"[TASK_ANALYSIS] 觸發原因: {trigger_reason}")
                 return {
                     'type': 'multi_expert',
                     'confidence': float(confidence),
@@ -1229,18 +1279,18 @@ def supervisor_task_analysis_node(state: State) -> State:
     return state
 
 
-def supervisor_fast_path_node(state: State) -> State:
+def supervisor_routing_node(state: State) -> State:
     """
-    節點2: Supervisor Fast-Path 處理
+    節點2: Supervisor 路由處理 (Fast-Path)
     直接處理簡單問題,無需轉交給專家 agents
 
     處理類型:
     1. simple_greeting: 生成親切的問候回應
-    2. simple_maps: 調用 google_map_search 查詢地點
+    2. simple_maps: 調用 Google Maps 查詢地點
     """
-    agent_logger.info("[FAST_PATH] 開始 Fast-Path 處理")
+    agent_logger.info("[SUPERVISOR_ROUTING] 開始 Fast-Path 處理")
 
-    # 🔹 追蹤器：記錄 supervisor_fast_path 節點開始
+    # 🔹 追蹤器：記錄 supervisor_routing 節點開始
     try:
         thread_id = current_thread_id.get()
         messages = state.get('messages', [])
@@ -1249,9 +1299,9 @@ def supervisor_fast_path_node(state: State) -> State:
             if hasattr(msg, 'type') and msg.type == 'human':
                 user_query = msg.content[:200]
                 break
-        tracker.start_agent(thread_id, "supervisor_fast_path", user_query)
+        tracker.start_agent(thread_id, "supervisor_routing", user_query)
     except Exception as e:
-        agent_logger.warning(f"[TRACKER] supervisor_fast_path 追蹤失敗: {e}")
+        agent_logger.warning(f"[TRACKER] supervisor_routing 追蹤失敗: {e}")
 
     task_analysis = state.get('task_analysis', {})
     task_type = task_analysis.get('type', 'unknown')
@@ -1263,32 +1313,32 @@ def supervisor_fast_path_node(state: State) -> State:
             user_query = msg.content
             break
 
-    agent_logger.info(f"[FAST_PATH] 處理類型: {task_type}")
+    agent_logger.info(f"[SUPERVISOR_ROUTING] 處理類型: {task_type}")
 
     try:
         if task_type == "simple_greeting":
             # 簡單問候 - 使用 LLM 生成溫暖回應
-            agent_logger.info("[FAST_PATH] 生成問候回應")
+            agent_logger.info("[SUPERVISOR_ROUTING] 生成問候回應")
 
             greeting_prompt = f"""
-你是一個親切的醫療諮詢助手。用戶向你問候: "{user_query}"
+            你是一個親切的醫療諮詢助手。用戶向你問候: "{user_query}"
 
-請生成一個溫暖、專業的回應,包含:
-1. 友善的問候回覆
-2. 簡短介紹你可以提供的服務 (健康諮詢、醫療設施查詢)
-3. 鼓勵用戶提問
+            請生成一個溫暖、專業的回應,包含:
+            1. 友善的問候回覆
+            2. 簡短介紹你可以提供的服務 (健康諮詢、醫療設施查詢)
+            3. 鼓勵用戶提問
 
-使用繁體中文,語氣溫暖親切,適合台灣長者。
-"""
+            使用繁體中文,語氣溫暖親切,適合台灣長者。
+            """
 
             greeting_response = llm_GPT.invoke(greeting_prompt)
             response_content = greeting_response.content if hasattr(greeting_response, 'content') else str(greeting_response)
 
-            agent_logger.info(f"[FAST_PATH] 問候回應生成完成: {response_content[:100]}...")
+            agent_logger.info(f"[SUPERVISOR_ROUTING] 問候回應生成完成: {response_content[:100]}...")
 
         elif task_type == "simple_maps":
             # 地點查詢 - 調用 google_map_search
-            agent_logger.info(f"[FAST_PATH] 執行地點查詢: {user_query}")
+            agent_logger.info(f"[SUPERVISOR_ROUTING] 執行地點查詢: {user_query}")
 
             # 直接調用 google_map_search 函數（非工具調用模式）
             # 從 state 中提取 location_info
@@ -1298,38 +1348,38 @@ def supervisor_fast_path_node(state: State) -> State:
 
             # 用 LLM 將搜尋結果轉換為友善的回應
             maps_prompt = f"""
-用戶查詢: "{user_query}"
+            用戶查詢: "{user_query}"
 
-Google Maps 搜尋結果:
-{maps_result}
+            Google Maps 搜尋結果:
+            {maps_result}
 
-請將搜尋結果整理成友善、清晰的回應。要求:
+            請將搜尋結果整理成友善、清晰的回應。要求:
 
-1. 開頭簡短說明找到幾家設施
-2. **使用有序列表 (1. 2. 3.) 格式列出每家設施**，每家設施包含:
-   - **設施名稱** (使用粗體)
-   - 地址
-   - 評分
-   - Google Maps 連結 (使用 Markdown 連結格式)
-3. 結尾提醒用戶可以點擊連結查看詳細地圖
+            1. 開頭簡短說明找到幾家設施
+            2. **使用有序列表 (1. 2. 3.) 格式列出每家設施**，每家設施包含:
+            - **設施名稱** (使用粗體)
+            - 地址
+            - 評分
+            - Google Maps 連結 (使用 Markdown 連結格式)
+            3. 結尾提醒用戶可以點擊連結查看詳細地圖
 
-**重要格式要求:**
-- 使用標準 Markdown 語法
-- 每個設施之間空一行
-- 不要使用表格格式
-- 使用清晰的列表結構
+            **重要格式要求:**
+            - 使用標準 Markdown 語法
+            - 每個設施之間空一行
+            - 不要使用表格格式
+            - 使用清晰的列表結構
 
-使用繁體中文,語氣溫暖親切,適合台灣長者閱讀。
-"""
+            使用繁體中文,語氣溫暖親切,適合台灣長者閱讀。
+            """
 
             maps_response = llm_GPT.invoke(maps_prompt)
             response_content = maps_response.content if hasattr(maps_response, 'content') else str(maps_response)
 
-            agent_logger.info(f"[FAST_PATH] 地點查詢回應生成完成: {response_content[:100]}...")
+            agent_logger.info(f"[SUPERVISOR_ROUTING] 地點查詢回應生成完成: {response_content[:100]}...")
 
         else:
             # 不應該到這裡,但以防萬一
-            agent_logger.warning(f"[FAST_PATH] 未預期的任務類型: {task_type}")
+            agent_logger.warning(f"[SUPERVISOR_ROUTING] 未預期的任務類型: {task_type}")
             response_content = "抱歉,我暫時無法處理這個問題。請讓我為您轉接專業的醫療顧問。"
 
         # 將回應添加到 messages
@@ -1337,18 +1387,18 @@ Google Maps 搜尋結果:
         state['messages'] = messages + [AIMessage(content=response_content)]
         state['fast_path_handled'] = True
 
-        agent_logger.info("[FAST_PATH] Fast-Path 處理完成")
+        agent_logger.info("[SUPERVISOR_ROUTING] Fast-Path 處理完成")
 
         # 🔹 追蹤器：完成 supervisor_fast_path 節點
         try:
             thread_id = current_thread_id.get()
             handoff_msg = f"處理類型: {task_type}, 回應長度: {len(response_content)}"
-            tracker.complete_agent(thread_id, "supervisor_fast_path", handoff_message=handoff_msg)
+            tracker.complete_agent(thread_id, "supervisor_routing", handoff_message=handoff_msg)
         except Exception as e:
-            agent_logger.warning(f"[TRACKER] supervisor_fast_path 完成追蹤失敗: {e}")
+            agent_logger.warning(f"[TRACKER] supervisor_routing 完成追蹤失敗: {e}")
 
     except Exception as e:
-        agent_logger.error(f"[FAST_PATH] 處理失敗: {e}")
+        agent_logger.error(f"[SUPERVISOR_ROUTING] 處理失敗: {e}")
         error_response = "抱歉,我在處理您的請求時遇到問題。請稍後再試或換個問題問我。"
         from langchain_core.messages import AIMessage
         state['messages'] = messages + [AIMessage(content=error_response)]
@@ -1357,700 +1407,294 @@ Google Maps 搜尋結果:
         # 🔹 追蹤器：錯誤時也完成追蹤
         try:
             thread_id = current_thread_id.get()
-            tracker.complete_agent(thread_id, "supervisor_fast_path", handoff_message=f"錯誤: {str(e)[:100]}")
+            tracker.complete_agent(thread_id, "supervisor_routing", handoff_message=f"錯誤: {str(e)[:100]}")
         except:
             pass
 
     return state
 
 
-def supervisor_decomposition_node(state: State) -> State:
+def integration_node(state: State) -> State:
     """
-    節點3: Supervisor 子任務拆解
-    將複雜問題拆解為子任務並分配給各專家 agents
+    整合節點：收集並整合多個 agent 的回應
 
-    輸出:
-    - subtasks: {agent_name: {task_id, query, priority, expected_output}}
-    - needs_integration: 是否需要整合多個 agent 的結果
+    處理兩種情況：
+    1. 單一 agent 回應：直接返回
+    2. 多個 agent 回應：使用 LLM 整合統一建議
     """
-    agent_logger.info("[DECOMPOSITION] 開始子任務拆解")
+    agent_logger.info("[INTEGRATION] 開始整合 Agent 回應")
 
-    # 🔹 追蹤器：記錄 supervisor_decomposition 節點開始
+    # 追蹤器記錄
     try:
         thread_id = current_thread_id.get()
-        messages = state.get('messages', [])
-        user_query = ""
-        for msg in reversed(messages):
-            if hasattr(msg, 'type') and msg.type == 'human':
-                user_query = msg.content[:200]
-                break
-        tracker.start_agent(thread_id, "supervisor_decomposition", user_query)
+        tracker.start_agent(thread_id, "integration", "整合專家回應")
     except Exception as e:
-        agent_logger.warning(f"[TRACKER] supervisor_decomposition 追蹤失敗: {e}")
+        agent_logger.warning(f"[TRACKER] integration 追蹤失敗: {e}")
 
+    task_analysis = state.get('task_analysis', {})
+    task_type = task_analysis.get('type', 'single_expert')
+    needs_agents = task_analysis.get('needs_agents', [])
+    messages = state.get('messages', [])
+
+    # 收集所有 agent 的回應（從後往前查找，每個 agent 只取最新回應）
+    agent_responses = {}
+
+    for msg in reversed(messages):
+        if hasattr(msg, 'type') and msg.type == 'ai' and hasattr(msg, 'content'):
+            # 通過檢查前面的 tool message 來判斷是哪個 agent 的回應
+            msg_index = messages.index(msg)
+            if msg_index > 0:
+                prev_msg = messages[msg_index - 1]
+                if hasattr(prev_msg, 'type') and prev_msg.type == 'tool':
+                    tool_name = getattr(prev_msg, 'name', '')
+                    # 判斷是哪個 agent
+                    if 'chronic_search' in tool_name and 'chronic_agent' not in agent_responses:
+                        agent_responses['chronic_agent'] = msg.content
+                    elif 'cardiovascular_search' in tool_name and 'cardiovascular_agent' not in agent_responses:
+                        agent_responses['cardiovascular_agent'] = msg.content
+                    elif tool_name in ['cofacts_check_tool', 'google_fact_check_tool', 'net_search'] and 'fact_check_agent' not in agent_responses:
+                        agent_responses['fact_check_agent'] = msg.content
+
+    agent_logger.info(f"[INTEGRATION] 收集到 {len(agent_responses)} 個專家回應: {list(agent_responses.keys())}")
+
+    # 判斷是否需要整合
+    if task_type == 'multi_expert' and len(agent_responses) > 1:
+        # 多專家整合
+        agent_logger.info("[INTEGRATION] 執行多專家回應整合")
+
+        # 構建整合 prompt
+        responses_text = ""
+        agent_display_map = {
+            'chronic_agent': '慢性疾病專家',
+            'cardiovascular_agent': '心血管疾病專家',
+            'fact_check_agent': '資訊查核專家'
+        }
+
+        for agent_name, response_content in agent_responses.items():
+            display_name = agent_display_map.get(agent_name, agent_name)
+            responses_text += f"\n\n【{display_name}】\n{response_content}\n"
+
+        integration_prompt = f"""
+你是一位醫療協調專家，需要整合多位專科醫師的意見，為患者提供統一、清晰的建議。
+
+專家意見如下：
+{responses_text}
+
+請整合以上專家意見，生成一個統一的醫療建議回應。要求：
+
+1. **綜合分析**：整合多位專家的觀點，找出共同建議和關聯性
+2. **結構清晰**：使用 Markdown 格式，包含明確的標題和分段
+3. **避免重複**：不要簡單複述每位專家的話，而是融合成統一建議
+4. **突出關聯**：特別強調不同疾病之間的相互影響和綜合管理策略
+5. **實用建議**：提供可操作的綜合治療和生活管理建議
+
+使用繁體中文，語氣專業但溫暖，適合台灣長者閱讀。
+"""
+
+        try:
+            integrated_response = llm_GPT.invoke(integration_prompt)
+            final_content = integrated_response.content if hasattr(integrated_response, 'content') else str(integrated_response)
+            agent_logger.info(f"[INTEGRATION] 整合完成，回應長度: {len(final_content)} 字符")
+        except Exception as e:
+            agent_logger.error(f"[INTEGRATION] LLM 整合失敗: {e}")
+            # 備援：簡單拼接
+            final_content = f"## 綜合醫療建議\n\n{responses_text}"
+
+    elif len(agent_responses) == 1:
+        # 單一專家回應，直接使用
+        agent_logger.info("[INTEGRATION] 單一專家回應，直接返回")
+        final_content = list(agent_responses.values())[0]
+
+    else:
+        # 沒有找到任何回應（異常情況）
+        agent_logger.warning("[INTEGRATION] 未找到任何 Agent 回應")
+        final_content = "抱歉，我無法為您找到相關資訊。請換個問題再試一次。"
+
+    # 將最終回應添加到 messages
+    from langchain_core.messages import AIMessage
+    state['messages'] = messages + [AIMessage(content=final_content)]
+
+    # 追蹤器記錄完成
+    try:
+        thread_id = current_thread_id.get()
+        handoff_msg = f"整合類型: {task_type}, 專家數: {len(agent_responses)}, 回應長度: {len(final_content)}"
+        tracker.complete_agent(thread_id, "integration", handoff_message=handoff_msg)
+    except Exception as e:
+        agent_logger.warning(f"[TRACKER] integration 完成追蹤失敗: {e}")
+
+    return state
+
+
+# ============================================================================
+# 條件路由函數 - 支援並行執行
+# ============================================================================
+
+def route_to_agents(state: State) -> list[Send] | str:
+    """
+    條件路由函數：根據 task_analysis 決定要派發哪些 agents
+
+    支援三種路由模式：
+    1. Fast-Path：直接處理簡單問題（問候/地圖查詢）
+    2. 並行派發：多個 agents 同時執行（multi_expert）
+    3. 單一派發：派發給單一 agent（single_expert）
+
+    Returns:
+        - 'supervisor_routing': Fast-Path 處理
+        - list[Send]: 並行派發多個 agents
+        - str (agent_name): 派發單一 agent
+    """
     task_analysis = state.get('task_analysis', {})
     task_type = task_analysis.get('type', 'single_expert')
     needs_agents = task_analysis.get('needs_agents', ['chronic_agent'])
 
-    messages = state.get('messages', [])
-    user_query = ""
-    for msg in reversed(messages):
-        if hasattr(msg, 'type') and msg.type == 'human':
-            user_query = msg.content
-            break
+    agent_logger.info(f"[ROUTE] 任務類型: {task_type}, 需要的專家: {needs_agents}")
 
-    agent_logger.info(f"[DECOMPOSITION] 問題類型: {task_type}, 需要的 agents: {needs_agents}")
+    # Fast-Path：簡單問候或地圖查詢
+    if task_type in ['simple_greeting', 'simple_maps']:
+        agent_logger.info(f"[ROUTE] Fast-Path 路由: {task_type}")
+        return 'supervisor_routing'
 
-    import uuid
+    # Multi-Expert：並行派發多個 agents
+    if task_type == 'multi_expert' and len(needs_agents) > 1:
+        agent_logger.info(f"[ROUTE] 並行派發 {len(needs_agents)} 個專家: {needs_agents}")
+        # 使用 Send 命令並行派發
+        return [Send(agent_name, state) for agent_name in needs_agents]
 
-    try:
-        if task_type == "single_expert":
-            # 單一專家 - 不需要複雜的拆解,直接指派整個問題
-            agent_name = needs_agents[0]
-            agent_logger.info(f"[DECOMPOSITION] 單一專家模式,指派給: {agent_name}")
+    # Single-Expert：派發單一專家
+    if needs_agents:
+        agent_logger.info(f"[ROUTE] 單一派發: {needs_agents[0]}")
+        return needs_agents[0]
 
-            subtasks = {
-                agent_name: {
-                    "task_id": str(uuid.uuid4())[:8],
-                    "query": user_query,
-                    "priority": 1,
-                    "expected_output": "專業的醫療建議",
-                    "status": "pending"
-                }
-            }
-            needs_integration = False
-
-        elif task_type == "multi_expert":
-            # 多專家協作 - 需要用 LLM 拆解子任務
-            agent_logger.info(f"[DECOMPOSITION] 多專家模式,拆解子任務")
-
-            # 構建專家描述
-            agent_descriptions = {
-                'chronic_agent': '慢性疾病專家 (糖尿病、高血壓、腎臟病、關節炎等)',
-                'cardiovascular_agent': '心血管疾病專家 (心臟病、中風、血壓問題、胸痛等)',
-                'fact_check_agent': '資訊搜尋與查核專家 (事實查核、網路搜尋、最新資訊)'
-            }
-
-            agent_list_text = "\n".join([f"- {name}: {desc}" for name, desc in agent_descriptions.items() if name in needs_agents])
-
-            decomposition_prompt = f"""
-你是一個任務規劃專家。用戶提出了一個需要多位專家協作的健康問題。
-
-用戶問題: "{user_query}"
-
-需要參與的專家:
-{agent_list_text}
-
-**重要限制**: 你只能為上述列出的專家分配任務，不能添加其他專家或額外的任務。
-
-請為每位專家分配一個具體的子任務。對於每個子任務,請指定:
-1. 專家應該查詢什麼 (具體、可執行的問題)
-2. 期望輸出什麼內容
-
-請以 JSON 格式回應,格式如下:
-{{
-  "agent_name": {{
-    "query": "該專家應該查詢的具體問題",
-    "expected_output": "期望該專家提供的資訊類型",
-    "priority": 1
-  }}
-}}
-
-注意:
-- 只能使用上述列出的專家名稱，不能添加其他專家
-- query 應該是一個完整、獨立的問題,專家能直接理解和回答
-- 避免重複的子任務
-- 優先級都設為 1 (並行執行)
-- 不要添加事實查核或網路搜尋任務（除非明確指定要 fact_check_agent）
-"""
-
-            decomposition_response = llm_GPT.invoke(decomposition_prompt)
-            response_text = decomposition_response.content if hasattr(decomposition_response, 'content') else str(decomposition_response)
-
-            agent_logger.info(f"[DECOMPOSITION] LLM 拆解結果: {response_text[:200]}...")
-
-            # 使用通用 JSON 提取函數
-            decomposed_tasks = extract_json_from_llm_response(response_text, "DECOMPOSITION")
-
-            # 如果提取失敗，使用簡單分配
-            if not decomposed_tasks:
-                agent_logger.warning("[DECOMPOSITION] JSON 提取失敗，使用簡單分配策略")
-                decomposed_tasks = {agent: {"query": user_query, "expected_output": "專業建議", "priority": 1} for agent in needs_agents}
-            else:
-                agent_logger.info(f"[DECOMPOSITION] 解析成功，包含 {len(decomposed_tasks)} 個任務")
-
-            # 構建 subtasks - 嚴格限制只使用 needs_agents 中的專家
-            subtasks = {}
-            for agent_name in needs_agents:
-                if agent_name in decomposed_tasks:
-                    subtasks[agent_name] = {
-                        "task_id": str(uuid.uuid4())[:8],
-                        "query": decomposed_tasks[agent_name].get("query", user_query),
-                        "priority": decomposed_tasks[agent_name].get("priority", 1),
-                        "expected_output": decomposed_tasks[agent_name].get("expected_output", "專業建議"),
-                        "status": "pending"
-                    }
-                else:
-                    # 如果 LLM 沒有為這個 agent 生成子任務,使用原問題
-                    subtasks[agent_name] = {
-                        "task_id": str(uuid.uuid4())[:8],
-                        "query": user_query,
-                        "priority": 1,
-                        "expected_output": "專業建議",
-                        "status": "pending"
-                    }
-
-            # 🔹 額外檢查：移除任何不在 needs_agents 中的 agent（防止 LLM 自作主張添加）
-            extra_agents = [agent for agent in decomposed_tasks.keys() if agent not in needs_agents]
-            if extra_agents:
-                agent_logger.warning(f"[DECOMPOSITION] LLM 嘗試添加額外的 agents，已過濾: {extra_agents}")
-                agent_logger.info(f"[DECOMPOSITION] 只保留指定的 agents: {list(subtasks.keys())}")
-
-            needs_integration = True
-            agent_logger.info(f"[DECOMPOSITION] 拆解完成,共 {len(subtasks)} 個子任務,需要整合結果")
-
-        else:
-            # 不應該到這裡
-            agent_logger.warning(f"[DECOMPOSITION] 未預期的任務類型: {task_type}")
-            subtasks = {
-                'chronic_agent': {
-                    "task_id": str(uuid.uuid4())[:8],
-                    "query": user_query,
-                    "priority": 1,
-                    "expected_output": "專業建議",
-                    "status": "pending"
-                }
-            }
-            needs_integration = False
-
-        # 儲存到 state
-        state['subtasks'] = subtasks
-        state['needs_integration'] = needs_integration
-
-        # 詳細日誌
-        for agent_name, subtask in subtasks.items():
-            agent_logger.info(f"[DECOMPOSITION] {agent_name}: {subtask['query'][:80]}...")
-
-    except Exception as e:
-        agent_logger.error(f"[DECOMPOSITION] 拆解失敗: {e}")
-        # 降級處理
-        subtasks = {
-            'chronic_agent': {
-                "task_id": str(uuid.uuid4())[:8],
-                "query": user_query,
-                "priority": 1,
-                "expected_output": "專業建議",
-                "status": "pending"
-            }
-        }
-        state['subtasks'] = subtasks
-        state['needs_integration'] = False
-
-    agent_logger.info("[DECOMPOSITION] 子任務拆解完成")
-
-    # 🔹 追蹤器：完成 supervisor_decomposition 節點
-    try:
-        thread_id = current_thread_id.get()
-        handoff_msg = f"拆解為 {len(subtasks)} 個子任務: {list(subtasks.keys())}"
-        tracker.complete_agent(thread_id, "supervisor_decomposition", handoff_message=handoff_msg)
-    except Exception as e:
-        agent_logger.warning(f"[TRACKER] supervisor_decomposition 完成追蹤失敗: {e}")
-
-    return state
+    # 預設：chronic_agent
+    agent_logger.warning("[ROUTE] 未識別的任務類型，預設派發 chronic_agent")
+    return 'chronic_agent'
 
 
-def supervisor_summary_node(state: State) -> State:
+def route_after_fast_path(state: State) -> str:
     """
-    Supervisor 最終總結節點
-
-    功能:
-    1. 單一 agent: 對回應進行格式檢查和潤飾
-    2. 多個 agents: 整合所有回應生成統一答案
-
-    所有情況都由 Supervisor 生成最終輸出
-    """
-    agent_logger.info("[SUPERVISOR_SUMMARY] 開始最終總結")
-
-    # 追蹤器
-    try:
-        thread_id = current_thread_id.get()
-        agent_responses = state.get('agent_responses', {})
-        tracker.start_agent(thread_id, "supervisor_summary", f"總結 {len(agent_responses)} 個回應")
-    except Exception as e:
-        agent_logger.warning(f"[TRACKER] supervisor_summary 追蹤失敗: {e}")
-
-    messages = state.get('messages', [])
-    agent_responses = state.get('agent_responses', {})
-    subtasks = state.get('subtasks', {})
-
-    # 提取用戶原始問題
-    user_query = ""
-    for msg in messages:
-        if hasattr(msg, 'type') and msg.type == 'human':
-            user_query = msg.content
-            break
-
-    try:
-        if len(agent_responses) == 1:
-            # ========== 單一 Agent: 格式檢查和潤飾 ==========
-            agent_name = list(agent_responses.keys())[0]
-            agent_response = agent_responses[agent_name]
-
-            agent_logger.info(f"[SUPERVISOR_SUMMARY] 單一 agent ({agent_name}) 總結")
-
-            summary_prompt = f"""
-你是醫療諮詢系統的 Supervisor。專家已回答用戶問題，請進行最終檢查和潤飾。
-
-**用戶問題**: "{user_query}"
-
-**專家回應** ({AGENT_DISPLAY_NAMES.get(agent_name, agent_name)}):
-{agent_response}
-
-**你的任務**:
-1. 檢查回應是否完整回答用戶問題
-2. 確保使用繁體中文和適當的 Markdown 格式
-3. 如需要，進行輕微潤飾（語氣、格式、結構）
-4. 保持專家的專業建議不變
-
-**輸出要求**:
-- 如果專家回應已經很好，可直接輸出原文
-- 如需潤飾，保持專業內容不變，只調整表達方式
-- 使用 Markdown 格式
-- 語氣溫暖親切，適合台灣長者
-
-請直接提供最終回應，不要包含任何前言或後記。
-"""
-
-        else:
-            # ========== 多個 Agents: 整合總結 ==========
-            agent_logger.info(f"[SUPERVISOR_SUMMARY] 多 agent ({len(agent_responses)}) 整合")
-
-            # 構建專家回應文本
-            agent_responses_text = ""
-            for agent_name, response_content in agent_responses.items():
-                agent_display_name = AGENT_DISPLAY_NAMES.get(agent_name, agent_name)
-                subtask_info = subtasks.get(agent_name, {})
-                subtask_query = subtask_info.get('query', '未知')
-
-                agent_responses_text += f"""
-### {agent_display_name}
-**子任務**: {subtask_query}
-**回應**:
-{response_content}
-
----
-"""
-
-            summary_prompt = f"""
-你是醫療諮詢系統的 Supervisor。多位專家已協作回答用戶問題，請整合他們的回應。
-
-**用戶原始問題**: "{user_query}"
-
-**各專家的回應**:
-{agent_responses_text}
-
-**你的任務**:
-請整合以上所有專家的回應，生成一個統一、連貫、完整的最終答案。
-
-**整合要求**:
-1. **完整性**: 涵蓋所有專家提供的關鍵資訊
-2. **連貫性**: 自然流暢，不要簡單堆疊
-3. **避免重複**: 如果多位專家提到相同資訊，只說明一次
-4. **標註來源**: 適當提及「慢性疾病專家建議...」、「心血管專家指出...」
-5. **解決矛盾**: 如果專家意見有矛盾，說明不同觀點並建議諮詢醫生
-6. **實用建議**: 提供清晰、可行的行動建議
-
-**輸出格式**:
-使用 Markdown 格式，包含適當的標題、列表和強調。
-使用繁體中文，語氣專業但親切，適合台灣長者閱讀。
-
-請直接提供最終整合答案，不要包含任何前言或後記。
-"""
-
-        # 調用 LLM 生成總結
-        summary_response = llm_GPT.invoke(summary_prompt)
-        final_content = summary_response.content if hasattr(summary_response, 'content') else str(summary_response)
-
-        agent_logger.info(f"[SUPERVISOR_SUMMARY] 總結完成，長度: {len(final_content)} 字符")
-
-        # 將總結添加到 messages
-        from langchain_core.messages import AIMessage
-        state['messages'] = messages + [AIMessage(content=final_content)]
-
-        # 追蹤器完成
-        try:
-            thread_id = current_thread_id.get()
-            handoff_msg = f"總結完成, 回應長度: {len(final_content)}"
-            tracker.complete_agent(thread_id, "supervisor_summary", handoff_message=handoff_msg)
-        except Exception as e:
-            agent_logger.warning(f"[TRACKER] supervisor_summary 完成追蹤失敗: {e}")
-
-    except Exception as e:
-        agent_logger.error(f"[SUPERVISOR_SUMMARY] 總結失敗: {e}")
-        # 降級處理：簡單合併
-        combined_text = f"## 健康諮詢回覆\n\n針對您的問題:「{user_query}」\n\n"
-        for agent_name, response_content in agent_responses.items():
-            agent_display_name = AGENT_DISPLAY_NAMES.get(agent_name, agent_name)
-            combined_text += f"### {agent_display_name} 的建議\n{response_content}\n\n"
-
-        from langchain_core.messages import AIMessage
-        state['messages'] = messages + [AIMessage(content=combined_text)]
-
-        # 追蹤器錯誤完成
-        try:
-            thread_id = current_thread_id.get()
-            tracker.complete_agent(thread_id, "supervisor_summary", handoff_message=f"錯誤: {str(e)[:100]}")
-        except:
-            pass
-
-    agent_logger.info("[SUPERVISOR_SUMMARY] 總結節點完成")
-    return state
-
-
-# ============================================================================
-# Agent Task Wrappers - 包裝現有 agents,注入子任務但保留自主性
-# ============================================================================
-
-def create_agent_task_node(agent_name: str, base_agent):
-    """
-    創建一個包裝節點,將子任務注入到 agent 但保留其自主決策能力
-
-    Args:
-        agent_name: agent 名稱 (如 'chronic_agent')
-        base_agent: 原始的 ReAct agent
+    Fast-Path 處理後的路由
 
     Returns:
-        包裝後的節點函數
+        END: 直接結束（Fast-Path 已完成回應）
     """
-    def agent_task_node(state: State) -> dict:  # ⭐ 返回 dict，不是 State
-        """
-        ⭐ 重要：這個函數返回 dict 而不是修改 state 對象
-        LangGraph 會使用 merge_dicts reducer 合併多個並行節點的返回值
-        """
-        agent_logger.info(f"[{agent_name.upper()}_TASK] 開始執行")
+    # Fast-Path 已經生成回應，直接結束
+    if state.get('fast_path_handled'):
+        agent_logger.info("[ROUTE] Fast-Path 已處理完成，直接結束")
+        return END
 
-        # 🔹 追蹤器：記錄 agent task 節點開始
-        try:
-            thread_id = current_thread_id.get()
-            subtasks = state.get('subtasks', {})
-            subtask = subtasks.get(agent_name, {})
-            task_query = subtask.get('query', '')[:200]
-            tracker.start_agent(thread_id, agent_name, task_query)
-        except Exception as e:
-            agent_logger.warning(f"[TRACKER] {agent_name} 追蹤失敗: {e}")
-
-        subtasks = state.get('subtasks', {})
-        subtask = subtasks.get(agent_name, {})
-
-        if not subtask:
-            agent_logger.warning(f"[{agent_name.upper()}_TASK] 沒有找到子任務")
-            # ⭐ 返回部分更新
-            return {
-                "agent_responses": {
-                    agent_name: "找不到對應的子任務定義"
-                }
-            }
-
-        task_query = subtask.get('query', '')
-        task_id = subtask.get('task_id', 'unknown')
-        expected_output = subtask.get('expected_output', '專業建議')
-
-        agent_logger.info(f"[{agent_name.upper()}_TASK] 任務 ID: {task_id}")
-        agent_logger.info(f"[{agent_name.upper()}_TASK] 查詢: {task_query[:100]}...")
-
-        # 構建任務指示消息 (注入到 messages 中)
-        task_instruction = f"""[任務指示]
-任務 ID: {task_id}
-具體查詢: {task_query}
-期望輸出: {expected_output}
-
-請使用你的專業知識和工具來完成這個子任務。你必須首先調用你的專門工具,然後根據工具返回的結果提供專業建議。"""
-
-        from langchain_core.messages import HumanMessage
-
-        # 創建包含任務指示的新消息列表
-        messages = state.get('messages', [])
-        agent_messages = messages + [HumanMessage(content=task_instruction)]
-
-        # 構建 agent 的 state
-        agent_state = {
-            'messages': agent_messages
-        }
-
-        try:
-            # 調用原始 agent (保留自主決策)
-            agent_result = base_agent.invoke(agent_state)
-
-            # 提取 agent 的回應
-            agent_messages_result = agent_result.get('messages', [])
-            agent_response_content = ""
-
-            # 找到最後一條 AI 消息
-            for msg in reversed(agent_messages_result):
-                if hasattr(msg, 'type') and msg.type == 'ai' and hasattr(msg, 'content') and msg.content.strip():
-                    agent_response_content = msg.content.strip()
-                    break
-
-            if not agent_response_content:
-                agent_logger.warning(f"[{agent_name.upper()}_TASK] Agent 沒有返回有效回應")
-                agent_response_content = "抱歉,我暫時無法處理這個問題。"
-
-            agent_logger.info(f"[{agent_name.upper()}_TASK] 回應長度: {len(agent_response_content)} 字符")
-            agent_logger.info(f"[{agent_name.upper()}_TASK] 執行完成")
-
-            # 🔹 追蹤器：完成 agent task 節點
-            try:
-                thread_id = current_thread_id.get()
-                handoff_msg = f"任務完成, 回應長度: {len(agent_response_content)}"
-                tracker.complete_agent(thread_id, agent_name, handoff_message=handoff_msg)
-            except Exception as e:
-                agent_logger.warning(f"[TRACKER] {agent_name} 完成追蹤失敗: {e}")
-
-            # ⭐ 只返回要更新的字段，LangGraph 會用 reducer 合併
-            return {
-                "agent_responses": {
-                    agent_name: agent_response_content
-                },
-                "subtasks": {
-                    agent_name: {
-                        **subtask,  # 保留原有字段
-                        'status': 'completed'
-                    }
-                }
-            }
-
-        except Exception as e:
-            agent_logger.error(f"[{agent_name.upper()}_TASK] 執行失敗: {e}")
-
-            # 檢查是否為 rate limit 錯誤
-            error_msg = str(e)
-            is_rate_limit = "429" in error_msg or "rate_limit" in error_msg.lower()
-
-            if is_rate_limit:
-                response_content = (
-                    "由於 API 請求速率限制，暫時無法完成此查詢。"
-                    "建議稍後重試或聯繫技術支援。"
-                )
-                agent_logger.warning(f"[{agent_name.upper()}_TASK] Rate limit 錯誤，已記錄降級回應")
-            else:
-                response_content = f"執行失敗: {error_msg[:200]}"
-
-            # 🔹 追蹤器：錯誤時也完成追蹤
-            try:
-                thread_id = current_thread_id.get()
-                tracker.complete_agent(thread_id, agent_name, handoff_message=f"錯誤: {error_msg[:100]}")
-            except:
-                pass
-
-            # ⭐ 錯誤時也返回部分更新
-            return {
-                "agent_responses": {
-                    agent_name: response_content
-                },
-                "subtasks": {
-                    agent_name: {
-                        **subtask,
-                        'status': 'failed'
-                    }
-                }
-            }
-
-    return agent_task_node
+    # 異常情況：Fast-Path 未處理
+    agent_logger.warning("[ROUTE] Fast-Path 未處理，異常結束")
+    return END
 
 
-# 創建包裝後的 agent 節點
-chronic_agent_task_node = create_agent_task_node('chronic_agent', chronic_agent)
-cardiovascular_agent_task_node = create_agent_task_node('cardiovascular_agent', cardiovascular_agent)
-fact_check_agent_task_node = create_agent_task_node('fact_check_agent', fact_check_agent)
-
-
-# ============================================================================
-# 任務指派型 Workflow (Task-Assigning Supervisor)
-# ============================================================================
-
-# 路由函數 1: 根據任務分析結果決定下一步
-def route_after_task_analysis(state: State) -> str:
+def route_after_agents(state: State) -> str:
     """
-    路由邏輯: 根據任務分析結果決定下一步
-    - simple_greeting/simple_maps → supervisor_fast_path
-    - single_expert/multi_expert → supervisor_decomposition
+    Agent 執行完成後的路由
+
+    判斷是否需要整合多個 agent 的回應
+
+    Returns:
+        'integration': 需要整合多個回應
+        END: 單一回應，直接結束
     """
     task_analysis = state.get('task_analysis', {})
     task_type = task_analysis.get('type', 'single_expert')
+    needs_agents = task_analysis.get('needs_agents', [])
 
-    agent_logger.info(f"[ROUTE] 任務分析後路由: task_type={task_type}")
+    # 多專家協作：需要整合
+    if task_type == 'multi_expert' and len(needs_agents) > 1:
+        agent_logger.info(f"[ROUTE] 多專家協作，進入整合節點")
+        return 'integration'
 
-    if task_type in ["simple_greeting", "simple_maps"]:
-        return "supervisor_fast_path"
-    else:
-        # single_expert or multi_expert
-        return "supervisor_decomposition"
-
-
-# 路由函數 2: 根據子任務決定如何派發 agents
-def route_after_decomposition(state: State):
-    """
-    路由邏輯: 根據子任務數量決定單一或並行執行
-    - 單一 agent → 返回 agent 名稱
-    - 多個 agents → 返回 Send 列表 (並行執行)
-    """
-    subtasks = state.get('subtasks', {})
-    agent_logger.info(f"[ROUTE] 子任務拆解後路由: {len(subtasks)} 個子任務")
-
-    if len(subtasks) == 0:
-        agent_logger.warning("[ROUTE] 沒有子任務,路由到 END")
-        return END
-
-    elif len(subtasks) == 1:
-        # 單一 agent
-        agent_name = list(subtasks.keys())[0]
-        agent_logger.info(f"[ROUTE] 單一 agent 模式: {agent_name}")
-
-        # 根據 agent_name 路由到對應的 task node
-        if agent_name == 'chronic_agent':
-            return "chronic_agent_task"
-        elif agent_name == 'cardiovascular_agent':
-            return "cardiovascular_agent_task"
-        elif agent_name == 'fact_check_agent':
-            return "fact_check_agent_task"
-        else:
-            agent_logger.warning(f"[ROUTE] 未知的 agent: {agent_name},預設到 chronic_agent_task")
-            return "chronic_agent_task"
-
-    else:
-        # 多個 agents - 並行執行
-        agent_logger.info(f"[ROUTE] 多 agent 並行模式: {list(subtasks.keys())}")
-
-        send_list = []
-        for agent_name in subtasks.keys():
-            # 根據 agent_name 決定目標節點
-            if agent_name == 'chronic_agent':
-                send_list.append(Send("chronic_agent_task", state))
-            elif agent_name == 'cardiovascular_agent':
-                send_list.append(Send("cardiovascular_agent_task", state))
-            elif agent_name == 'fact_check_agent':
-                send_list.append(Send("fact_check_agent_task", state))
-
-        return send_list
+    # 單一專家：直接結束
+    agent_logger.info(f"[ROUTE] 單一專家回應，直接結束")
+    return END
 
 
-# 路由函數 3: 並行 agents 收斂節點
-def parallel_join_node(state: State) -> State:
-    """
-    並行完成收斂節點
+# ============================================================================
+# 舊架構已刪除：
+# - create_handoff_tool 及相關的 handoff tools（已被新架構的條件路由取代）
+# - supervisor agent（已被 task_analysis + routing nodes 取代）
+# 新架構：Task Analysis → Conditional Routing → Parallel Agents → Integration
+# ============================================================================
 
-    所有並行 agents 完成後會收斂到此節點。
-    此時 LangGraph 的 reducer 已經合併了所有 agent_responses。
+# ============================================================================
+# Workflow 定義 - 新架構：並行多專家協作
+# ============================================================================
+#
+# 流程圖：
+# START
+#   → supervisor_task_analysis (分析用戶意圖)
+#   → 條件路由 (route_to_agents)
+#       ├─ simple_greeting/maps → supervisor_routing (Fast-Path) → END
+#       ├─ single_expert → chronic_agent / cardiovascular_agent / fact_check_agent → END
+#       └─ multi_expert → [chronic_agent, cardiovascular_agent] (並行) → integration → END
+#
+# ============================================================================
 
-    這個節點的作用:
-    1. 驗證所有預期的 agents 都已完成
-    2. 記錄完成狀態日誌
-    3. 為後續路由提供正確的狀態
-    4. 如果是單一 agent 且不需要整合，直接將回應寫入 messages
-    """
-    agent_logger.info("[PARALLEL_JOIN] 並行 agents 收斂檢查")
-
-    subtasks = state.get('subtasks', {})
-    agent_responses = state.get('agent_responses', {})
-    needs_integration = state.get('needs_integration', False)
-
-    expected_agents = list(subtasks.keys())
-    completed_agents = list(agent_responses.keys())
-
-    agent_logger.info(f"[PARALLEL_JOIN] needs_integration={needs_integration}")
-    agent_logger.info(f"[PARALLEL_JOIN] 預期 agents: {expected_agents}")
-    agent_logger.info(f"[PARALLEL_JOIN] 已完成 agents: {completed_agents}")
-    agent_logger.info(f"[PARALLEL_JOIN] 完成度: {len(completed_agents)}/{len(expected_agents)}")
-
-    # 驗證完成度
-    all_completed = all(agent in agent_responses for agent in expected_agents)
-
-    if all_completed:
-        agent_logger.info("[PARALLEL_JOIN] SUCCESS - 所有 agents 已完成並合併狀態")
-    else:
-        missing = [a for a in expected_agents if a not in completed_agents]
-        agent_logger.warning(f"[PARALLEL_JOIN] WARNING - 部分 agents 未完成: {missing}")
-
-    return state
-
-
-# 路由函數 4: 收斂後路由到 supervisor_summary
-def route_after_join(state: State) -> str:
-    """
-    收斂節點之後的路由邏輯
-
-    所有情況都路由到 supervisor_summary 進行最終總結
-
-    Returns:
-        - "supervisor_summary": 路由到 Supervisor 總結節點
-        - END: 異常情況（無 agent 回應）
-    """
-    agent_responses = state.get('agent_responses', {})
-
-    agent_logger.info(f"[ROUTE_AFTER_JOIN] agent_responses 數量: {len(agent_responses)}")
-
-    if len(agent_responses) == 0:
-        agent_logger.warning("[ROUTE_AFTER_JOIN] 無 agent 回應，異常結束")
-        return END
-
-    # ✅ 不論單一或多個 agent，都走 supervisor_summary
-    agent_logger.info(f"[ROUTE_AFTER_JOIN] → supervisor_summary ({len(agent_responses)} agents)")
-    return "supervisor_summary"
-
-
-# 構建任務指派型 Workflow
-new_workflow = (
+workflow = (
     StateGraph(State)
-    # 添加所有節點
-    .add_node("supervisor_analysis", supervisor_task_analysis_node)
-    .add_node("supervisor_fast_path", supervisor_fast_path_node)
-    .add_node("supervisor_decomposition", supervisor_decomposition_node)
-    .add_node("chronic_agent_task", chronic_agent_task_node)
-    .add_node("cardiovascular_agent_task", cardiovascular_agent_task_node)
-    .add_node("fact_check_agent_task", fact_check_agent_task_node)
-    .add_node("parallel_join", parallel_join_node)  # 並行收斂節點
-    .add_node("supervisor_summary", supervisor_summary_node)  # Supervisor 總結節點
 
-    # 路由邏輯
-    .add_edge(START, "supervisor_analysis")
+    # ========== 節點定義 ==========
+    # 1. 任務分析節點
+    .add_node('supervisor_task_analysis', supervisor_task_analysis_node)
+
+    # 2. Fast-Path 路由節點（處理問候和地圖查詢）
+    .add_node('supervisor_routing', supervisor_routing_node)
+
+    # 3. Agent 節點
+    .add_node('chronic_agent', chronic_agent)
+    .add_node('cardiovascular_agent', cardiovascular_agent)
+    .add_node('fact_check_agent', fact_check_agent)
+
+    # 4. 整合節點（收集並整合多個 agent 回應）
+    .add_node('integration', integration_node)
+
+    # ========== 路由邏輯 ==========
+    # START → 任務分析
+    .add_edge(START, 'supervisor_task_analysis')
+
+    # 任務分析 → 條件路由（關鍵：支援並行派發）
     .add_conditional_edges(
-        "supervisor_analysis",
-        route_after_task_analysis,
-        {
-            "supervisor_fast_path": "supervisor_fast_path",
-            "supervisor_decomposition": "supervisor_decomposition"
-        }
+        'supervisor_task_analysis',
+        route_to_agents,  # 路由函數
+        # 可能的目標節點
+        ['supervisor_routing', 'chronic_agent', 'cardiovascular_agent', 'fact_check_agent']
     )
-    .add_edge("supervisor_fast_path", END)
+
+    # Fast-Path 路由 → END
     .add_conditional_edges(
-        "supervisor_decomposition",
-        route_after_decomposition
-        # 不需要指定 path_map,因為可能返回 Send 列表或單一字串
+        'supervisor_routing',
+        route_after_fast_path,
+        [END]
     )
 
-    # 所有 agent 節點完成後到 parallel_join
-    .add_edge("chronic_agent_task", "parallel_join")
-    .add_edge("cardiovascular_agent_task", "parallel_join")
-    .add_edge("fact_check_agent_task", "parallel_join")
-
-    # parallel_join 之後統一路由到 supervisor_summary
+    # Agents → 條件路由（判斷是否需要整合）
     .add_conditional_edges(
-        "parallel_join",
-        route_after_join,
-        {
-            "supervisor_summary": "supervisor_summary",
-            END: END
-        }
+        'chronic_agent',
+        route_after_agents,
+        ['integration', END]
     )
-    .add_edge("supervisor_summary", END)
+    .add_conditional_edges(
+        'cardiovascular_agent',
+        route_after_agents,
+        ['integration', END]
+    )
+    .add_conditional_edges(
+        'fact_check_agent',
+        route_after_agents,
+        ['integration', END]
+    )
 
+    # 整合節點 → END
+    .add_edge('integration', END)
+
+    # 編譯 Workflow
     .compile(checkpointer=memory)
 )
 
-agent_logger.info("[WORKFLOW] 任務指派型 Workflow 構建完成")
-
-# 使用任務指派型 workflow
-workflow = new_workflow
+agent_logger.info("[WORKFLOW] 新架構 Workflow 構建完成（支援並行多專家協作）")
+agent_logger.info("[WORKFLOW] 支援模式: Fast-Path / 單一專家 / 並行多專家")
 
 def generate_response(message: str, session_id: str = "default", location_info: dict = None) -> dict:
     """
@@ -2110,13 +1754,19 @@ def generate_response(message: str, session_id: str = "default", location_info: 
     # 提取最終的 AI 回應（supervisor的最終總結）
     messages = result.get('messages', [])
 
-    # 提取並記錄轉交資訊（傳入完整 result 以支援新 workflow）
+    # 提取並記錄執行的代理資訊（適配新架構）
     transferred_agent = extract_transferred_agent_from_messages(result)
     if transferred_agent:
-        display_name = AGENT_DISPLAY_NAMES.get(transferred_agent, transferred_agent)
-        agent_logger.info(f"[WORKFLOW_ROUTING] 最終處理代理: {display_name} ({transferred_agent})")
+        if isinstance(transferred_agent, list):
+            # 多專家協作
+            display_names = [AGENT_DISPLAY_NAMES.get(agent, agent) for agent in transferred_agent]
+            agent_logger.info(f"[WORKFLOW_ROUTING] 多專家協作: {', '.join(display_names)} ({transferred_agent})")
+        else:
+            # 單一專家
+            display_name = AGENT_DISPLAY_NAMES.get(transferred_agent, transferred_agent)
+            agent_logger.info(f"[WORKFLOW_ROUTING] 處理代理: {display_name} ({transferred_agent})")
     else:
-        agent_logger.warning(f"[WORKFLOW_ROUTING] 未能識別轉交的代理")
+        agent_logger.warning(f"[WORKFLOW_ROUTING] 未能識別執行的代理")
 
     # 獲取最後一條AI消息（工作流的最終輸出）
     final_response = ""
@@ -2132,9 +1782,15 @@ def generate_response(message: str, session_id: str = "default", location_info: 
     agent_logger.info(f"[WORKFLOW_COMPLETE] 回應長度: {len(final_response)} 字符")
     agent_logger.info(f"[WORKFLOW_COMPLETE] 消息總數: {len(messages)}")
 
-    # 🔹 追蹤器：完成轉交的 Agent 並標記 Thread 完成
+    # 🔹 追蹤器：完成執行的 Agent 並標記 Thread 完成
     if transferred_agent:
-        tracker.complete_agent(session_id, transferred_agent, handoff_message=final_response[:100])
+        if isinstance(transferred_agent, list):
+            # 多專家協作：標記所有 agents 完成
+            for agent in transferred_agent:
+                tracker.complete_agent(session_id, agent, handoff_message=final_response[:100])
+        else:
+            # 單一專家
+            tracker.complete_agent(session_id, transferred_agent, handoff_message=final_response[:100])
     tracker.complete_thread(session_id)
 
     # 建構統一回應格式

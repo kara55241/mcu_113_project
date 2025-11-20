@@ -4,6 +4,13 @@
       <h2 class="text-lg font-semibold">Agent 執行流程</h2>
       <div class="flex gap-2">
         <button
+          @click="toggleViewMode"
+          class="btn-secondary"
+          :title="viewMode === 'logical' ? '切換到時間序視圖' : '切換到邏輯層視圖'"
+        >
+          {{ viewMode === 'logical' ? '📊 邏輯層' : '⏱️ 時間序' }}
+        </button>
+        <button
           @click="refreshData"
           :disabled="loading"
           class="btn-secondary"
@@ -166,6 +173,7 @@ const autoRefresh = ref(true)
 const refreshInterval = ref<number | null>(null)
 const lastUpdateTime = ref<number>(Date.now())
 const noChangeCount = ref<number>(0)
+const viewMode = ref<'timeline' | 'logical'>('logical') // 新增：視圖模式（時間序 vs 邏輯層）
 
 const statusClass = computed(() => ({
   'text-green-600 font-semibold': execution.value?.status === 'completed',
@@ -239,14 +247,176 @@ const buildFlowGraph = () => {
 
   console.log('[buildFlowGraph] Building graph with', execution.value.agents.length, 'agents')
 
+  if (viewMode.value === 'logical') {
+    buildLogicalFlowGraph()
+  } else {
+    buildTimelineFlowGraph()
+  }
+}
+
+const buildLogicalFlowGraph = () => {
+  // 邏輯層視圖：層次化佈局
   const newNodes: any[] = []
   const newEdges: any[] = []
 
-  // 佈局參數
-  const nodeWidth = 250
-  const verticalSpacing = 180  // 增加垂直間距
+  const centerX = 400
+  const layerSpacing = 200
+  const expertSpacing = 350  // 專家代理之間的水平間距
 
-  // 添加起始節點
+  let currentY = 0
+
+  // 第一層：起始節點
+  newNodes.push({
+    id: 'start',
+    type: 'input',
+    position: { x: centerX, y: currentY },
+    data: { label: '用戶查詢' },
+  })
+  currentY += layerSpacing
+
+  const grouped = execution.value.grouped_agents || {}
+
+  // 第二層：Supervisor 決策（合併所有 supervisor 節點）
+  if (grouped.supervisor && grouped.supervisor.length > 0) {
+    const supervisorId = 'supervisor-layer'
+    const supervisorTools = grouped.supervisor.flatMap((a: any) => a.tools_used || [])
+    const supervisorStatus = grouped.supervisor.some((a: any) => a.status === 'running') ? 'running' : 'completed'
+
+    newNodes.push({
+      id: supervisorId,
+      type: 'agent',
+      position: { x: centerX, y: currentY },
+      data: {
+        name: 'SUPERVISOR 決策中心',
+        status: supervisorStatus,
+        tools: supervisorTools,
+      },
+    })
+
+    newEdges.push({
+      id: 'start-supervisor',
+      source: 'start',
+      target: supervisorId,
+      animated: supervisorStatus === 'running',
+      style: { stroke: supervisorStatus === 'running' ? '#3b82f6' : '#10b981', strokeWidth: 2 },
+    })
+
+    currentY += layerSpacing
+  }
+
+  // 第三層：專家代理（並行顯示）
+  if (grouped.expert && grouped.expert.length > 0) {
+    const expertCount = grouped.expert.length
+    const startX = centerX - ((expertCount - 1) * expertSpacing) / 2
+
+    grouped.expert.forEach((agent: any, index: number) => {
+      const expertId = `expert-${agent.name}`
+      const expertX = startX + index * expertSpacing
+
+      newNodes.push({
+        id: expertId,
+        type: 'agent',
+        position: { x: expertX, y: currentY },
+        data: {
+          name: agent.display_name,
+          status: agent.status,
+          tools: agent.tools_used || [],
+        },
+      })
+
+      // 從 supervisor 連接到專家
+      newEdges.push({
+        id: `supervisor-${expertId}`,
+        source: 'supervisor-layer',
+        target: expertId,
+        animated: agent.status === 'running',
+        style: { stroke: agent.status === 'running' ? '#3b82f6' : '#10b981', strokeWidth: 2 },
+        label: '轉交'
+      })
+    })
+
+    currentY += layerSpacing
+  }
+
+  // 第四層：整合節點
+  if (grouped.integration && grouped.integration.length > 0) {
+    const integrationAgent = grouped.integration[0]
+    const integrationId = 'integration-layer'
+
+    newNodes.push({
+      id: integrationId,
+      type: 'agent',
+      position: { x: centerX, y: currentY },
+      data: {
+        name: integrationAgent.display_name,
+        status: integrationAgent.status,
+        tools: integrationAgent.tools_used || [],
+      },
+    })
+
+    // 從所有專家連接到整合節點
+    if (grouped.expert && grouped.expert.length > 0) {
+      grouped.expert.forEach((agent: any) => {
+        const expertId = `expert-${agent.name}`
+        newEdges.push({
+          id: `${expertId}-integration`,
+          source: expertId,
+          target: integrationId,
+          style: { stroke: '#10b981', strokeWidth: 2 },
+          label: '回報'
+        })
+      })
+    } else {
+      // 如果沒有專家代理，從 supervisor 連接
+      newEdges.push({
+        id: 'supervisor-integration',
+        source: 'supervisor-layer',
+        target: integrationId,
+        style: { stroke: '#10b981', strokeWidth: 2 },
+      })
+    }
+
+    currentY += layerSpacing
+  }
+
+  // 第五層：結束節點
+  if (execution.value.status === 'completed') {
+    newNodes.push({
+      id: 'end',
+      type: 'output',
+      position: { x: centerX, y: currentY },
+      data: { label: '完成' },
+    })
+
+    // 從整合節點或最後一個代理連接到結束
+    const lastNodeId = grouped.integration && grouped.integration.length > 0
+      ? 'integration-layer'
+      : (grouped.expert && grouped.expert.length > 0
+        ? `expert-${grouped.expert[grouped.expert.length - 1].name}`
+        : 'supervisor-layer')
+
+    newEdges.push({
+      id: `${lastNodeId}-end`,
+      source: lastNodeId,
+      target: 'end',
+      style: { stroke: '#10b981', strokeWidth: 2 },
+    })
+  }
+
+  nodes.value = newNodes
+  edges.value = newEdges
+
+  console.log('[buildLogicalFlowGraph] Created', newNodes.length, 'nodes and', newEdges.length, 'edges')
+}
+
+const buildTimelineFlowGraph = () => {
+  // 時間序視圖：線性佈局（原有邏輯）
+  const newNodes: any[] = []
+  const newEdges: any[] = []
+
+  const nodeWidth = 250
+  const verticalSpacing = 180
+
   newNodes.push({
     id: 'start',
     type: 'input',
@@ -254,7 +424,6 @@ const buildFlowGraph = () => {
     data: { label: '開始' },
   })
 
-  // 添加 Agent 節點
   execution.value.agents.forEach((agent: any, index: number) => {
     const nodeId = `agent-${index}`
 
@@ -269,12 +438,10 @@ const buildFlowGraph = () => {
       },
     })
 
-    // 彩色邊：根據狀態設置顏色
     const edgeStyle = agent.status === 'running'
-      ? { stroke: '#3b82f6', strokeWidth: 2 }  // 藍色 - 運行中
-      : { stroke: '#10b981', strokeWidth: 2 }  // 綠色 - 已完成
+      ? { stroke: '#3b82f6', strokeWidth: 2 }
+      : { stroke: '#10b981', strokeWidth: 2 }
 
-    // 連接邊
     if (index === 0) {
       newEdges.push({
         id: `start-${nodeId}`,
@@ -294,7 +461,6 @@ const buildFlowGraph = () => {
     }
   })
 
-  // 添加結束節點
   if (execution.value.status === 'completed') {
     newNodes.push({
       id: 'end',
@@ -307,14 +473,14 @@ const buildFlowGraph = () => {
       id: `agent-${execution.value.agents.length - 1}-end`,
       source: `agent-${execution.value.agents.length - 1}`,
       target: 'end',
-      style: { stroke: '#10b981', strokeWidth: 2 },  // 綠色 - 已完成
+      style: { stroke: '#10b981', strokeWidth: 2 },
     })
   }
 
   nodes.value = newNodes
   edges.value = newEdges
 
-  console.log('[buildFlowGraph] Created', newNodes.length, 'nodes and', newEdges.length, 'edges')
+  console.log('[buildTimelineFlowGraph] Created', newNodes.length, 'nodes and', newEdges.length, 'edges')
 }
 
 const formatTime = (isoString: string) => {
@@ -328,6 +494,11 @@ const refreshData = () => {
 
 const toggleAutoRefresh = () => {
   autoRefresh.value = !autoRefresh.value
+}
+
+const toggleViewMode = () => {
+  viewMode.value = viewMode.value === 'logical' ? 'timeline' : 'logical'
+  buildFlowGraph()  // 重新建構流程圖
 }
 
 const startAutoRefresh = () => {

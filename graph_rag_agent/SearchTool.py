@@ -30,12 +30,40 @@ class SearchTools:
             search_type = 'hospital'
             keyword = input.strip()
             query_type = "text"  # 預設為文字查詢
+            specialty_keyword = None  # 專科關鍵字
+            original_query = keyword  # 保留原始查詢用於回應
+
+            # 專科關鍵字檢測（在清理之前先檢測）
+            specialty_keywords = {
+                '中醫': '中醫',
+                '西醫': '西醫',
+                '牙醫': '牙醫',
+                '牙科': '牙醫',
+                '小兒科': '小兒科',
+                '婦產科': '婦產科',
+                '眼科': '眼科',
+                '皮膚科': '皮膚科',
+                '耳鼻喉科': '耳鼻喉科',
+                '骨科': '骨科',
+                '復健科': '復健科',
+                '精神科': '精神科',
+                '泌尿科': '泌尿科',
+                '心臟科': '心臟科'
+            }
+
+            # 檢測專科
+            for key, value in specialty_keywords.items():
+                if key in keyword:
+                    specialty_keyword = value
+                    break
 
             # 類別判斷
             if "診所" in keyword:
                 search_type = 'doctor'
-            elif "藥局" in keyword:
+            elif "藥局" in keyword or "藥房" in keyword:
                 search_type = 'pharmacy'
+            elif "醫院" in keyword:
+                search_type = 'hospital'
 
             # 判斷使用精確座標還是文字地名
             if location_info and 'coordinates' in location_info:
@@ -52,9 +80,19 @@ class SearchTools:
 
             # 模式 B: 使用文字地名進行 geocoding
             if query_type == "text":
-                # 清除描述詞，只留下地名
-                for word in ['醫院', '診所', '藥局', '附近', '哪裡', '哪里']:
+                # 清除描述詞，但保留專科關鍵字
+                # 先移除常見的描述詞
+                for word in ['附近的', '附近', '哪裡有', '哪里有', '的', '找', '搜尋', '查詢']:
                     keyword = keyword.replace(word, '')
+
+                # 移除專科關鍵字（因為會用 keyword 參數傳遞）
+                if specialty_keyword:
+                    keyword = keyword.replace(specialty_keyword, '')
+
+                # 移除設施類型詞（診所、醫院、藥局）
+                for word in ['診所', '醫院', '藥局', '藥房']:
+                    keyword = keyword.replace(word, '')
+
                 keyword = keyword.strip()
 
                 # 地理編碼
@@ -65,18 +103,25 @@ class SearchTools:
                 loc = geocode[0]['geometry']['location']
                 latlng = (loc['lat'], loc['lng'])
 
-            # 查詢附近地點
-            results = gmaps.places_nearby(
-                location=latlng,
-                radius=3000,
-                type=search_type,
-                language='zh-TW'
-            ).get('results', [])
+            # 查詢附近地點 - 加入專科關鍵字參數
+            search_params = {
+                'location': latlng,
+                'radius': 3000,
+                'type': search_type,
+                'language': 'zh-TW'
+            }
+
+            # 如果有專科關鍵字，加入 keyword 參數以精確篩選
+            if specialty_keyword:
+                search_params['keyword'] = specialty_keyword
+
+            results = gmaps.places_nearby(**search_params).get('results', [])
 
             if not results:
-                return f"❗在「{keyword}」附近找不到相關醫療設施"
+                specialty_text = f"{specialty_keyword}" if specialty_keyword else "相關醫療設施"
+                return f"❗在「{keyword}」附近找不到{specialty_text}"
 
-            # 過濾結果：移除動物醫院和無效結果
+            # 過濾結果：移除動物醫院和無效結果，並依專科篩選
             filtered_results = []
             for place in results[:8]:  # 多取一些以防過濾後不足
                 name = place.get("name", "")
@@ -86,6 +131,16 @@ class SearchTools:
                 is_generic = name in ['藥局', 'Pharmacy', '藥房', '醫院', 'Hospital']
                 has_invalid_types = 'veterinary_care' in place.get('types', [])
 
+                # 如果指定專科，進一步檢查名稱是否包含專科關鍵字
+                if specialty_keyword:
+                    # 對於中醫，接受「中醫」關鍵字
+                    if specialty_keyword == '中醫' and '中醫' not in name:
+                        continue
+                    # 對於其他專科，也可以加入類似的檢查
+                    elif specialty_keyword != '中醫' and specialty_keyword not in name:
+                        # 允許部分匹配，例如「牙醫」可以匹配「牙科」
+                        continue
+
                 if not (is_animal_hospital or is_generic or has_invalid_types) and name:
                     filtered_results.append(place)
 
@@ -93,10 +148,12 @@ class SearchTools:
                     break
 
             if not filtered_results:
-                return f"❗在「{keyword}」附近找不到合適的醫療設施（已排除動物醫院）"
+                specialty_text = f"{specialty_keyword}" if specialty_keyword else "合適的醫療設施"
+                return f"❗在「{keyword}」附近找不到{specialty_text}（已排除動物醫院）"
 
             # 建立 AI 可讀的文字回應
-            reply = f"## 🏥 在「{keyword}」附近找到以下醫療設施\n\n"
+            specialty_display = f"{specialty_keyword}" if specialty_keyword else "醫療設施"
+            reply = f"## 🏥 在「{keyword}」附近找到以下{specialty_display}\n\n"
 
             # 建立結構化數據
             structured_results = []

@@ -42,6 +42,7 @@ class AgentExecutionTracker:
         agent_data = {
             'name': agent_name,
             'display_name': self._get_agent_display_name(agent_name),
+            'role': self._get_agent_role(agent_name),
             'started_at': datetime.now().isoformat(),
             'completed_at': None,
             'status': 'running',
@@ -194,7 +195,26 @@ class AgentExecutionTracker:
         Returns:
             執行狀態數據，如果不存在返回 None
         """
-        return self.executions.get(thread_id)
+        execution = self.executions.get(thread_id)
+        if not execution:
+            return None
+
+        # 新增邏輯層分組（按角色分組代理）
+        grouped_agents = {
+            'supervisor': [],
+            'expert': [],
+            'integration': [],
+            'unknown': []
+        }
+
+        for agent in execution.get('agents', []):
+            role = agent.get('role', 'unknown')
+            grouped_agents[role].append(agent)
+
+        # 添加 grouped_agents 欄位
+        execution['grouped_agents'] = grouped_agents
+
+        return execution
 
     def get_all_threads(self) -> List[str]:
         """
@@ -238,12 +258,37 @@ class AgentExecutionTracker:
     def _get_agent_display_name(self, agent_name: str) -> str:
         """獲取 Agent 顯示名稱"""
         display_names = {
-            "supervisor": "任務分配專家",
-            "chronic_agent": "慢性疾病專家",
-            "cardiovascular_agent": "心血管疾病專家",
-            "fact_check_agent": "資訊搜尋專家"
+            # 舊架構節點
+            "supervisor": "SUPERVISOR",
+            # 新架構 supervisor 節點
+            "supervisor_analysis": "任務分析節點",
+            "supervisor_fast_path": "快速回應節點",
+            "supervisor_decomposition": "任務拆解節點",
+            # Agent 節點
+            "chronic_agent": "CHRONIC AGENT",
+            "cardiovascular_agent": "CARDIOVASCULAR AGENT",
+            "fact_check_agent": "FACT-CHECK AGENT",
+            # 整合節點
+            "integration": "結果整合節點"
         }
         return display_names.get(agent_name, agent_name)
+
+    def _get_agent_role(self, agent_name: str) -> str:
+        """獲取 Agent 角色類型（用於邏輯層分組）"""
+        role_map = {
+            # Supervisor 層（決策和分析）
+            "supervisor": "supervisor",
+            "supervisor_analysis": "supervisor",
+            "supervisor_fast_path": "supervisor",
+            "supervisor_decomposition": "supervisor",
+            # 專家代理層（並行執行）
+            "chronic_agent": "expert",
+            "cardiovascular_agent": "expert",
+            "fact_check_agent": "expert",
+            # 整合層（結果整合）
+            "integration": "integration"
+        }
+        return role_map.get(agent_name, "unknown")
 
     def _truncate_string(self, text: str, max_length: int) -> str:
         """截斷字符串到指定長度"""

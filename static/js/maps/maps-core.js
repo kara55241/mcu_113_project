@@ -101,7 +101,9 @@ MedApp.maps.core = {
             fullscreenControl: true,
             streetViewControl: true,
             zoomControl: true,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            keyboardShortcuts: true, // 啟用鍵盤快捷鍵，但會在搜索框獲得焦點時禁用
+            gestureHandling: 'greedy' // 改善手勢處理
           });
           
           // 保存地圖實例到全局
@@ -262,55 +264,55 @@ MedApp.maps.core = {
             address: results[0].formatted_address,
             coordinates: `${latLng.lat()},${latLng.lng()}`
           };
-          
+
           // 顯示信息窗口
           const content = `
             <div class="info-window-content">
               <strong>${results[0].formatted_address}</strong>
               <p>座標: ${latLng.lat().toFixed(6)}, ${latLng.lng().toFixed(6)}</p>
-              <button id="selectThisLocation" class="select-location-btn">選擇此位置</button>
+              <button class="select-location-btn" data-action="select">選擇此位置</button>
             </div>
           `;
-          
+
           this.infoWindow.setContent(content);
           this.infoWindow.open(this.map, marker);
-          
-          // 添加選擇按鈕事件
-          setTimeout(() => {
-            const selectBtn = document.getElementById('selectThisLocation');
+
+          // 添加選擇按鈕事件 - 使用事件委託避免 ID 衝突
+          google.maps.event.addListenerOnce(this.infoWindow, 'domready', () => {
+            const selectBtn = document.querySelector('.info-window-content button[data-action="select"]');
             if (selectBtn) {
               selectBtn.addEventListener('click', () => this.selectLocation());
             }
-          }, 100);
+          });
         } else {
           MedApp.log("反向地理編碼失敗: " + status, 'warn');
-          
+
           // 僅使用座標
           MedApp.state.selectedLocation = {
             name: `座標 (${latLng.lat().toFixed(6)}, ${latLng.lng().toFixed(6)})`,
             address: `座標: ${latLng.lat().toFixed(6)}, ${latLng.lng().toFixed(6)}`,
             coordinates: `${latLng.lat()},${latLng.lng()}`
           };
-          
+
           // 顯示信息窗口
           const content = `
             <div class="info-window-content">
               <strong>選定位置</strong>
               <p>座標: ${latLng.lat().toFixed(6)}, ${latLng.lng().toFixed(6)}</p>
-              <button id="selectThisLocation" class="select-location-btn">選擇此位置</button>
+              <button class="select-location-btn" data-action="select">選擇此位置</button>
             </div>
           `;
-          
+
           this.infoWindow.setContent(content);
           this.infoWindow.open(this.map, marker);
-          
-          // 添加選擇按鈕事件
-          setTimeout(() => {
-            const selectBtn = document.getElementById('selectThisLocation');
+
+          // 添加選擇按鈕事件 - 使用事件委託避免 ID 衝突
+          google.maps.event.addListenerOnce(this.infoWindow, 'domready', () => {
+            const selectBtn = document.querySelector('.info-window-content button[data-action="select"]');
             if (selectBtn) {
               selectBtn.addEventListener('click', () => this.selectLocation());
             }
-          }, 100);
+          });
         }
       });
     },
@@ -433,24 +435,24 @@ MedApp.maps.core = {
           <div class="info-window-content">
             <strong>${results[0].formatted_address}</strong>
             <p>這是您的當前位置</p>
-            <button id="searchNearbyHospitalsHereBtn" class="primary-button">
+            <button class="primary-button" data-action="search-hospitals">
               <i class="fas fa-search"></i> 搜尋附近醫院
             </button>
           </div>
         `;
-        
+
         this.infoWindow.setContent(content);
         this.infoWindow.open(this.map, marker);
-        
-        // 添加搜尋按鈕事件
-        setTimeout(() => {
-          const searchBtn = document.getElementById('searchNearbyHospitalsHereBtn');
+
+        // 添加搜尋按鈕事件 - 使用 Google Maps 事件監聽
+        google.maps.event.addListenerOnce(this.infoWindow, 'domready', () => {
+          const searchBtn = document.querySelector('.info-window-content button[data-action="search-hospitals"]');
           if (searchBtn && MedApp.maps.hospital && MedApp.maps.hospital.searchNearbyHospitals) {
             searchBtn.addEventListener('click', () => {
               MedApp.maps.hospital.searchNearbyHospitals();
             });
           }
-        }, 100);
+        });
       } else {
         MedApp.log("反向地理編碼失敗: " + status, 'warn');
         
@@ -466,24 +468,24 @@ MedApp.maps.core = {
           <div class="info-window-content">
             <strong>您的當前位置</strong>
             <p>座標: ${lat.toFixed(6)}, ${lng.toFixed(6)}</p>
-            <button id="searchNearbyHospitalsHereBtn" class="primary-button">
+            <button class="primary-button" data-action="search-hospitals">
               <i class="fas fa-search"></i> 搜尋附近醫院
             </button>
           </div>
         `;
-        
+
         this.infoWindow.setContent(content);
         this.infoWindow.open(this.map, marker);
-        
-        // 添加搜尋按鈕事件
-        setTimeout(() => {
-          const searchBtn = document.getElementById('searchNearbyHospitalsHereBtn');
+
+        // 添加搜尋按鈕事件 - 使用 Google Maps 事件監聽
+        google.maps.event.addListenerOnce(this.infoWindow, 'domready', () => {
+          const searchBtn = document.querySelector('.info-window-content button[data-action="search-hospitals"]');
           if (searchBtn && MedApp.maps.hospital && MedApp.maps.hospital.searchNearbyHospitals) {
             searchBtn.addEventListener('click', () => {
               MedApp.maps.hospital.searchNearbyHospitals();
             });
           }
-        }, 100);
+        });
       }
     },
     
@@ -563,18 +565,19 @@ MedApp.maps.core = {
           overflow: hidden;
           position: relative;
         }
-        
-        /* 搜索框容器 */
+
+        /* 搜索框容器 - 修復定位和z-index */
         .location-search-container {
-          position: absolute;
-          top: 10px;
-          left: 10px;
-          width: 300px;
-          z-index: 10;
+          position: relative;
+          margin-bottom: 10px;
+          width: 100%;
+          max-width: 100%;
+          z-index: 1;
           background-color: rgba(37, 37, 50, 0.9);
           padding: 10px;
           border-radius: 8px;
           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          box-sizing: border-box;
         }
         
         /* 輸入框組 */
@@ -667,19 +670,74 @@ MedApp.maps.core = {
           gap: 12px;
         }
         
-        /* 修正信息窗口樣式 */
+        /* 修正信息窗口樣式 - 防止位置偏移 */
         .gm-style .gm-style-iw-c {
-          padding: 12px;
-          border-radius: 8px;
-          max-width: 300px;
+          padding: 12px !important;
+          border-radius: 8px !important;
+          max-width: 350px !important;
+          box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.3) !important;
+          background: white !important;
         }
-        
+
         .gm-style .gm-style-iw-d {
-          overflow: hidden !important;
+          overflow: auto !important;
           max-width: 100% !important;
+          max-height: 300px !important;
+        }
+
+        .gm-style .gm-style-iw-t::after {
+          box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        /* 確保信息窗口內容不會溢出 */
+        .gm-style-iw {
+          padding: 0 !important;
+        }
+
+        /* 信息窗口內的文字樣式 - 確保可見 */
+        .gm-style .gm-style-iw-c .info-window-content {
+          color: #1a1a1a !important;
+        }
+
+        .gm-style .gm-style-iw-c .info-window-content h3,
+        .gm-style .gm-style-iw-c .info-window-content strong {
+          color: #1a1a1a !important;
+          font-weight: bold;
+        }
+
+        .gm-style .gm-style-iw-c .info-window-content p {
+          color: #4a4a4a !important;
+          margin: 4px 0;
+        }
+
+        /* 信息窗口按鈕樣式 */
+        .gm-style .gm-style-iw-c button,
+        .gm-style .gm-style-iw-c a {
+          color: white !important;
+        }
+
+        .gm-style .gm-style-iw-c button i,
+        .gm-style .gm-style-iw-c a i {
+          color: white !important;
+        }
+
+        /* 地圖搜索框 - 防止按鍵被地圖攔截 */
+        .location-search-input,
+        .location-search-btn {
+          pointer-events: auto !important;
+          z-index: 1000 !important;
+        }
+
+        /* 確保地圖模態框的 z-index 正確 */
+        .map-modal {
+          z-index: 9999 !important;
+        }
+
+        .map-modal-content {
+          z-index: 10000 !important;
         }
       `;
-      
+
       document.head.appendChild(style);
     }
   };

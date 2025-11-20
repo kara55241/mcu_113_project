@@ -33,16 +33,38 @@ MedApp.maps.search = {
         MedApp.log("找不到地點搜索輸入框", 'warn');
         return;
       }
-      
+
       try {
         // 確保地圖和Google API已加載
         if (!window.google || !window.google.maps || !window.google.maps.places || !MedApp.maps.core.map) {
           MedApp.log("Google Maps Places API 尚未加載或地圖未初始化", 'warn');
+          // 延遲重試
+          setTimeout(() => this.setupSearchBox(), 500);
           return;
         }
-        
+
+        // 如果已經設置過，先移除舊的事件監聽器
+        if (this.searchBox) {
+          google.maps.event.clearInstanceListeners(this.searchBox);
+        }
+
         // 創建搜索框
         this.searchBox = new google.maps.places.SearchBox(this.elements.searchInput);
+
+        // 禁用 Google Maps 的鍵盤快捷鍵，防止攔截輸入
+        this.elements.searchInput.addEventListener('focus', () => {
+          // 當搜索框獲得焦點時，暫時禁用地圖的鍵盤控制
+          if (MedApp.maps.core.map) {
+            MedApp.maps.core.map.setOptions({ keyboardShortcuts: false });
+          }
+        });
+
+        this.elements.searchInput.addEventListener('blur', () => {
+          // 當搜索框失去焦點時，重新啟用地圖的鍵盤控制
+          if (MedApp.maps.core.map) {
+            MedApp.maps.core.map.setOptions({ keyboardShortcuts: true });
+          }
+        });
         
         // 限制在當前地圖視圖內搜索
         MedApp.maps.core.map.addListener('bounds_changed', () => {
@@ -61,14 +83,28 @@ MedApp.maps.search = {
           });
         }
         
-        // 回車鍵搜索
+        // 回車鍵搜索 - 防止事件被地圖攔截
         this.elements.searchInput.addEventListener('keydown', (event) => {
+          // 停止事件冒泡，防止被地圖攔截
+          event.stopPropagation();
+
           if (event.key === 'Enter') {
             event.preventDefault();
+            event.stopImmediatePropagation();
+
             if (this.elements.searchButton) {
               this.elements.searchButton.click();
             }
           }
+        });
+
+        // 防止所有鍵盤事件被地圖攔截
+        this.elements.searchInput.addEventListener('keyup', (event) => {
+          event.stopPropagation();
+        });
+
+        this.elements.searchInput.addEventListener('keypress', (event) => {
+          event.stopPropagation();
         });
         
         MedApp.log("地點搜索框設置完成", 'info');
@@ -120,22 +156,22 @@ MedApp.maps.search = {
             <div class="info-window-content">
               <strong>${place.name || "選定位置"}</strong>
               <p>${place.formatted_address || place.vicinity || ""}</p>
-              <button id="selectThisLocation" class="select-location-btn">選擇此位置</button>
+              <button class="select-location-btn" data-action="select">選擇此位置</button>
             </div>
           `;
-          
+
           MedApp.maps.core.infoWindow.setContent(content);
           MedApp.maps.core.infoWindow.open(MedApp.maps.core.map, marker);
-          
-          // 添加選擇按鈕事件
-          setTimeout(() => {
-            const selectBtn = document.getElementById('selectThisLocation');
+
+          // 添加選擇按鈕事件 - 使用 Google Maps 事件監聽
+          google.maps.event.addListenerOnce(MedApp.maps.core.infoWindow, 'domready', () => {
+            const selectBtn = document.querySelector('.info-window-content button[data-action="select"]');
             if (selectBtn) {
               selectBtn.addEventListener('click', () => {
                 MedApp.maps.core.selectLocation();
               });
             }
-          }, 100);
+          });
         });
         
         // 添加到標記數組
@@ -222,20 +258,20 @@ MedApp.maps.search = {
             <div class="info-window-content">
               <strong>${results[0].formatted_address}</strong>
               <p>座標: ${lat}, ${lng}</p>
-              <button id="selectThisLocation" class="select-location-btn">選擇此位置</button>
+              <button class="select-location-btn" data-action="select">選擇此位置</button>
             </div>
           `;
-          
+
           MedApp.maps.core.infoWindow.setContent(content);
           MedApp.maps.core.infoWindow.open(MedApp.maps.core.map, marker);
-          
-          // 添加選擇按鈕事件
-          setTimeout(() => {
-            const selectBtn = document.getElementById('selectThisLocation');
+
+          // 添加選擇按鈕事件 - 使用 Google Maps 事件監聽
+          google.maps.event.addListenerOnce(MedApp.maps.core.infoWindow, 'domready', () => {
+            const selectBtn = document.querySelector('.info-window-content button[data-action="select"]');
             if (selectBtn) {
               selectBtn.addEventListener('click', () => MedApp.maps.core.selectLocation());
             }
-          }, 100);
+          });
         } else {
           MedApp.log("反向地理編碼失敗: " + status, 'warn');
           
@@ -251,20 +287,20 @@ MedApp.maps.search = {
             <div class="info-window-content">
               <strong>選定位置</strong>
               <p>座標: ${lat}, ${lng}</p>
-              <button id="selectThisLocation" class="select-location-btn">選擇此位置</button>
+              <button class="select-location-btn" data-action="select">選擇此位置</button>
             </div>
           `;
-          
+
           MedApp.maps.core.infoWindow.setContent(content);
           MedApp.maps.core.infoWindow.open(MedApp.maps.core.map, marker);
-          
-          // 添加選擇按鈕事件
-          setTimeout(() => {
-            const selectBtn = document.getElementById('selectThisLocation');
+
+          // 添加選擇按鈕事件 - 使用 Google Maps 事件監聽
+          google.maps.event.addListenerOnce(MedApp.maps.core.infoWindow, 'domready', () => {
+            const selectBtn = document.querySelector('.info-window-content button[data-action="select"]');
             if (selectBtn) {
               selectBtn.addEventListener('click', () => MedApp.maps.core.selectLocation());
             }
-          }, 100);
+          });
         }
       });
     },
@@ -303,20 +339,20 @@ MedApp.maps.search = {
             <div class="info-window-content">
               <strong>${results[0].formatted_address}</strong>
               <p>座標: ${location.lat()}, ${location.lng()}</p>
-              <button id="selectThisLocation" class="select-location-btn">選擇此位置</button>
+              <button class="select-location-btn" data-action="select">選擇此位置</button>
             </div>
           `;
-          
+
           MedApp.maps.core.infoWindow.setContent(content);
           MedApp.maps.core.infoWindow.open(MedApp.maps.core.map, marker);
-          
-          // 添加選擇按鈕事件
-          setTimeout(() => {
-            const selectBtn = document.getElementById('selectThisLocation');
+
+          // 添加選擇按鈕事件 - 使用 Google Maps 事件監聽
+          google.maps.event.addListenerOnce(MedApp.maps.core.infoWindow, 'domready', () => {
+            const selectBtn = document.querySelector('.info-window-content button[data-action="select"]');
             if (selectBtn) {
               selectBtn.addEventListener('click', () => MedApp.maps.core.selectLocation());
             }
-          }, 100);
+          });
         } else {
           MedApp.log("地理編碼失敗: " + status, 'warn');
           alert("找不到該地點，請輸入更精確的地址或地點名稱。");

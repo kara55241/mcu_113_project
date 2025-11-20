@@ -1,0 +1,529 @@
+{
+  "test_questions": [
+    {
+      "id": 1,
+      "category": "基礎查詢",
+      "difficulty": "簡單",
+      "question": "什麼是高血壓?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應包含血壓定義、正常值範圍"
+      }
+    },
+    {
+      "id": 2,
+      "category": "基礎查詢",
+      "difficulty": "簡單",
+      "question": "糖尿病有哪些症狀?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應列出典型症狀（多尿、多飲、多食）"
+      }
+    },
+    {
+      "id": 3,
+      "category": "基礎查詢",
+      "difficulty": "簡單",
+      "question": "高血壓的正常值是多少?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應提供具體數值（收縮壓/舒張壓）"
+      }
+    },
+    {
+      "id": 4,
+      "category": "飲食建議",
+      "difficulty": "簡單",
+      "question": "糖尿病患者可以吃什麼水果?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應提供低 GI 水果建議"
+      }
+    },
+    {
+      "id": 5,
+      "category": "飲食建議",
+      "difficulty": "簡單",
+      "question": "高血壓患者要少吃什麼?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應提及鈉/鹽分限制"
+      }
+    },
+    {
+      "id": 6,
+      "category": "事實查核",
+      "difficulty": "簡單",
+      "question": "喝檸檬水可以治療糖尿病嗎?",
+      "expected_agent": "fact_check_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "search_used": true,
+        "response_accuracy": "應澄清為錯誤說法"
+      }
+    },
+    {
+      "id": 7,
+      "category": "運動建議",
+      "difficulty": "簡單",
+      "question": "高血壓患者可以運動嗎?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應說明適度運動有益"
+      }
+    },
+    {
+      "id": 8,
+      "category": "併發症",
+      "difficulty": "中等",
+      "question": "糖尿病會引起哪些併發症?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應列出多種併發症（神經、腎臟、眼睛等）"
+      }
+    },
+    {
+      "id": 9,
+      "category": "併發症",
+      "difficulty": "中等",
+      "question": "高血壓不控制會怎樣?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應提及心血管風險"
+      }
+    },
+    {
+      "id": 10,
+      "category": "藥物諮詢",
+      "difficulty": "中等",
+      "question": "降血壓藥物有哪些種類?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應列出主要藥物分類"
+      }
+    },
+    {
+      "id": 11,
+      "category": "藥物諮詢",
+      "difficulty": "中等",
+      "question": "胰島素要怎麼使用?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應說明基本使用方式和注意事項"
+      }
+    },
+    {
+      "id": 12,
+      "category": "檢查診斷",
+      "difficulty": "中等",
+      "question": "如何診斷糖尿病?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應提及血糖檢測標準"
+      }
+    },
+    {
+      "id": 13,
+      "category": "檢查診斷",
+      "difficulty": "中等",
+      "question": "心電圖可以檢查什麼?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應說明心電圖用途"
+      }
+    },
+    {
+      "id": 14,
+      "category": "事實查核",
+      "difficulty": "中等",
+      "question": "網路說吃苦瓜可以降血糖，這是真的嗎?",
+      "expected_agent": "fact_check_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "search_used": true,
+        "response_accuracy": "應提供科學證據評估"
+      }
+    },
+    {
+      "id": 15,
+      "category": "生活管理",
+      "difficulty": "中等",
+      "question": "糖尿病患者要如何監測血糖?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應說明監測頻率和時機"
+      }
+    },
+    {
+      "id": 16,
+      "category": "複雜查詢",
+      "difficulty": "中等",
+      "question": "糖尿病和高血壓有什麼關係?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "multi_agent_collaboration": true,
+        "response_accuracy": "應整合兩種疾病的關聯性"
+      }
+    },
+    {
+      "id": 17,
+      "category": "飲食建議",
+      "difficulty": "中等",
+      "question": "糖尿病患者一天可以吃多少碳水化合物?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應提供量化建議"
+      }
+    },
+    {
+      "id": 18,
+      "category": "運動建議",
+      "difficulty": "中等",
+      "question": "糖尿病患者適合做什麼運動?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應列出推薦運動類型"
+      }
+    },
+    {
+      "id": 19,
+      "category": "藥物諮詢",
+      "difficulty": "中等",
+      "question": "降血壓藥可以自己停藥嗎?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應強調不可自行停藥"
+      }
+    },
+    {
+      "id": 20,
+      "category": "事實查核",
+      "difficulty": "中等",
+      "question": "聽說喝紅麴可以降血壓，這樣我就不用吃藥了嗎?",
+      "expected_agent": "fact_check_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "search_used": true,
+        "response_accuracy": "應澄清不可取代正規治療"
+      }
+    },
+    {
+      "id": 21,
+      "category": "複雜情境",
+      "difficulty": "困難",
+      "question": "我有糖尿病和高血壓，飲食要注意什麼?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "multi_agent_collaboration": true,
+        "response_accuracy": "應整合兩種疾病的飲食建議"
+      }
+    },
+    {
+      "id": 22,
+      "category": "複雜情境",
+      "difficulty": "困難",
+      "question": "糖尿病患者如果血壓也高，藥物會不會互相影響?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "multi_agent_collaboration": true,
+        "response_accuracy": "應說明藥物交互作用考量"
+      }
+    },
+    {
+      "id": 23,
+      "category": "緊急情況",
+      "difficulty": "困難",
+      "question": "低血糖發作要怎麼處理?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應提供緊急處理步驟"
+      }
+    },
+    {
+      "id": 24,
+      "category": "緊急情況",
+      "difficulty": "困難",
+      "question": "血壓突然飆高到 180 該怎麼辦?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應建議就醫並說明緊急處理"
+      }
+    },
+    {
+      "id": 25,
+      "category": "長期管理",
+      "difficulty": "困難",
+      "question": "糖尿病患者要定期做哪些檢查?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應列出完整追蹤項目"
+      }
+    },
+    {
+      "id": 26,
+      "category": "長期管理",
+      "difficulty": "困難",
+      "question": "高血壓患者除了吃藥還要注意什麼?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應提供全面性生活管理建議"
+      }
+    },
+    {
+      "id": 27,
+      "category": "複雜查詢",
+      "difficulty": "困難",
+      "question": "糖尿病會導致心血管疾病嗎?如何預防?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "multi_agent_collaboration": true,
+        "response_accuracy": "應說明關聯並提供預防建議"
+      }
+    },
+    {
+      "id": 28,
+      "category": "事實查核",
+      "difficulty": "困難",
+      "question": "我在 LINE 看到一篇文章說打胰島素會洗腎，這是真的嗎?",
+      "expected_agent": "fact_check_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "search_used": true,
+        "cofacts_used": true,
+        "response_accuracy": "應澄清謠言並提供正確資訊"
+      }
+    },
+    {
+      "id": 29,
+      "category": "個人化建議",
+      "difficulty": "困難",
+      "question": "我 65 歲，有糖尿病，想開始運動，有什麼建議?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應考慮年齡和疾病提供建議"
+      }
+    },
+    {
+      "id": 30,
+      "category": "個人化建議",
+      "difficulty": "困難",
+      "question": "我血壓 140/90，需要吃藥嗎?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應說明診斷標準並建議諮詢醫師"
+      }
+    },
+    {
+      "id": 31,
+      "category": "多輪對話",
+      "difficulty": "困難",
+      "question": "糖尿病的飲食原則是什麼?",
+      "follow_up": "那我早餐可以吃什麼?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "context_maintained": true,
+        "response_accuracy": "應記住前文並提供具體早餐建議"
+      }
+    },
+    {
+      "id": 32,
+      "category": "多輪對話",
+      "difficulty": "困難",
+      "question": "高血壓要怎麼控制?",
+      "follow_up": "那如果我同時有糖尿病呢?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "context_maintained": true,
+        "multi_agent_collaboration": true,
+        "response_accuracy": "應整合前文並提供綜合建議"
+      }
+    },
+    {
+      "id": 33,
+      "category": "藥物諮詢",
+      "difficulty": "困難",
+      "question": "我吃的降血壓藥讓我一直咳嗽，可以換藥嗎?",
+      "expected_agent": "cardiovascular_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應識別 ACE 抑制劑副作用並建議回診"
+      }
+    },
+    {
+      "id": 34,
+      "category": "併發症",
+      "difficulty": "困難",
+      "question": "糖尿病足是什麼?要怎麼預防?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應說明成因和預防措施"
+      }
+    },
+    {
+      "id": 35,
+      "category": "生活管理",
+      "difficulty": "困難",
+      "question": "糖尿病患者可以喝酒嗎?",
+      "expected_agent": "chronic_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "graphrag_used": true,
+        "response_accuracy": "應說明風險和限制建議"
+      }
+    },
+    {
+      "id": 36,
+      "category": "複雜情境",
+      "difficulty": "非常困難",
+      "question": "我媽媽 75 歲，有糖尿病、高血壓和高血脂，最近容易頭暈，該注意什麼?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "multi_agent_collaboration": true,
+        "response_accuracy": "應整合多種疾病考量並建議就醫"
+      }
+    },
+    {
+      "id": 37,
+      "category": "事實查核 + 諮詢",
+      "difficulty": "非常困難",
+      "question": "朋友說生酮飲食可以治好糖尿病，我可以試試嗎?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "fact_check_used": true,
+        "chronic_agent_used": true,
+        "response_accuracy": "應查核說法並提供專業飲食建議"
+      }
+    },
+    {
+      "id": 38,
+      "category": "多重查詢",
+      "difficulty": "非常困難",
+      "question": "糖尿病和高血壓的藥物分別有哪些?兩種一起吃會怎樣?飲食又要怎麼調整?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "multi_agent_collaboration": true,
+        "response_completeness": "應回答所有子問題",
+        "response_accuracy": "應整合藥物和飲食建議"
+      }
+    },
+    {
+      "id": 39,
+      "category": "邊界測試",
+      "difficulty": "非常困難",
+      "question": "糖尿病患者可以吃生酮飲食嗎?會不會影響血壓?需要調整藥物嗎?",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "multi_agent_collaboration": true,
+        "response_accuracy": "應考慮多重因素並建議醫療諮詢"
+      }
+    },
+    {
+      "id": 40,
+      "category": "整合查詢",
+      "difficulty": "非常困難",
+      "question": "我有糖尿病 10 年了，最近確診高血壓，醫生說要開始吃降血壓藥。我想知道這兩種病的關係、藥物會不會衝突、飲食和運動要怎麼調整，還有網路上說的一些偏方是不是真的。",
+      "expected_agent": "multi_agent",
+      "evaluation_criteria": {
+        "correct_routing": true,
+        "multi_agent_collaboration": true,
+        "all_agents_involved": true,
+        "response_completeness": "應涵蓋所有面向",
+        "response_accuracy": "應提供全面且準確的整合建議"
+      }
+    }
+  ],
+  "evaluation_metrics": {
+    "routing_accuracy": "代理路由準確率",
+    "response_time": "平均響應時間",
+    "graphrag_usage": "GraphRAG 使用率",
+    "search_usage": "搜索工具使用率",
+    "multi_agent_collaboration": "多代理協作成功率",
+    "context_maintenance": "上下文維護準確率",
+    "response_completeness": "回答完整度",
+    "response_accuracy": "回答準確度",
+    "fact_check_accuracy": "事實查核準確率",
+    "user_satisfaction": "用戶滿意度（主觀評分）"
+  },
+  "difficulty_distribution": {
+    "簡單": 7,
+    "中等": 13,
+    "困難": 15,
+    "非常困難": 5
+  },
+  "category_distribution": {
+    "基礎查詢": 3,
+    "飲食建議": 3,
+    "運動建議": 2,
+    "藥物諮詢": 4,
+    "併發症": 3,
+    "檢查診斷": 2,
+    "事實查核": 5,
+    "生活管理": 3,
+    "複雜查詢": 3,
+    "複雜情境": 3,
+    "緊急情況": 2,
+    "長期管理": 2,
+    "個人化建議": 2,
+    "多輪對話": 2,
+    "多重查詢": 1,
+    "邊界測試": 1,
+    "整合查詢": 1
+  }
+}

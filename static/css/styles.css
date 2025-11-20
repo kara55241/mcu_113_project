@@ -68,7 +68,7 @@
     --accent-green: #32d74b;
     --accent-orange: #ff9f0a;
     --accent-red: #ff6961;
-    
+
     /* 深色主題專用配色 */
     --high-contrast-text: #ffffff;
     --background-soft: #181818;
@@ -76,12 +76,176 @@
     --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.4);
     --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.5);
     --shadow-strong: 0 6px 24px rgba(0, 0, 0, 0.6);
-    
+
     /* 深色主題聊天泡泡 - 改為藍色系 */
     --chat-bg-user: #007bff;
     --chat-bg-ai: #3a3a3a;
     --chat-text-user: #ffffff;
     --chat-text-ai: #e8e8e8;
+}
+
+/* 深色主題下輔助功能按鈕的樣式優化 */
+[data-theme="dark"] .accessibility-button {
+    background: var(--accent-blue);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
+}
+
+[data-theme="dark"] .accessibility-button i {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .accessibility-button:hover {
+    background: var(--accent-blue-dark);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 16px rgba(74, 158, 255, 0.4);
+}
+
+[data-theme="dark"] #themeToggleBtn {
+    background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-blue) 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 4px 16px rgba(255, 159, 10, 0.5) !important;
+    color: #ffffff !important;
+}
+
+/* 深色主題下主要按鈕的樣式 */
+[data-theme="dark"] .primary-button {
+    background: var(--accent-blue);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
+}
+
+[data-theme="dark"] .primary-button:hover {
+    background: var(--accent-blue-dark);
+    box-shadow: 0 4px 16px rgba(74, 158, 255, 0.4);
+}
+
+/* 深色主題下次要按鈕的樣式 */
+[data-theme="dark"] .secondary-button {
+    background: var(--light-gray);
+    color: #ffffff !important;
+    border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .secondary-button:hover {
+    background: var(--medium-gray);
+    border-color: var(--accent-blue);
+}
+
+/* 深色主題下按鈕圖標的顏色 */
+[data-theme="dark"] .primary-button i,
+[data-theme="dark"] .secondary-button i {
+    color: #ffffff !important;
+}
+
+/* 深色主題下關閉按鈕 */
+[data-theme="dark"] .close-button {
+    background: var(--medium-gray);
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .close-button:hover {
+    background: var(--accent-red);
+    color: #ffffff !important;
+}
+
+/* 深色主題下輸入按鈕 */
+[data-theme="dark"] .input-button {
+    background: var(--light-gray);
+    color: #ffffff !important;
+    border: 1px solid var(--border-subtle);
+}
+
+[data-theme="dark"] .input-button:hover {
+    background: var(--medium-gray);
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .input-button i {
+    color: #ffffff !important;
+}
+
+/* 深色主題下輸入框 */
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] textarea {
+    background: var(--light-gray);
+    color: #ffffff !important;
+    border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] input[type="text"]::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--secondary-gray) !important;
+}
+
+/* 深色主題下地圖搜索框 */
+[data-theme="dark"] .location-search-input {
+    background: var(--light-gray);
+    color: #ffffff !important;
+    border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .location-search-input::placeholder {
+    color: var(--secondary-gray) !important;
+}
+
+/* 深色主題下信息窗口按鈕 */
+[data-theme="dark"] .direction-btn,
+[data-theme="dark"] .map-link,
+[data-theme="dark"] .select-location-btn {
+    background: var(--accent-blue);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .direction-btn:hover,
+[data-theme="dark"] .map-link:hover,
+[data-theme="dark"] .select-location-btn:hover {
+    background: var(--accent-blue-dark);
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .direction-btn i,
+[data-theme="dark"] .map-link i,
+[data-theme="dark"] .select-location-btn i {
+    color: #ffffff !important;
+}
+
+/* 深色主題下信息窗口內容 */
+[data-theme="dark"] .info-window-content {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .info-window-content strong {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .info-window-content p {
+    color: var(--secondary-gray) !important;
+}
+
+/* 深色主題下醫院動作按鈕 */
+[data-theme="dark"] .hospital-actions {
+    background: var(--light-gray);
+    border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .hospital-actions .action-button {
+    background: var(--medium-gray);
+    color: #ffffff !important;
+    border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .hospital-actions .action-button:hover {
+    background: var(--accent-blue);
+    color: #ffffff !important;
+    border-color: var(--accent-blue);
+}
+
+[data-theme="dark"] .hospital-actions .action-button i {
+    color: #ffffff !important;
 }
 
 /* 淺色主題變量優化 - 降低刺眼程度 */
@@ -176,7 +340,7 @@ body {
     background: var(--accent-blue);
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--border-radius-sm);
-    color: white;
+    color: #ffffff !important;
     font-size: var(--font-size-sm);
     cursor: pointer;
     margin-left: var(--spacing-sm);
@@ -189,11 +353,16 @@ body {
     font-weight: bold;
 }
 
+.accessibility-button i {
+    color: #ffffff !important;
+}
+
 /* 主題切換按鈕特殊樣式 - 提高可見度 */
 #themeToggleBtn {
     background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-blue) 100%) !important;
     border: 2px solid rgba(255, 255, 255, 0.4) !important;
     box-shadow: 0 4px 16px rgba(255, 159, 10, 0.4) !important;
+    color: #ffffff !important;
     position: relative;
     z-index: 1002;
     opacity: 1 !important;
@@ -201,6 +370,10 @@ body {
     display: flex !important;
     min-width: 56px;
     min-height: 44px;
+}
+
+#themeToggleBtn i {
+    color: #ffffff !important;
 }
 
 .accessibility-button:hover {
@@ -804,10 +977,13 @@ body {
     width: 90%;
     max-width: 1000px;
     height: 80%;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     animation: modalSlideIn var(--transition-medium) ease-out;
+    margin: 0 auto;
+    position: relative;
 }
 
 @keyframes modalSlideIn {
@@ -1075,6 +1251,99 @@ body {
 .message-bubble:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.12);
     transform: translateY(-1px);
+}
+
+/* Markdown 內容樣式 - 表格、列表等 */
+.message-bubble .table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: var(--spacing-md) 0;
+    border-radius: var(--border-radius-sm);
+    background: rgba(255, 255, 255, 0.5);
+    padding: var(--spacing-xs);
+}
+
+.message-bubble .markdown-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.message-bubble .markdown-table thead {
+    background: var(--accent-blue);
+    color: white;
+}
+
+.message-bubble .markdown-table th {
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.message-bubble .markdown-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border-subtle);
+    vertical-align: top;
+}
+
+.message-bubble .markdown-table tbody tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.message-bubble .markdown-table tbody tr:hover {
+    background: rgba(90, 200, 250, 0.1);
+}
+
+/* Markdown 列表樣式 */
+.message-bubble .markdown-unordered-list,
+.message-bubble .markdown-ordered-list {
+    margin: var(--spacing-md) 0;
+    padding-left: var(--spacing-lg);
+    line-height: 1.8;
+}
+
+.message-bubble .markdown-unordered-list li,
+.message-bubble .markdown-ordered-list li {
+    margin: var(--spacing-xs) 0;
+    padding-left: var(--spacing-xs);
+}
+
+.message-bubble .markdown-unordered-list li {
+    list-style-type: disc;
+}
+
+/* Markdown 代碼塊樣式 */
+.message-bubble .markdown-code-block {
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-md);
+    overflow-x: auto;
+    margin: var(--spacing-md) 0;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    line-height: 1.5;
+}
+
+/* 深色主題下的 Markdown 樣式調整 */
+[data-theme="dark"] .message-bubble .table-container {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .message-bubble .markdown-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .message-bubble .markdown-table tbody tr:hover {
+    background: rgba(74, 158, 255, 0.15);
+}
+
+[data-theme="dark"] .message-bubble .markdown-code-block {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .message.user .message-bubble {
@@ -1363,6 +1632,88 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* 信息窗口按鈕樣式 - 用於地圖標記彈窗 */
+.direction-btn,
+.map-link,
+.select-location-btn {
+    padding: 8px 16px;
+    background: var(--accent-blue);
+    color: white !important;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    margin: 4px;
+}
+
+.direction-btn:hover,
+.map-link:hover,
+.select-location-btn:hover {
+    background: var(--accent-blue-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.direction-btn i,
+.map-link i,
+.select-location-btn i {
+    font-size: 14px;
+    color: white !important;
+}
+
+/* 信息窗口內容樣式 */
+.info-window-content {
+    padding: 8px;
+    min-width: 200px;
+    color: #1a1a1a !important;
+}
+
+.info-window-content h3,
+.info-window-content strong {
+    color: #1a1a1a !important;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.info-window-content p {
+    color: #4a4a4a !important;
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+/* Google Maps 信息窗口樣式強制覆蓋 - 確保在任何主題下都可見 */
+.gm-style .gm-style-iw-c {
+    background: white !important;
+}
+
+.gm-style .gm-style-iw-c * {
+    color: #1a1a1a !important;
+}
+
+.gm-style .gm-style-iw-c p {
+    color: #4a4a4a !important;
+}
+
+.gm-style .gm-style-iw-c button,
+.gm-style .gm-style-iw-c a.map-link,
+.gm-style .gm-style-iw-c .direction-btn,
+.gm-style .gm-style-iw-c .select-location-btn {
+    color: white !important;
+}
+
+.gm-style .gm-style-iw-c button *,
+.gm-style .gm-style-iw-c a *,
+.gm-style .gm-style-iw-c .direction-btn *,
+.gm-style .gm-style-iw-c .select-location-btn * {
+    color: white !important;
 }
 
 /* 響應式設計 - 醫院操作區域 */

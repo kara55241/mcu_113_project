@@ -12,16 +12,12 @@ MedApp.chat.input = {
       fileInput: null,
       suggestionButtons: null
     },
-    
-    // 語音辨識物件
-    recognition: null,
-    
+
     // 初始化
     init: function() {
       this.initElements();
-      this.setupSpeechRecognition();
       this.bindEvents();
-      
+
       MedApp.log('聊天輸入模組初始化完成', 'info');
     },
     
@@ -94,21 +90,21 @@ MedApp.chat.input = {
       // 添加緊急事件處理 - 以防模組加載順序有問題
       this.addEmergencyHandlers();
     },
-    
+
     // 添加緊急事件處理 - 確保按鈕功能
     addEmergencyHandlers: function() {
       // 全局快速修復函數
       window.fixChatInput = () => {
         MedApp.log('執行聊天輸入模塊緊急修復', 'info');
-        
+
         const inputField = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
-        
+
         if (inputField && sendButton) {
           // 移除所有現有事件處理器，避免重複
           const newSendButton = sendButton.cloneNode(true);
           sendButton.parentNode.replaceChild(newSendButton, sendButton);
-          
+
           // 添加新的事件處理器
           newSendButton.addEventListener('click', () => {
             const message = inputField.value.trim();
@@ -119,35 +115,35 @@ MedApp.chat.input = {
                 // 備用發送方法
                 const chatContainer = document.getElementById('chatContainer');
                 const welcomeMessage = document.querySelector('.welcome-message');
-                
+
                 // 隱藏歡迎消息
                 if (welcomeMessage) {
                   welcomeMessage.style.display = 'none';
                 }
-                
+
                 // 添加用戶消息
                 const userMsg = document.createElement('div');
                 userMsg.classList.add('message', 'user');
                 userMsg.textContent = message;
-                
+
                 const timeSpan = document.createElement('span');
                 timeSpan.classList.add('message-time');
                 const now = new Date();
                 timeSpan.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-                
+
                 userMsg.appendChild(timeSpan);
                 chatContainer.appendChild(userMsg);
-                
+
                 // 清空輸入框
                 inputField.value = '';
               }
             }
           });
-          
+
           MedApp.log('聊天輸入模塊緊急修復完成', 'info');
         }
       };
-      
+
       // 3秒後自動檢查並修復
       setTimeout(() => {
         // 如果點擊發送按鈕沒反應，嘗試修復
@@ -158,55 +154,10 @@ MedApp.chat.input = {
             window.fixChatInput();
           }
         };
-        
+
         // 檢查並自動修復
         testSend();
       }, 3000);
-    },
-    
-    // 設置語音辨識
-    setupSpeechRecognition: function() {
-      // 檢查瀏覽器是否支援語音辨識
-      if (MedApp.features.speechRecognition) {
-        this.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        this.recognition.continuous = false;
-        this.recognition.lang = 'zh-TW';
-        
-        // 設定語音辨識結果處理
-        this.recognition.onresult = (event) => {
-          const transcript = event.results[0][0].transcript;
-          if (this.elements.inputField) {
-            this.elements.inputField.value = transcript;
-          }
-          if (this.elements.micButton) {
-            this.elements.micButton.classList.remove('active');
-          }
-        };
-        
-        // 設定語音辨識錯誤處理
-        this.recognition.onerror = (event) => {
-          MedApp.log('語音辨識錯誤: ' + event.error, 'error');
-          if (this.elements.micButton) {
-            this.elements.micButton.classList.remove('active');
-          }
-        };
-        
-        // 綁定麥克風按鈕事件
-        if (this.elements.micButton) {
-          this.elements.micButton.addEventListener('click', () => {
-            if (this.elements.micButton.classList.contains('active')) {
-              this.recognition.stop();
-              this.elements.micButton.classList.remove('active');
-            } else {
-              this.recognition.start();
-              this.elements.micButton.classList.add('active');
-            }
-          });
-        }
-      } else if (this.elements.micButton) {
-        // 如果不支援語音辨識，隱藏麥克風按鈕
-        this.elements.micButton.style.display = 'none';
-      }
     },
     
     // 處理檔案上傳
