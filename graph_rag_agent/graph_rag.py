@@ -297,7 +297,7 @@ def graphrag_chronic(input: str, return_graph_data: bool = True):
             str: 僅返回答案文本（向後兼容）
     """
     # 統一 top_k 配置（增加以獲取更多相關 chunks）
-    TOP_K = 10
+    TOP_K = 3
 
     # 獲取 RAG 答案（直接使用 retriever 返回原始檢索結果）
     result = chronic_retriever.search(query_text=input, top_k=TOP_K)
@@ -364,7 +364,7 @@ def graphrag_cardiovascular(input: str, return_graph_data: bool = True):
             str: 僅返回答案文本（向後兼容）
     """
     # 統一 top_k 配置（增加以獲取更多相關 chunks）
-    TOP_K = 10
+    TOP_K = 3
 
     # 獲取 RAG 答案（直接使用 retriever 返回原始檢索結果）
     result = cardiovascular_retriever.search(query_text=input, top_k=TOP_K)
