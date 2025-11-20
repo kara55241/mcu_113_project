@@ -42,12 +42,16 @@ class AgentStatusView(APIView):
                 else:
                     # 獲取最近的 Threads
                     recent_threads = tracker.get_recent_threads(limit=10)
-                    return Response({
-                        "status": "success",
-                        "source": "memory_tracker",
-                        "thread_count": len(recent_threads),
-                        "threads": recent_threads
-                    })
+
+                    # 如果追蹤器中有數據，直接返回
+                    if recent_threads:
+                        return Response({
+                            "status": "success",
+                            "source": "memory_tracker",
+                            "thread_count": len(recent_threads),
+                            "threads": recent_threads
+                        })
+                    # 否則回退到 checkpoint 資料庫
             except ImportError:
                 # 追蹤器不可用，回退到 checkpoint 資料庫
                 pass
@@ -63,6 +67,13 @@ class AgentStatusView(APIView):
 
             conn = sqlite3.connect(str(checkpoint_db))
             cursor = conn.cursor()
+
+            # 查詢統計數據
+            cursor.execute("SELECT COUNT(*) FROM checkpoints")
+            total_checkpoints = cursor.fetchone()[0]
+
+            cursor.execute("SELECT COUNT(DISTINCT thread_id) FROM checkpoints")
+            active_threads = cursor.fetchone()[0]
 
             # 查詢最近的 checkpoint 記錄
             cursor.execute("""
@@ -88,7 +99,9 @@ class AgentStatusView(APIView):
             return Response({
                 "status": "success",
                 "source": "checkpoint_database",
-                "checkpoint_count": len(checkpoints),
+                "checkpoint_count": total_checkpoints,
+                "active_threads_count": active_threads,
+                "total_executions": active_threads,  # 線程數等於執行次數
                 "recent_checkpoints": checkpoints
             })
 

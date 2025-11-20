@@ -337,9 +337,9 @@ class Command(BaseCommand):
         
         # Check multi-agent module
         try:
-            from graph_rag_agent.multi_agent import workflow, new_workflow
+            from graph_rag_agent.multi_agent import workflow
             self.stdout.write(f"  Multi-agent module: OK")
-            self.stdout.write(f"  Current workflow: new_workflow (任務指派型)")
+            self.stdout.write(f"  Current workflow: workflow (Supervisor + Expert Agents)")
         except ImportError as e:
             self.stdout.write(f"  Multi-agent module: FAILED - {str(e)}")
     

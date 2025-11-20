@@ -285,16 +285,24 @@ def _log_tool_tracker(agent_name: str, tool_name: str, args: dict, result: any, 
     """
     try:
         thread_id = _get_thread_id(state)
-        # 截斷參數和結果以避免日誌過長
+        # 截斷參數以避免日誌過長
         truncated_args = {k: str(v)[:100] for k, v in args.items()}
-        truncated_result = str(result)[:200] if result else None
+
+        # 保留完整的 result 以便追蹤器提取 graph_data
+        # 如果 result 是字典且包含 graph_data，不要截斷
+        if isinstance(result, dict) and 'graph_data' in result:
+            # GraphRAG 工具返回，保留完整結果
+            tracker_result = result
+        else:
+            # 其他工具，截斷結果以節省記憶體
+            tracker_result = str(result)[:200] if result else None
 
         tracker.log_tool_call(
             thread_id=thread_id,
             agent_name=agent_name,
             tool_name=tool_name,
             args=truncated_args,
-            result=truncated_result
+            result=tracker_result
         )
     except Exception as e:
         agent_logger.warning(f"[TRACKER] 工具結果追蹤失敗: {e}")

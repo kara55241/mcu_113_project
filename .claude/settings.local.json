@@ -59,7 +59,10 @@
       "Bash(git commit -m \"$(cat <<''EOF''\n更新多代理系統與前端監控功能\n\n- 增強 GraphRAG 查詢邏輯與錯誤處理\n- 優化多代理協作流程\n- 更新前端聊天顯示與監控儀表板\n- 同步代理檢查點資料庫\n- 更新依賴套件\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git commit:*)",
       "Bash(../venv/Scripts/python.exe:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(./venv/Scripts/python.exe:*)",
+      "Bash(pkill:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []

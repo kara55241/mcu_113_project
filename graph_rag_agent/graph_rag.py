@@ -299,9 +299,10 @@ def graphrag_chronic(input: str, return_graph_data: bool = True):
     # 統一 top_k 配置（增加以獲取更多相關 chunks）
     TOP_K = 10
 
-    # 獲取 RAG 答案
+    # 獲取 RAG 答案（直接使用 retriever 返回原始檢索結果）
     result = chronic_retriever.search(query_text=input, top_k=TOP_K)
-    answer = result
+    # Retriever.search() 返回 RetrieverResult，從 items 中提取 content
+    answer = result.items[0].content if result.items else "無法檢索到相關資訊"
 
     # 如果不需要圖譜數據，直接返回答案（向後兼容）
     if not return_graph_data:
@@ -365,9 +366,10 @@ def graphrag_cardiovascular(input: str, return_graph_data: bool = True):
     # 統一 top_k 配置（增加以獲取更多相關 chunks）
     TOP_K = 10
 
-    # 獲取 RAG 答案
+    # 獲取 RAG 答案（直接使用 retriever 返回原始檢索結果）
     result = cardiovascular_retriever.search(query_text=input, top_k=TOP_K)
-    answer = result.answer
+    # Retriever.search() 返回 RetrieverResult，從 items 中提取 content
+    answer = result.items[0].content if result.items else "無法檢索到相關資訊"
 
     # 如果不需要圖譜數據，直接返回答案（向後兼容）
     if not return_graph_data:
