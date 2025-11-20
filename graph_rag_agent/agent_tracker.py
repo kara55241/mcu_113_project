@@ -256,37 +256,44 @@ class AgentExecutionTracker:
             logger.info(f"[TRACKER] Cleared old threads, kept {keep_count}")
 
     def _get_agent_display_name(self, agent_name: str) -> str:
-        """獲取 Agent 顯示名稱"""
+        """獲取 Agent 顯示名稱（統一 Supervisor 節點顯示）"""
         display_names = {
-            # 舊架構節點
+            # 統一的 Supervisor 顯示（新架構）
             "supervisor": "SUPERVISOR",
-            # 新架構 supervisor 節點
-            "supervisor_analysis": "任務分析節點",
-            "supervisor_fast_path": "快速回應節點",
-            "supervisor_decomposition": "任務拆解節點",
-            # Agent 節點
-            "chronic_agent": "CHRONIC AGENT",
-            "cardiovascular_agent": "CARDIOVASCULAR AGENT",
-            "fact_check_agent": "FACT-CHECK AGENT",
-            # 整合節點
-            "integration": "結果整合節點"
+            "supervisor_task_analysis": "SUPERVISOR [分析]",
+            "supervisor_analysis": "SUPERVISOR [分析]",  # 備用別名
+            "supervisor_routing": "SUPERVISOR [路由]",
+            "supervisor_fast_path": "SUPERVISOR [快速路由]",  # 舊名稱備用
+            "integration": "SUPERVISOR [整合]",
+            "integration_node": "SUPERVISOR [整合]",  # 備用別名
+
+            # Expert Agents（保持原樣，確保顯示）
+            "chronic_agent": "慢性疾病專家",
+            "cardiovascular_agent": "心血管專家",
+            "fact_check_agent": "資訊查核專家",
+
+            # 舊架構節點（保留兼容）
+            "supervisor_decomposition": "SUPERVISOR [拆解]"
         }
         return display_names.get(agent_name, agent_name)
 
     def _get_agent_role(self, agent_name: str) -> str:
         """獲取 Agent 角色類型（用於邏輯層分組）"""
         role_map = {
-            # Supervisor 層（決策和分析）
+            # Supervisor 層（統一為 supervisor）
             "supervisor": "supervisor",
-            "supervisor_analysis": "supervisor",
+            "supervisor_task_analysis": "supervisor",
+            "supervisor_analysis": "supervisor",  # 備用別名
+            "supervisor_routing": "supervisor",
             "supervisor_fast_path": "supervisor",
             "supervisor_decomposition": "supervisor",
+            "integration": "supervisor",  # 整合也屬於 supervisor 職責
+            "integration_node": "supervisor",
+
             # 專家代理層（並行執行）
             "chronic_agent": "expert",
             "cardiovascular_agent": "expert",
-            "fact_check_agent": "expert",
-            # 整合層（結果整合）
-            "integration": "integration"
+            "fact_check_agent": "expert"
         }
         return role_map.get(agent_name, "unknown")
 

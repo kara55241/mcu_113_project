@@ -752,7 +752,67 @@ def google_map_search(
         return error_msg
 
 
-chronic_agent = create_react_agent(
+# ============================================================================
+# Agent 包裝函數 - 添加追蹤邏輯
+# ============================================================================
+
+def create_tracked_agent_node(agent, agent_name: str):
+    """
+    為 agent 添加追蹤邏輯的包裝函數
+
+    Args:
+        agent: create_react_agent 創建的 agent
+        agent_name: agent 名稱
+
+    Returns:
+        包裝後的 agent 函數
+    """
+    def tracked_agent(state: State):
+        # 開始追蹤
+        try:
+            thread_id = current_thread_id.get()
+            # 提取用戶查詢
+            user_query = ""
+            messages = state.get('messages', [])
+            for msg in reversed(messages):
+                if hasattr(msg, 'type') and msg.type == 'human':
+                    user_query = msg.content[:200]
+                    break
+
+            tracker.start_agent(thread_id, agent_name, user_query)
+            agent_logger.info(f"[AGENT_START] {agent_name} 開始執行")
+        except Exception as e:
+            agent_logger.warning(f"[TRACKER] {agent_name} 啟動追蹤失敗: {e}")
+
+        # 執行 agent
+        result = agent.invoke(state)
+
+        # 完成追蹤
+        try:
+            thread_id = current_thread_id.get()
+            # 提取回應內容作為 handoff_message
+            messages = result.get('messages', [])
+            handoff_msg = ""
+            for msg in reversed(messages):
+                if hasattr(msg, 'type') and msg.type == 'ai' and hasattr(msg, 'content'):
+                    handoff_msg = msg.content[:100]
+                    break
+
+            tracker.complete_agent(thread_id, agent_name, handoff_message=handoff_msg)
+            agent_logger.info(f"[AGENT_COMPLETE] {agent_name} 執行完成")
+        except Exception as e:
+            agent_logger.warning(f"[TRACKER] {agent_name} 完成追蹤失敗: {e}")
+
+        return result
+
+    return tracked_agent
+
+
+# ============================================================================
+# Expert Agents 定義
+# ============================================================================
+
+_chronic_agent_raw = create_react_agent(
     model=llm_GPT,
     tools=[
         chronic_search
@@ -826,7 +886,7 @@ REMEMBER: Your FIRST action is ALWAYS to call chronic_search tool, NO EXCEPTIONS
 """
 )
 
-cardiovascular_agent = create_react_agent(
+_cardiovascular_agent_raw = create_react_agent(
     model=llm_GPT,
     tools=[
         cardiovascular_search
@@ -900,7 +960,7 @@ REMEMBER: Your FIRST action is ALWAYS to call cardiovascular_search tool, NO EXC
 """
 )
 
-fact_check_agent = create_react_agent(
+_fact_check_agent_raw = create_react_agent(
     model=llm_GPT,
     tools=[
         cofacts_check_tool,
@@ -963,6 +1023,13 @@ Response Structure Templates:
 You are the final authority on information search and fact-checking - provide comprehensive, current information.
 """
     )
+
+# 創建帶追蹤的 agent 節點（用於 workflow）
+chronic_agent = create_tracked_agent_node(_chronic_agent_raw, "chronic_agent")
+cardiovascular_agent = create_tracked_agent_node(_cardiovascular_agent_raw, "cardiovascular_agent")
+fact_check_agent = create_tracked_agent_node(_fact_check_agent_raw, "fact_check_agent")
+
+agent_logger.info("[AGENTS] Expert Agents 已創建並添加追蹤邏輯")
 
 
 # ============================================================================
@@ -1501,9 +1568,52 @@ def integration_node(state: State) -> State:
             final_content = f"## 綜合醫療建議\n\n{responses_text}"
 
     elif len(agent_responses) == 1:
-        # 單一專家回應，直接使用
-        agent_logger.info("[INTEGRATION] 單一專家回應，直接返回")
-        final_content = list(agent_responses.values())[0]
+        # 單一專家回應：進行簡單的總結和格式檢查
+        agent_logger.info("[INTEGRATION] 單一專家回應，進行總結")
+        agent_name = list(agent_responses.keys())[0]
+        agent_content = list(agent_responses.values())[0]
+
+        # 檢查回應是否已經是良好的 Markdown 格式
+        has_headers = '##' in agent_content
+        has_lists = any(marker in agent_content for marker in ['- ', '* ', '1. ', '2. '])
+
+        if has_headers and has_lists and len(agent_content) > 200:
+            # 回應已經格式良好，直接使用
+            agent_logger.info("[INTEGRATION] 專家回應格式良好，直接使用")
+            final_content = agent_content
+        else:
+            # 回應需要 supervisor 總結和格式化
+            agent_logger.info("[INTEGRATION] 使用 Supervisor 總結單一專家回應")
+            agent_display_map = {
+                'chronic_agent': '慢性疾病專家',
+                'cardiovascular_agent': '心血管疾病專家',
+                'fact_check_agent': '資訊查核專家'
+            }
+            display_name = agent_display_map.get(agent_name, agent_name)
+
+            summary_prompt = f"""
+你是醫療協調專家。以下是{display_name}的回應：
+
+{agent_content}
+
+請將專家意見總結為清晰、易讀的格式。要求：
+
+1. **保持專業性**：維持醫療建議的準確性
+2. **結構清晰**：使用 Markdown 格式（## 標題、列表）
+3. **突出重點**：用 **粗體** 強調關鍵建議
+4. **簡潔實用**：提供可操作的具體建議
+
+使用繁體中文，語氣專業但溫暖，適合台灣長者閱讀。
+"""
+
+            try:
+                summary_response = llm_GPT.invoke(summary_prompt)
+                final_content = summary_response.content if hasattr(summary_response, 'content') else str(summary_response)
+                agent_logger.info(f"[INTEGRATION] Supervisor 總結完成，長度: {len(final_content)}")
+            except Exception as e:
+                agent_logger.error(f"[INTEGRATION] Supervisor 總結失敗: {e}")
+                # 備援：使用原始回應
+                final_content = agent_content
 
     else:
         # 沒有找到任何回應（異常情況）
@@ -1591,24 +1701,25 @@ def route_after_agents(state: State) -> str:
     """
     Agent 執行完成後的路由
 
-    判斷是否需要整合多個 agent 的回應
+    所有 agent 回應都會進入整合節點，確保：
+    1. 多專家回應被整合
+    2. 單一專家回應被 supervisor 總結和潤飾
+    3. 保持架構一致性
 
     Returns:
-        'integration': 需要整合多個回應
-        END: 單一回應，直接結束
+        'integration': 統一進入整合節點
     """
     task_analysis = state.get('task_analysis', {})
     task_type = task_analysis.get('type', 'single_expert')
     needs_agents = task_analysis.get('needs_agents', [])
 
-    # 多專家協作：需要整合
+    # 所有專家回應都進入整合節點
     if task_type == 'multi_expert' and len(needs_agents) > 1:
         agent_logger.info(f"[ROUTE] 多專家協作，進入整合節點")
-        return 'integration'
+    else:
+        agent_logger.info(f"[ROUTE] 單一專家回應，進入整合節點進行總結")
 
-    # 單一專家：直接結束
-    agent_logger.info(f"[ROUTE] 單一專家回應，直接結束")
-    return END
+    return 'integration'
 
 
 # ============================================================================
@@ -1627,8 +1738,12 @@ def route_after_agents(state: State) -> str:
 #   → supervisor_task_analysis (分析用戶意圖)
 #   → 條件路由 (route_to_agents)
 #       ├─ simple_greeting/maps → supervisor_routing (Fast-Path) → END
-#       ├─ single_expert → chronic_agent / cardiovascular_agent / fact_check_agent → END
-#       └─ multi_expert → [chronic_agent, cardiovascular_agent] (並行) → integration → END
+#       ├─ single_expert → agent → integration (總結) → END
+#       └─ multi_expert → [agents 並行] → integration (整合) → END
+#
+# 所有專家回應都經過 integration 節點：
+#   - 單一專家：Supervisor 總結和格式化（如需要）
+#   - 多專家：Supervisor 整合多個意見並生成統一建議
 #
 # ============================================================================
 
@@ -1669,21 +1784,21 @@ workflow = (
         [END]
     )
 
-    # Agents → 條件路由（判斷是否需要整合）
+    # Agents → 統一進入整合節點（單一或多專家都需要總結）
     .add_conditional_edges(
         'chronic_agent',
         route_after_agents,
-        ['integration', END]
+        ['integration']  # 只返回 integration，不再直接到 END
     )
     .add_conditional_edges(
         'cardiovascular_agent',
         route_after_agents,
-        ['integration', END]
+        ['integration']
     )
     .add_conditional_edges(
         'fact_check_agent',
         route_after_agents,
-        ['integration', END]
+        ['integration']
     )
 
     # 整合節點 → END
