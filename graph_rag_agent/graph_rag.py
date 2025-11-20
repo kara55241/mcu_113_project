@@ -16,7 +16,7 @@ NEO4J_URI = os.getenv("NEO4J_URI")
 NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 chronic= os.getenv("NEO4J_CHRONIC")
-cardiovascular=os.getenv("NEO4J_CARDIOVASCULAR")
+health=os.getenv("NEO4J_HEALTH")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GOOGLE_API_KEY=os.getenv("GOOGLE_API_KEY")
 
@@ -28,7 +28,7 @@ create_vector_index(driver, name="text_embeddings", label="Chunk",
                    embedding_property="embedding", dimensions=1536, similarity_fn="cosine",neo4j_database=chronic)
 
 create_vector_index(driver, name="text_embeddings", label="Chunk",
-                   embedding_property="embedding", dimensions=1536, similarity_fn="cosine",neo4j_database=cardiovascular)
+                   embedding_property="embedding", dimensions=1536, similarity_fn="cosine",neo4j_database=health)
 
 chronic_retriever = VectorCypherRetriever(
    driver,
@@ -110,7 +110,7 @@ RETURN '=== text ===\\n' +
          ' -> ' + endNode(rel).name
        ], '\\n---\\n') AS info
 """,
-   neo4j_database=cardiovascular)
+   neo4j_database=health)
 
 rag_template = RagTemplate(template=
 '''
@@ -135,8 +135,6 @@ If you are not sure about the answer, just say "I do not know the answer, please
 # Answer:
 ''', system_instructions="You are an expert in medcial field, your goal is provide imformation for elders using Neo4j.",expected_inputs=['query_text', 'context'])
 
-chronic_rag  = GraphRAG(llm=llm, retriever=chronic_retriever, prompt_template=rag_template)
-cardiovascular_rag=GraphRAG(llm=llm, retriever=cardiovascular_retriever, prompt_template=rag_template)
 
 
 # 用於獲取完整圖譜數據的 retriever（慢性疾病）
@@ -282,7 +280,7 @@ RETURN
       id: elementId(c)
   }] AS chunks
 """,
-    neo4j_database=cardiovascular
+    neo4j_database=health
 )
 def graphrag_chronic(input: str, return_graph_data: bool = True):
     """
@@ -302,8 +300,8 @@ def graphrag_chronic(input: str, return_graph_data: bool = True):
     TOP_K = 10
 
     # 獲取 RAG 答案
-    result = chronic_rag.search(input, retriever_config={'top_k': TOP_K})
-    answer = result.answer
+    result = chronic_retriever.search(query_text=input, top_k=TOP_K)
+    answer = result
 
     # 如果不需要圖譜數據，直接返回答案（向後兼容）
     if not return_graph_data:
@@ -368,7 +366,7 @@ def graphrag_cardiovascular(input: str, return_graph_data: bool = True):
     TOP_K = 10
 
     # 獲取 RAG 答案
-    result = cardiovascular_rag.search(input, retriever_config={'top_k': TOP_K})
+    result = cardiovascular_retriever.search(query_text=input, top_k=TOP_K)
     answer = result.answer
 
     # 如果不需要圖譜數據，直接返回答案（向後兼容）
@@ -400,7 +398,7 @@ def graphrag_cardiovascular(input: str, return_graph_data: bool = True):
         return {
             "answer": answer,
             "graph_data": graph_data,
-            "database": f"{cardiovascular}"
+            "database": f"{health}"
         }
 
     except Exception as e:
@@ -411,7 +409,7 @@ def graphrag_cardiovascular(input: str, return_graph_data: bool = True):
         return {
             "answer": answer,
             "graph_data": {"nodes": [], "relationships": [], "chunks": []},
-            "database": f"{cardiovascular}",
+            "database": f"{health}",
             "error": str(e)
         }
 
